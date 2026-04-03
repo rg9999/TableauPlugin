@@ -5,13 +5,11 @@ import App from './App'
 describe('App', () => {
   it('renders without crashing', () => {
     render(<App />)
-    expect(screen.getByText('Tableau Telemetry Extension')).toBeInTheDocument()
+    expect(screen.getByTestId('panel-layout')).toBeInTheDocument()
   })
 
-  it('wraps content in MUI ThemeProvider', () => {
-    const { container } = render(<App />)
-    // CssBaseline injects a style element — verify it exists
-    const styles = container.ownerDocument.querySelectorAll('style')
-    expect(styles.length).toBeGreaterThan(0)
+  it('shows the empty state on initial load', () => {
+    render(<App />)
+    expect(screen.getByText('Drag fields from the tree to start exploring')).toBeInTheDocument()
   })
 })

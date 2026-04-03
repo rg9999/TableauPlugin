@@ -5,12 +5,13 @@ import './theme/agGridTheme'
 import './theme/agGridStyles.css'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-balham.css'
+import PanelLayout from './components/PanelLayout/PanelLayout'
 
 function App() {
   return (
     <ThemeProvider theme={muiTheme}>
       <CssBaseline />
-      <div>Tableau Telemetry Extension</div>
+      <PanelLayout />
     </ThemeProvider>
   )
 }
