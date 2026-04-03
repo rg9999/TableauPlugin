@@ -1,0 +1,88 @@
+# generated: 2026-04-03
+# last_updated: 2026-04-03
+# project: TableauPlugin
+# project_key: NOKEY
+# tracking_system: file-system
+# story_location: _bmad-output/implementation-artifacts
+
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+#
+# Epic Status Transitions:
+#   - backlog → in-progress: Automatically when first story is created (via create-story)
+#   - in-progress → done: Manually when all stories reach 'done' status
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created in stories folder
+#   - in-progress: Developer actively working on implementation
+#   - review: Ready for code review (via Dev's code-review workflow)
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+#
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when first story is created
+# - Stories can be worked in parallel if team capacity allows
+# - SM typically creates next story after previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+
+generated: 2026-04-03
+last_updated: 2026-04-03
+project: TableauPlugin
+project_key: NOKEY
+tracking_system: file-system
+story_location: _bmad-output/implementation-artifacts
+
+development_status:
+  # Epic 1: Project Foundation & Extension Shell
+  epic-1: in-progress
+  1-1-project-scaffold-and-tableau-extension-initialization: review
+  1-2-design-tokens-and-theming: ready-for-dev
+  1-3-panel-layout-with-responsive-zone-adaptation: backlog
+  1-4-tableau-api-adapter-service: backlog
+  1-5-test-mock-data-and-tableau-api-mock: backlog
+  epic-1-retrospective: optional
+
+  # Epic 2: Field Selection & Tree Navigation
+  epic-2: backlog
+  2-1-field-hierarchy-parsing-and-tree-rendering: backlog
+  2-2-drag-and-drop-field-to-grid: backlog
+  2-3-field-removal-and-bidirectional-sync: backlog
+  2-4-tree-search-and-filter: backlog
+  epic-2-retrospective: optional
+
+  # Epic 3: Mixed-Line Data Grid
+  epic-3: backlog
+  3-1-sparse-grid-model-and-data-rendering: backlog
+  3-2-row-type-visual-distinction-and-virtual-scrolling: backlog
+  3-3-array-cell-handling: backlog
+  epic-3-retrospective: optional
+
+  # Epic 4: Grid Interaction — Filtering, Sorting & Row Detail
+  epic-4: backlog
+  4-1-column-sorting-and-filtering: backlog
+  4-2-row-detail-panel: backlog
+  4-3-tree-panel-collapse-from-grid-view: backlog
+  epic-4-retrospective: optional
+
+  # Epic 5: Tableau Filter Integration & Live Refresh
+  epic-5: backlog
+  5-1-tableau-filter-event-subscription: backlog
+  5-2-live-data-refresh-with-state-preservation: backlog
+  5-3-status-bar-and-new-data-indicators: backlog
+  epic-5-retrospective: optional
+
+  # Epic 6: State Persistence & Deployment
+  epic-6: backlog
+  6-1-state-persistence-via-tableau-settings-api: backlog
+  6-2-air-gapped-build-configuration: backlog
+  6-3-tableau-server-deployment-and-version-updates: backlog
+  epic-6-retrospective: optional
