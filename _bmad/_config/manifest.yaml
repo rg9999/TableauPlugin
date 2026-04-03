@@ -1,0 +1,37 @@
+installation:
+  version: 6.2.2
+  installDate: 2026-04-03T08:13:58.319Z
+  lastUpdated: 2026-04-03T08:14:03.536Z
+modules:
+  - name: core
+    version: 6.2.2
+    installDate: 2026-04-03T08:13:58.318Z
+    lastUpdated: 2026-04-03T08:14:03.531Z
+    source: built-in
+    npmPackage: null
+    repoUrl: null
+  - name: bmm
+    version: 6.2.2
+    installDate: 2026-04-03T08:13:57.532Z
+    lastUpdated: 2026-04-03T08:14:03.531Z
+    source: built-in
+    npmPackage: null
+    repoUrl: null
+  - name: ma-skills
+    version: null
+    installDate: 2026-04-03T08:13:58.147Z
+    lastUpdated: 2026-04-03T08:14:03.533Z
+    source: custom
+    npmPackage: null
+    repoUrl: null
+  - name: custom
+    version: null
+    installDate: 2026-04-03T08:14:03.536Z
+    lastUpdated: 2026-04-03T08:14:03.536Z
+    source: unknown
+    npmPackage: null
+    repoUrl: null
+ides:
+  - claude-code
+  - cline
+  - opencode

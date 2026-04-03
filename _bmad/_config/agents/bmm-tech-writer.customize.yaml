@@ -1,0 +1,6 @@
+# MA-AGENTS: skill enforcement for bmm-tech-writer
+critical_actions:
+  - "Read the skills MANIFEST at {project-root}/skills/MANIFEST.yaml"
+  - "For each skill marked always_load: true, read the skill file completely"
+  - "If _bmad-output/project-context.md exists, read it completely"
+  - "Follow all skill directives and project-context rules during this session"

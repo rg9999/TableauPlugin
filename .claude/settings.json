@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git remote:*)",
+      "Bash(npx install:*)",
+      "Bash(npx ma-agents:*)",
+      "WebSearch"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/lib/hooks/claude-code/verify-manifest.js\""
+          }
+        ]
+      }
+    ]
+  }
+}

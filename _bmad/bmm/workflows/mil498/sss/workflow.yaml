@@ -1,0 +1,15 @@
+name: "bmad-mil-generate-sss"
+version: "1.0.0"
+description: "Generate a MIL-STD-498 System/Subsystem Specification (SSS). Use when the user says 'generate SSS' or 'generate system specification'"
+
+config_source: "{project-root}/_bmad/bmm/config.yaml"
+user_name: "{config_source}:user_name"
+communication_language: "{config_source}:communication_language"
+document_output_language: "{config_source}:document_output_language"
+output_folder: "{config_source}:output_folder"
+date: system-generated
+
+installed_path: "{project-root}/_bmad/bmm/workflows/mil498/sss"
+instructions: "{installed_path}/instructions.md"
+
+template: "{project-root}/_bmad/bmm/templates/mil498/SSS.md"

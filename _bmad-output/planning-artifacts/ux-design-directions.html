@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TableauPlugin - UX Design Direction</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #e8e8e8; color: #333; }
+
+  /* Design Tokens */
+  :root {
+    --bg: #FFFFFF;
+    --surface: #F5F5F5;
+    --border: #E0E0E0;
+    --text-primary: #333333;
+    --text-secondary: #666666;
+    --text-muted: #999999;
+    --accent: #4E79A7;
+    --accent-hover: #3B6491;
+    --new-data: #E8F4E8;
+    --error: #D32F2F;
+    --drop-target: rgba(78, 121, 167, 0.2);
+    --type-1: #4E79A7;
+    --type-2: #F28E2B;
+    --type-3: #E15759;
+    --type-4: #76B7B2;
+    --type-5: #59A14F;
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 12px;
+    --space-lg: 16px;
+  }
+
+  .page-header { background: #2c2c2c; color: white; padding: 16px 24px; }
+  .page-header h1 { font-size: 18px; font-weight: 600; }
+  .page-header p { font-size: 12px; color: #aaa; margin-top: 4px; }
+
+  .direction-tabs { display: flex; background: #333; padding: 0 24px; gap: 0; }
+  .direction-tab { padding: 10px 20px; color: #aaa; font-size: 13px; cursor: pointer; border-bottom: 2px solid transparent; }
+  .direction-tab.active { color: white; border-bottom-color: var(--accent); }
+  .direction-tab:hover { color: white; }
+
+  .direction-panel { display: none; }
+  .direction-panel.active { display: block; }
+
+  /* Mock Extension Container */
+  .extension-frame {
+    margin: 24px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--bg);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  .extension-label { background: #f0f0f0; padding: 6px 12px; font-size: 11px; color: #666; border-bottom: 1px solid #ddd; }
+  .extension-label span { color: var(--accent); font-weight: 600; }
+
+  /* Layout */
+  .extension-body { display: flex; height: 520px; }
+
+  /* Tree Panel */
+  .tree-panel {
+    width: 240px; min-width: 240px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex; flex-direction: column;
+    font-size: 13px;
+  }
+  .tree-header {
+    padding: var(--space-md);
+    font-weight: 600; font-size: 13px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .tree-search {
+    margin: var(--space-sm);
+    padding: 6px 8px 6px 28px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 12px;
+    background: var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E") 8px center no-repeat;
+    outline: none;
+    width: calc(100% - 16px);
+  }
+  .tree-search:focus { border-color: var(--accent); }
+  .tree-content { flex: 1; overflow-y: auto; padding: var(--space-xs) 0; }
+
+  .tree-node { padding: 3px 0 3px var(--space-md); cursor: pointer; display: flex; align-items: center; gap: 4px; }
+  .tree-node:hover { background: rgba(78, 121, 167, 0.08); }
+  .tree-node.selected { background: rgba(78, 121, 167, 0.12); font-weight: 600; }
+  .tree-node .arrow { width: 16px; font-size: 10px; color: var(--text-secondary); text-align: center; }
+  .tree-node .icon { width: 16px; font-size: 11px; text-align: center; }
+  .tree-node .check { width: 14px; height: 14px; border: 1.5px solid var(--border); border-radius: 2px; margin-right: 2px; }
+  .tree-node .check.checked { background: var(--accent); border-color: var(--accent); position: relative; }
+  .tree-node .check.checked::after { content: "✓"; color: white; font-size: 10px; position: absolute; top: -1px; left: 1px; }
+  .tree-indent-1 { padding-left: 28px; }
+  .tree-indent-2 { padding-left: 44px; }
+  .tree-indent-3 { padding-left: 60px; }
+  .tree-node.dragging { opacity: 0.5; background: var(--drop-target); }
+
+  /* Grid Area */
+  .grid-area { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+  /* Grid Header */
+  .grid-header { display: flex; border-bottom: 2px solid var(--border); background: var(--surface); font-size: 12px; font-weight: 600; }
+  .grid-col-header {
+    padding: 8px var(--space-sm);
+    border-right: 1px solid var(--border);
+    cursor: pointer;
+    position: relative;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .grid-col-header:hover { background: rgba(0,0,0,0.04); }
+  .grid-col-header .sort-icon { color: var(--accent); font-size: 10px; margin-left: 4px; }
+  .col-ts { width: 140px; min-width: 140px; background: rgba(78,121,167,0.06); }
+  .col-type { width: 60px; min-width: 60px; }
+  .col-data { width: 120px; min-width: 120px; }
+  .col-data-wide { width: 150px; min-width: 150px; }
+
+  /* Grid Body */
+  .grid-body { flex: 1; overflow-y: auto; font-size: 12px; }
+  .grid-row { display: flex; border-bottom: 1px solid #f0f0f0; position: relative; }
+  .grid-row:hover { background: rgba(78, 121, 167, 0.04); }
+  .grid-row.selected { background: rgba(78, 121, 167, 0.08); }
+  .grid-row.new-row { background: var(--new-data); }
+  .grid-cell {
+    padding: 5px var(--space-sm);
+    border-right: 1px solid #f5f5f5;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .grid-cell.blank { color: var(--text-muted); }
+  .grid-cell.ts { width: 140px; min-width: 140px; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+  .grid-cell.type { width: 60px; min-width: 60px; font-size: 11px; }
+  .grid-cell.data { width: 120px; min-width: 120px; }
+  .grid-cell.data-wide { width: 150px; min-width: 150px; }
+
+  /* Row type color stripe */
+  .stripe-nav { border-left: 4px solid var(--type-1); }
+  .stripe-fc { border-left: 4px solid var(--type-2); }
+  .stripe-sensor { border-left: 4px solid var(--type-3); }
+  .stripe-comm { border-left: 4px solid var(--type-4); }
+  .stripe-log { border-left: 4px solid var(--type-5); }
+
+  /* Drop indicator */
+  .drop-indicator {
+    position: absolute; top: 0; bottom: 0; width: 3px;
+    background: var(--accent);
+    z-index: 10;
+    display: none;
+  }
+
+  /* Row Detail Panel */
+  .detail-panel {
+    height: 180px;
+    border-top: 2px solid var(--border);
+    background: var(--surface);
+    overflow-y: auto;
+    font-size: 12px;
+  }
+  .detail-header {
+    padding: 6px var(--space-md);
+    font-weight: 600; font-size: 13px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--surface);
+    position: sticky; top: 0;
+  }
+  .detail-close { cursor: pointer; color: var(--text-secondary); font-size: 16px; }
+  .detail-tree { padding: var(--space-sm) var(--space-md); }
+  .detail-node { display: flex; padding: 2px 0; }
+  .detail-node .key { color: var(--text-secondary); min-width: 200px; }
+  .detail-node .value { color: var(--text-primary); font-variant-numeric: tabular-nums; }
+  .detail-indent-1 { padding-left: 20px; }
+  .detail-indent-2 { padding-left: 40px; }
+  .detail-group { font-weight: 600; color: var(--text-primary); cursor: pointer; }
+  .detail-group .arrow { margin-right: 4px; font-size: 10px; }
+
+  /* Status Bar */
+  .status-bar {
+    height: 24px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 0 var(--space-md);
+    font-size: 11px; color: var(--text-secondary);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .status-bar .refresh-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--type-5);
+    display: inline-block;
+    margin-right: 4px;
+  }
+  .status-new { color: var(--type-5); font-weight: 600; }
+
+  /* Empty State */
+  .empty-state {
+    flex: 1; display: flex; align-items: center; justify-content: center;
+    color: var(--text-muted); font-size: 14px;
+  }
+  .empty-state .hint { text-align: center; }
+  .empty-state .hint .icon { font-size: 32px; margin-bottom: 8px; display: block; }
+
+  /* Drag ghost preview */
+  .drag-ghost {
+    background: var(--accent); color: white;
+    padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 600;
+    position: absolute; pointer-events: none; display: none;
+  }
+
+  /* Description panels */
+  .desc-section { margin: 0 24px 24px; }
+  .desc-section h3 { font-size: 14px; margin-bottom: 8px; color: #333; }
+  .desc-section p { font-size: 13px; color: #555; line-height: 1.5; margin-bottom: 6px; }
+  .desc-section ul { font-size: 13px; color: #555; line-height: 1.6; padding-left: 20px; }
+
+  /* Collapsed tree state */
+  .tree-panel.collapsed { width: 32px; min-width: 32px; }
+  .tree-panel.collapsed .tree-header span,
+  .tree-panel.collapsed .tree-search,
+  .tree-panel.collapsed .tree-content { display: none; }
+  .tree-panel.collapsed .tree-header { writing-mode: vertical-lr; padding: 12px 8px; justify-content: flex-start; }
+
+  /* Annotations */
+  .annotation {
+    background: #FFF9C4; border: 1px solid #F9A825; border-radius: 4px;
+    padding: 8px 12px; font-size: 12px; color: #5D4037; margin: 12px 24px;
+  }
+  .annotation strong { color: #E65100; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Tableau Telemetry Extension — UX Design Direction</h1>
+  <p>Design tokens, layout, and interaction patterns applied to a representative mockup</p>
+</div>
+
+<div class="direction-tabs">
+  <div class="direction-tab active" onclick="showDir(0)">Main View — Active Analysis</div>
+  <div class="direction-tab" onclick="showDir(1)">Empty State</div>
+  <div class="direction-tab" onclick="showDir(2)">Row Detail Open</div>
+  <div class="direction-tab" onclick="showDir(3)">Tree Collapsed</div>
+</div>
+
+<!-- Direction 0: Main View -->
+<div class="direction-panel active" id="dir-0">
+  <div class="annotation">
+    <strong>State:</strong> Analyst has dragged 5 fields from 3 message types. Grid shows mixed-line data interleaved by time.
+    Live refresh active — 36 new rows arrived. Status bar reflects current state.
+  </div>
+  <div class="extension-frame">
+    <div class="extension-label">Tableau Dashboard Extension Zone — <span>Telemetry Explorer</span></div>
+    <div class="extension-body">
+      <!-- Tree Panel -->
+      <div class="tree-panel">
+        <div class="tree-header"><span>Fields</span> <span style="font-size:11px;color:#999;cursor:pointer;">◀</span></div>
+        <input class="tree-search" placeholder="Search fields..." />
+        <div class="tree-content">
+          <div class="tree-node"><span class="arrow">▼</span><span class="icon">📁</span> Navigation</div>
+          <div class="tree-node tree-indent-1"><span class="arrow">▼</span><span class="icon">📁</span> GPS</div>
+          <div class="tree-node tree-indent-2"><span class="arrow">▼</span><span class="icon">📁</span> Position</div>
+          <div class="tree-node tree-indent-3 selected"><span class="check checked"></span> latitude</div>
+          <div class="tree-node tree-indent-3 selected"><span class="check checked"></span> longitude</div>
+          <div class="tree-node tree-indent-3"><span class="check"></span> altitude_msl</div>
+          <div class="tree-node tree-indent-2"><span class="arrow">▶</span><span class="icon">📁</span> Velocity</div>
+          <div class="tree-node tree-indent-1"><span class="arrow">▶</span><span class="icon">📁</span> INS</div>
+          <div class="tree-node"><span class="arrow">▼</span><span class="icon">📁</span> Flight Control</div>
+          <div class="tree-node tree-indent-1"><span class="arrow">▼</span><span class="icon">📁</span> Actuator</div>
+          <div class="tree-node tree-indent-2 selected"><span class="check checked"></span> cmd_position</div>
+          <div class="tree-node tree-indent-2"><span class="check"></span> feedback</div>
+          <div class="tree-node tree-indent-1"><span class="arrow">▶</span><span class="icon">📁</span> Mode</div>
+          <div class="tree-node"><span class="arrow">▼</span><span class="icon">📁</span> System Log</div>
+          <div class="tree-node tree-indent-1 selected"><span class="check checked"></span> severity</div>
+          <div class="tree-node tree-indent-1 selected"><span class="check checked"></span> message</div>
+          <div class="tree-node"><span class="arrow">▶</span><span class="icon">📁</span> Sensors</div>
+          <div class="tree-node"><span class="arrow">▶</span><span class="icon">📁</span> Communications</div>
+          <div class="tree-node"><span class="arrow">▶</span><span class="icon">📁</span> Power</div>
+        </div>
+      </div>
+      <!-- Grid Area -->
+      <div class="grid-area">
+        <div class="grid-header">
+          <div class="grid-col-header col-ts" style="background:rgba(78,121,167,0.06);">timestamp <span class="sort-icon">▼</span></div>
+          <div class="grid-col-header col-data">latitude</div>
+          <div class="grid-col-header col-data">longitude</div>
+          <div class="grid-col-header col-data">cmd_position</div>
+          <div class="grid-col-header col-type">severity</div>
+          <div class="grid-col-header col-data-wide">message</div>
+        </div>
+        <div class="grid-body">
+          <div class="grid-row stripe-nav"><div class="grid-cell ts">14:32:01.234</div><div class="grid-cell data">32.7157</div><div class="grid-cell data">-117.1611</div><div class="grid-cell data blank"></div><div class="grid-cell type blank"></div><div class="grid-cell data-wide blank"></div></div>
+          <div class="grid-row stripe-fc"><div class="grid-cell ts">14:32:01.235</div><div class="grid-cell data blank"></div><div class="grid-cell data blank"></div><div class="grid-cell data">0.8234</div><div class="grid-cell type blank"></div><div class="grid-cell data-wide blank"></div></div>
+          <div class="grid-row stripe-nav"><div class="grid-cell ts">14:32:01.334</div><div class="grid-cell data">32.7158</div><div class="grid-cell data">-117.1612</div><div class="grid-cell data blank"></div><div class="grid-cell type blank"></div><div class="grid-cell data-wide blank"></div></div>
+          <div class="grid-row stripe-log"><div class="grid-cell ts">14:32:01.400</div><div class="grid-cell data blank"></div><div class="grid-cell data blank"></div><div class="grid-cell data blank"></div><div class="grid-cell type" style="color:#F57C00;">WARN</div><div class="grid-cell data-wide">Actuator rate limit exceeded</div></div>
+          <div class="grid-row stripe-fc"><div class="grid-cell ts">14:32:01.435</div><div class="grid-cell data blank"></div><div class="grid-cell data blank"></div><div class="grid-cell data">0.9102</div><div class="grid-cell type blank"></div><div class="grid-cell data-wide blank"></div></div>
+          <div class="grid-row stripe-nav"><div class="grid-cell ts">14:32:01.534</div><div class="grid-cell data">32.7159</div><div class="grid-cell data">-117.1613</div><div class="grid-cell data blank"></div><div class="grid-cell type blank"></div><div class="grid-cell data-wide blank"></div></div>
+          <div class="grid-row stripe-fc selected"><div class="grid-cell ts">14:32:01.635</div><div class="grid-cell data blank"></div><div class="grid-cell data blank"></div><div class="grid-cell data" style="color:var(--error);font-weight:600;">1.0000</div><div class="grid-cell type blank"></div><div class="grid-cell data-wide blank"></div></div>
+          <div class="grid-row stripe-log"><div class="grid-cell ts">14:32:01.700</div><div class="grid-cell data blank"></div><div class="grid-cell data blank"></div><div class="grid-cell data blank"></div><div class="grid-cell type" style="color:var(--error);">ERR</div><div class="grid-cell data-wide">Actuator saturation detected</div></div>
+          <div class="grid-row stripe-nav new-row"><div class="grid-cell ts">14:32:01.834</div><div class="grid-cell data">32.7160</div><div class="grid-cell data">-117.1614</div><div class="grid-cell data blank"></div><div class="grid-cell type blank"></div><div class="grid-cell data-wide blank"></div></div>
+          <div class="grid-row stripe-fc new-row"><div class="grid-cell ts">14:32:01.835</div><div class="grid-cell data blank"></div><div class="grid-cell data blank"></div><div class="grid-cell data">0.9541</div><div class="grid-cell type blank"></div><div class="grid-cell data-wide blank"></div></div>
+          <div class="grid-row stripe-nav"><div class="grid-cell ts">14:32:01.934</div><div class="grid-cell data">32.7161</div><div class="grid-cell data">-117.1615</div><div class="grid-cell data blank"></div><div class="grid-cell type blank"></div><div class="grid-cell data-wide blank"></div></div>
+          <div class="grid-row stripe-fc"><div class="grid-cell ts">14:32:02.035</div><div class="grid-cell data blank"></div><div class="grid-cell data blank"></div><div class="grid-cell data">0.8876</div><div class="grid-cell type blank"></div><div class="grid-cell data-wide blank"></div></div>
+          <div class="grid-row stripe-nav"><div class="grid-cell ts">14:32:02.134</div><div class="grid-cell data">32.7162</div><div class="grid-cell data">-117.1616</div><div class="grid-cell data blank"></div><div class="grid-cell type blank"></div><div class="grid-cell data-wide blank"></div></div>
+          <div class="grid-row stripe-log"><div class="grid-cell ts">14:32:02.200</div><div class="grid-cell data blank"></div><div class="grid-cell data blank"></div><div class="grid-cell data blank"></div><div class="grid-cell type">INFO</div><div class="grid-cell data-wide">Recovery mode initiated</div></div>
+        </div>
+        <div class="status-bar">
+          <div><span class="refresh-dot"></span> 10,247 rows | 3 message types | <span class="status-new">+36 new</span></div>
+          <div>Last refresh: 2s ago</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="desc-section">
+    <h3>Key Design Elements</h3>
+    <ul>
+      <li><strong>Left-edge color stripes:</strong> Blue = Navigation, Orange = Flight Control, Green = System Log. Instant visual scanning.</li>
+      <li><strong>Sparse cells:</strong> Blank cells are truly empty (no "N/A" clutter). Only the message type's own fields have values.</li>
+      <li><strong>Timestamp pinned left</strong> with subtle blue tint — always the anchor column.</li>
+      <li><strong>Green-tinted rows</strong> at bottom = newly arrived data from live refresh.</li>
+      <li><strong>Selected row</strong> (blue highlight) shows cmd_position at 1.0000 in red — data-level emphasis for the saturated actuator.</li>
+      <li><strong>Status bar:</strong> Compact, always visible. Row count, message type count, new data count, last refresh time.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Direction 1: Empty State -->
+<div class="direction-panel" id="dir-1">
+  <div class="annotation">
+    <strong>State:</strong> Extension just loaded. No fields selected yet. Tree is populated from Tableau data source. Grid shows the empty state invitation.
+  </div>
+  <div class="extension-frame">
+    <div class="extension-label">Tableau Dashboard Extension Zone — <span>Telemetry Explorer</span></div>
+    <div class="extension-body">
+      <div class="tree-panel">
+        <div class="tree-header"><span>Fields</span> <span style="font-size:11px;color:#999;cursor:pointer;">◀</span></div>
+        <input class="tree-search" placeholder="Search fields..." />
+        <div class="tree-content">
+          <div class="tree-node"><span class="arrow">▶</span><span class="icon">📁</span> Navigation</div>
+          <div class="tree-node"><span class="arrow">▶</span><span class="icon">📁</span> Flight Control</div>
+          <div class="tree-node"><span class="arrow">▶</span><span class="icon">📁</span> Sensors</div>
+          <div class="tree-node"><span class="arrow">▶</span><span class="icon">📁</span> Communications</div>
+          <div class="tree-node"><span class="arrow">▶</span><span class="icon">📁</span> System Log</div>
+          <div class="tree-node"><span class="arrow">▶</span><span class="icon">📁</span> Power</div>
+          <div class="tree-node"><span class="arrow">▶</span><span class="icon">📁</span> Radar</div>
+          <div class="tree-node"><span class="arrow">▶</span><span class="icon">📁</span> Payload</div>
+        </div>
+      </div>
+      <div class="grid-area">
+        <div class="empty-state">
+          <div class="hint">
+            <span class="icon">⬅ ╌ ╌ ▦</span>
+            <div>Drag fields from the tree to start exploring</div>
+          </div>
+        </div>
+        <div class="status-bar">
+          <div>No fields selected</div>
+          <div>Ready</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="desc-section">
+    <h3>Empty State Design</h3>
+    <ul>
+      <li><strong>Minimal, not empty:</strong> A simple directional hint — no tutorial, no wizard, no multi-step onboarding.</li>
+      <li><strong>Tree is pre-populated:</strong> All ~200 message types are loaded from the Tableau data source. The analyst sees what's available immediately.</li>
+      <li><strong>Status bar confirms readiness:</strong> "No fields selected" / "Ready" — the tool is waiting for the analyst, not loading.</li>
+      <li><strong>First-time success target:</strong> Analyst should drag a field and see data within 30 seconds.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Direction 2: Row Detail Open -->
+<div class="direction-panel" id="dir-2">
+  <div class="annotation">
+    <strong>State:</strong> Analyst clicked a Flight Control row (cmd_position = 1.0000). Row detail panel shows the full nested message structure at the bottom.
+  </div>
+  <div class="extension-frame">
+    <div class="extension-label">Tableau Dashboard Extension Zone — <span>Telemetry Explorer</span></div>
+    <div class="extension-body" style="flex-direction:column;">
+      <div style="display:flex;flex:1;overflow:hidden;">
+        <div class="tree-panel" style="height:auto;">
+          <div class="tree-header"><span>Fields</span> <span style="font-size:11px;color:#999;cursor:pointer;">◀</span></div>
+          <input class="tree-search" placeholder="Search fields..." />
+          <div class="tree-content">
+            <div class="tree-node"><span class="arrow">▼</span><span class="icon">📁</span> Navigation</div>
+            <div class="tree-node tree-indent-1"><span class="arrow">▶</span><span class="icon">📁</span> GPS</div>
+            <div class="tree-node"><span class="arrow">▼</span><span class="icon">📁</span> Flight Control</div>
+            <div class="tree-node tree-indent-1"><span class="arrow">▶</span><span class="icon">📁</span> Actuator</div>
+            <div class="tree-node"><span class="arrow">▶</span><span class="icon">📁</span> System Log</div>
+          </div>
+        </div>
+        <div class="grid-area" style="min-height:0;">
+          <div class="grid-header">
+            <div class="grid-col-header col-ts">timestamp <span class="sort-icon">▼</span></div>
+            <div class="grid-col-header col-data">latitude</div>
+            <div class="grid-col-header col-data">longitude</div>
+            <div class="grid-col-header col-data">cmd_position</div>
+            <div class="grid-col-header col-type">severity</div>
+            <div class="grid-col-header col-data-wide">message</div>
+          </div>
+          <div class="grid-body">
+            <div class="grid-row stripe-nav"><div class="grid-cell ts">14:32:01.234</div><div class="grid-cell data">32.7157</div><div class="grid-cell data">-117.1611</div><div class="grid-cell data blank"></div><div class="grid-cell type blank"></div><div class="grid-cell data-wide blank"></div></div>
+            <div class="grid-row stripe-fc selected"><div class="grid-cell ts">14:32:01.635</div><div class="grid-cell data blank"></div><div class="grid-cell data blank"></div><div class="grid-cell data" style="color:var(--error);font-weight:600;">1.0000</div><div class="grid-cell type blank"></div><div class="grid-cell data-wide blank"></div></div>
+            <div class="grid-row stripe-log"><div class="grid-cell ts">14:32:01.700</div><div class="grid-cell data blank"></div><div class="grid-cell data blank"></div><div class="grid-cell data blank"></div><div class="grid-cell type" style="color:var(--error);">ERR</div><div class="grid-cell data-wide">Actuator saturation detected</div></div>
+            <div class="grid-row stripe-nav"><div class="grid-cell ts">14:32:01.834</div><div class="grid-cell data">32.7160</div><div class="grid-cell data">-117.1614</div><div class="grid-cell data blank"></div><div class="grid-cell type blank"></div><div class="grid-cell data-wide blank"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="detail-panel">
+        <div class="detail-header"><span>Row Detail — Flight Control / Actuator</span> <span class="detail-close">✕</span></div>
+        <div class="detail-tree">
+          <div class="detail-node detail-group"><span class="arrow">▼</span> flight_control</div>
+          <div class="detail-node detail-indent-1 detail-group"><span class="arrow">▼</span> actuator</div>
+          <div class="detail-node detail-indent-2"><span class="key">cmd_position</span> <span class="value" style="color:var(--error);font-weight:600;">1.0000</span></div>
+          <div class="detail-node detail-indent-2"><span class="key">feedback</span> <span class="value">0.9876</span></div>
+          <div class="detail-node detail-indent-2"><span class="key">rate</span> <span class="value">0.0342</span></div>
+          <div class="detail-node detail-indent-2"><span class="key">saturation_flag</span> <span class="value" style="color:var(--error);">true</span></div>
+          <div class="detail-node detail-indent-1 detail-group"><span class="arrow">▶</span> mode</div>
+          <div class="detail-node detail-indent-1"><span class="key">timestamp</span> <span class="value">14:32:01.635</span></div>
+          <div class="detail-node detail-indent-1"><span class="key">sequence_number</span> <span class="value">48291</span></div>
+        </div>
+      </div>
+      <div class="status-bar">
+        <div>10,247 rows | 3 message types</div>
+        <div>Last refresh: 5s ago</div>
+      </div>
+    </div>
+  </div>
+  <div class="desc-section">
+    <h3>Row Detail Panel Design</h3>
+    <ul>
+      <li><strong>Bottom panel (Wireshark-style):</strong> Opens below the grid, preserving grid context. Analyst can see both the grid row and all message fields.</li>
+      <li><strong>Full message tree:</strong> Shows ALL fields (not just selected columns), with expand/collapse per nested group.</li>
+      <li><strong>Name-value layout:</strong> Two-column layout (field name left, value right) for easy scanning.</li>
+      <li><strong>Close button:</strong> Click ✕ to dismiss and reclaim grid space.</li>
+      <li><strong>Resizable:</strong> Drag handle on top edge to resize (not shown in static mockup).</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Direction 3: Tree Collapsed -->
+<div class="direction-panel" id="dir-3">
+  <div class="annotation">
+    <strong>State:</strong> Analyst collapsed the tree panel to maximize grid space. A thin icon strip remains for quick re-expansion.
+  </div>
+  <div class="extension-frame">
+    <div class="extension-label">Tableau Dashboard Extension Zone — <span>Telemetry Explorer</span></div>
+    <div class="extension-body">
+      <div style="width:32px;min-width:32px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;align-items:center;padding-top:8px;">
+        <div style="cursor:pointer;color:var(--accent);font-size:14px;writing-mode:vertical-lr;font-weight:600;font-size:12px;letter-spacing:1px;">▶ Fields</div>
+      </div>
+      <div class="grid-area">
+        <div class="grid-header">
+          <div class="grid-col-header col-ts">timestamp <span class="sort-icon">▼</span></div>
+          <div class="grid-col-header col-data">latitude</div>
+          <div class="grid-col-header col-data">longitude</div>
+          <div class="grid-col-header col-data">cmd_position</div>
+          <div class="grid-col-header col-type">severity</div>
+          <div class="grid-col-header col-data-wide">message</div>
+          <div class="grid-col-header col-data">altitude_msl</div>
+          <div class="grid-col-header col-data">heading</div>
+        </div>
+        <div class="grid-body">
+          <div class="grid-row stripe-nav"><div class="grid-cell ts">14:32:01.234</div><div class="grid-cell data">32.7157</div><div class="grid-cell data">-117.1611</div><div class="grid-cell data blank"></div><div class="grid-cell type blank"></div><div class="grid-cell data-wide blank"></div><div class="grid-cell data">1420.3</div><div class="grid-cell data">275.4</div></div>
+          <div class="grid-row stripe-fc"><div class="grid-cell ts">14:32:01.235</div><div class="grid-cell data blank"></div><div class="grid-cell data blank"></div><div class="grid-cell data">0.8234</div><div class="grid-cell type blank"></div><div class="grid-cell data-wide blank"></div><div class="grid-cell data blank"></div><div class="grid-cell data blank"></div></div>
+          <div class="grid-row stripe-nav"><div class="grid-cell ts">14:32:01.334</div><div class="grid-cell data">32.7158</div><div class="grid-cell data">-117.1612</div><div class="grid-cell data blank"></div><div class="grid-cell type blank"></div><div class="grid-cell data-wide blank"></div><div class="grid-cell data">1419.8</div><div class="grid-cell data">275.5</div></div>
+          <div class="grid-row stripe-log"><div class="grid-cell ts">14:32:01.400</div><div class="grid-cell data blank"></div><div class="grid-cell data blank"></div><div class="grid-cell data blank"></div><div class="grid-cell type" style="color:#F57C00;">WARN</div><div class="grid-cell data-wide">Actuator rate limit exceeded</div><div class="grid-cell data blank"></div><div class="grid-cell data blank"></div></div>
+          <div class="grid-row stripe-fc"><div class="grid-cell ts">14:32:01.435</div><div class="grid-cell data blank"></div><div class="grid-cell data blank"></div><div class="grid-cell data">0.9102</div><div class="grid-cell type blank"></div><div class="grid-cell data-wide blank"></div><div class="grid-cell data blank"></div><div class="grid-cell data blank"></div></div>
+          <div class="grid-row stripe-nav"><div class="grid-cell ts">14:32:01.534</div><div class="grid-cell data">32.7159</div><div class="grid-cell data">-117.1613</div><div class="grid-cell data blank"></div><div class="grid-cell type blank"></div><div class="grid-cell data-wide blank"></div><div class="grid-cell data">1418.9</div><div class="grid-cell data">275.6</div></div>
+          <div class="grid-row stripe-fc"><div class="grid-cell ts">14:32:01.635</div><div class="grid-cell data blank"></div><div class="grid-cell data blank"></div><div class="grid-cell data" style="color:var(--error);font-weight:600;">1.0000</div><div class="grid-cell type blank"></div><div class="grid-cell data-wide blank"></div><div class="grid-cell data blank"></div><div class="grid-cell data blank"></div></div>
+          <div class="grid-row stripe-log"><div class="grid-cell ts">14:32:01.700</div><div class="grid-cell data blank"></div><div class="grid-cell data blank"></div><div class="grid-cell data blank"></div><div class="grid-cell type" style="color:var(--error);">ERR</div><div class="grid-cell data-wide">Actuator saturation detected</div><div class="grid-cell data blank"></div><div class="grid-cell data blank"></div></div>
+          <div class="grid-row stripe-nav"><div class="grid-cell ts">14:32:01.834</div><div class="grid-cell data">32.7160</div><div class="grid-cell data">-117.1614</div><div class="grid-cell data blank"></div><div class="grid-cell type blank"></div><div class="grid-cell data-wide blank"></div><div class="grid-cell data">1418.1</div><div class="grid-cell data">275.7</div></div>
+          <div class="grid-row stripe-fc"><div class="grid-cell ts">14:32:01.835</div><div class="grid-cell data blank"></div><div class="grid-cell data blank"></div><div class="grid-cell data">0.9541</div><div class="grid-cell type blank"></div><div class="grid-cell data-wide blank"></div><div class="grid-cell data blank"></div><div class="grid-cell data blank"></div></div>
+          <div class="grid-row stripe-nav"><div class="grid-cell ts">14:32:01.934</div><div class="grid-cell data">32.7161</div><div class="grid-cell data">-117.1615</div><div class="grid-cell data blank"></div><div class="grid-cell type blank"></div><div class="grid-cell data-wide blank"></div><div class="grid-cell data">1417.5</div><div class="grid-cell data">275.8</div></div>
+        </div>
+        <div class="status-bar">
+          <div>10,247 rows | 3 message types | 7 fields</div>
+          <div>Last refresh: 1s ago</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="desc-section">
+    <h3>Collapsed Tree — Maximum Data Density</h3>
+    <ul>
+      <li><strong>32px icon strip:</strong> "▶ Fields" label in vertical text. One click to re-expand.</li>
+      <li><strong>Full-width grid:</strong> All horizontal space dedicated to data columns.</li>
+      <li><strong>More columns visible:</strong> With tree collapsed, additional fields (altitude_msl, heading) are visible without horizontal scrolling.</li>
+      <li><strong>Analyst workflow:</strong> Set up fields with tree open → collapse tree → focus on data analysis.</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+function showDir(n) {
+  document.querySelectorAll('.direction-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.direction-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('dir-' + n).classList.add('active');
+  document.querySelectorAll('.direction-tab')[n].classList.add('active');
+}
+</script>
+</body>
+</html>

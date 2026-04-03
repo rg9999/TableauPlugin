@@ -1,0 +1,5 @@
+{
+  "instructions": [
+    "[ma-agents] # AI Agent Skills - Planning Instruction\n\nYou have access to a library of skills in your skills directory. Before starting any task:\n\n1. Read the skill manifest at .opencode/skills/MANIFEST.yaml\n2. Based on the task description, select which skills are relevant\n3. Read only the selected skill files\n4. Then proceed with the task\n\nAlways load skills marked with always_load: true.\nDo not load skills that are not relevant to the current task."
+  ]
+}
