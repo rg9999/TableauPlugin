@@ -1,22 +1,14 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App'
-
-declare const tableau:
-  | {
-      extensions: {
-        initializeAsync: () => Promise<void>
-      }
-    }
-  | undefined
+import { tableauAdapter } from './services/tableauAdapter'
+import { logger } from './utils/logger'
 
 const init = async () => {
   try {
-    if (typeof tableau !== 'undefined') {
-      await tableau.extensions.initializeAsync()
-    }
+    await tableauAdapter.initialize()
   } catch (err) {
-    console.error('Failed to initialize Tableau extension:', err)
+    logger.error('Failed to initialize Tableau extension:', err)
   }
 
   const container = document.getElementById('root')

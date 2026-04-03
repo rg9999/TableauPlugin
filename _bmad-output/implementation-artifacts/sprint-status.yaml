@@ -43,12 +43,12 @@ story_location: _bmad-output/implementation-artifacts
 
 development_status:
   # Epic 1: Project Foundation & Extension Shell
-  epic-1: in-progress
+  epic-1: done
   1-1-project-scaffold-and-tableau-extension-initialization: done
   1-2-design-tokens-and-theming: done
   1-3-panel-layout-with-responsive-zone-adaptation: done
-  1-4-tableau-api-adapter-service: backlog
-  1-5-test-mock-data-and-tableau-api-mock: backlog
+  1-4-tableau-api-adapter-service: done
+  1-5-test-mock-data-and-tableau-api-mock: done
   epic-1-retrospective: optional
 
   # Epic 2: Field Selection & Tree Navigation
