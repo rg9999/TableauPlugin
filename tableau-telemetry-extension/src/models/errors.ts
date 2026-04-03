@@ -1,11 +1,20 @@
 export class TableauConnectionError extends Error {
-  name = 'TableauConnectionError' as const
+  constructor(message?: string, options?: ErrorOptions) {
+    super(message, options)
+    this.name = 'TableauConnectionError'
+  }
 }
 
 export class TableauDataError extends Error {
-  name = 'TableauDataError' as const
+  constructor(message?: string, options?: ErrorOptions) {
+    super(message, options)
+    this.name = 'TableauDataError'
+  }
 }
 
 export class SettingsPersistError extends Error {
-  name = 'SettingsPersistError' as const
+  constructor(message?: string, options?: ErrorOptions) {
+    super(message, options)
+    this.name = 'SettingsPersistError'
+  }
 }

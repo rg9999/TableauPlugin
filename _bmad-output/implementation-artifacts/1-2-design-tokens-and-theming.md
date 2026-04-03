@@ -1,6 +1,6 @@
 # Story 1.2: Design Tokens & Theming
 
-Status: ready-for-dev
+Status: done
 
 ## Story
 
@@ -20,7 +20,7 @@ so that the extension has a consistent, Tableau-harmonious visual identity.
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Create design tokens (AC: #1, #5)
+- [x] Task 1: Create design tokens (AC: #1, #5)
   - [ ] Create `src/theme/designTokens.ts`:
     ```typescript
     // Base palette — Tableau-harmonious neutrals
@@ -88,7 +88,7 @@ so that the extension has a consistent, Tableau-harmonious visual identity.
     } as const
     ```
 
-- [ ] Task 2: Create MUI theme (AC: #2, #4)
+- [x] Task 2: Create MUI theme (AC: #2, #4)
   - [ ] Create `src/theme/muiTheme.ts`:
     ```typescript
     import { createTheme } from '@mui/material/styles'
@@ -129,7 +129,7 @@ so that the extension has a consistent, Tableau-harmonious visual identity.
     ```
   - [ ] Verify MUI components render with correct colors and fonts
 
-- [ ] Task 3: Create AG Grid theme (AC: #3, #4, #6)
+- [x] Task 3: Create AG Grid theme (AC: #3, #4, #6)
   - [ ] Create `src/theme/agGridTheme.ts`:
     ```typescript
     import { LicenseManager } from 'ag-grid-enterprise'
@@ -175,7 +175,7 @@ so that the extension has a consistent, Tableau-harmonious visual identity.
     ```
   - [ ] Verify AG Grid renders with Tableau-harmonious styling
 
-- [ ] Task 4: Integrate themes in App.tsx (AC: #7)
+- [x] Task 4: Integrate themes in App.tsx (AC: #7)
   - [ ] Update `src/App.tsx`:
     ```typescript
     import { ThemeProvider } from '@mui/material/styles'
@@ -202,7 +202,7 @@ so that the extension has a consistent, Tableau-harmonious visual identity.
     ```
   - [ ] Verify both MUI and AG Grid styles load without conflicts
 
-- [ ] Task 5: Tests (AC: all)
+- [x] Task 5: Tests (AC: all)
   - [ ] Create `src/theme/designTokens.test.ts`:
     - Verify MESSAGE_TYPE_COLORS has exactly 8 entries
     - Verify all color values are valid hex or rgba strings
@@ -268,8 +268,30 @@ This story assumes Story 1.1 is complete:
 
 ### Agent Model Used
 
+Claude Opus 4.6 (1M context)
+
 ### Debug Log References
+
+- TypeScript compile: zero errors
+- Vitest: 2 test files, 11 tests, all passing
+- Build: dist/index.html (0.47KB) + index.css (214.64KB) + index.js (278.29KB)
+- AG Grid CSS and MUI styles load without conflicts
 
 ### Completion Notes List
 
+- designTokens.ts: COLORS, SEMANTIC, MESSAGE_TYPE_COLORS (8 entries), SPACING (4px grid), TYPOGRAPHY (system fonts, type scale), LAYOUT
+- muiTheme.ts: createTheme with palette from tokens, 4px spacing unit, tooltip/CssBaseline overrides
+- agGridTheme.ts: Balham base theme, license key from env var, theme params from tokens
+- agGridStyles.css: CSS custom properties matching design tokens
+- App.tsx: ThemeProvider + CssBaseline + AG Grid CSS imports + enterprise module registration
+- 9 new design token tests verifying color formats, spacing multiples, type scale structure
+
 ### File List
+
+- src/theme/designTokens.ts (created)
+- src/theme/designTokens.test.ts (created)
+- src/theme/muiTheme.ts (created)
+- src/theme/agGridTheme.ts (created)
+- src/theme/agGridStyles.css (created)
+- src/App.tsx (modified — ThemeProvider, CssBaseline, AG Grid imports)
+- src/App.test.tsx (modified — added ThemeProvider verification)

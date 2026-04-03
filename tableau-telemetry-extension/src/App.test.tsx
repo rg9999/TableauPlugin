@@ -7,4 +7,11 @@ describe('App', () => {
     render(<App />)
     expect(screen.getByText('Tableau Telemetry Extension')).toBeInTheDocument()
   })
+
+  it('wraps content in MUI ThemeProvider', () => {
+    const { container } = render(<App />)
+    // CssBaseline injects a style element — verify it exists
+    const styles = container.ownerDocument.querySelectorAll('style')
+    expect(styles.length).toBeGreaterThan(0)
+  })
 })

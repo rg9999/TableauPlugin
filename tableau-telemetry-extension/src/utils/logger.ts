@@ -1,6 +1,8 @@
 type LogLevel = 'debug' | 'info' | 'warn' | 'error'
 
-const LOG_LEVEL: LogLevel = (import.meta.env.VITE_LOG_LEVEL as LogLevel) || 'info'
+const VALID_LEVELS: LogLevel[] = ['debug', 'info', 'warn', 'error']
+const raw = import.meta.env.VITE_LOG_LEVEL as string | undefined
+const LOG_LEVEL: LogLevel = raw && VALID_LEVELS.includes(raw as LogLevel) ? (raw as LogLevel) : 'info'
 
 const levels: Record<LogLevel, number> = { debug: 0, info: 1, warn: 2, error: 3 }
 

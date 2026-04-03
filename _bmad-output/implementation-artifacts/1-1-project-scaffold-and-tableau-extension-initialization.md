@@ -1,6 +1,6 @@
 # Story 1.1: Project Scaffold & Tableau Extension Initialization
 
-Status: review
+Status: done
 
 ## Story
 
