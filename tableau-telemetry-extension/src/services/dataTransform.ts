@@ -115,6 +115,37 @@ export function buildSparseGridModel(
   return gridRows
 }
 
+/**
+ * Reconstructs a nested object from a flat GridRowData.
+ * Converts dotted-path keys back into a nested structure for detail display.
+ * e.g., { "nav.gps.lat": 32.7, "nav.gps.lon": -117.2 } → { nav: { gps: { lat: 32.7, lon: -117.2 } } }
+ */
+export function reconstructNestedObject(row: GridRowData): Record<string, unknown> {
+  const result: Record<string, unknown> = {}
+
+  for (const [key, value] of Object.entries(row)) {
+    // Skip metadata fields
+    if (key === 'rowId') continue
+
+    const segments = key.split('.')
+    if (segments.length === 1) {
+      result[key] = value
+      continue
+    }
+
+    let current: Record<string, unknown> = result
+    for (let i = 0; i < segments.length - 1; i++) {
+      if (!(segments[i] in current) || typeof current[segments[i]] !== 'object') {
+        current[segments[i]] = {}
+      }
+      current = current[segments[i]] as Record<string, unknown>
+    }
+    current[segments[segments.length - 1]] = value
+  }
+
+  return result
+}
+
 /** Reset memoization cache (for testing) */
 export function clearParseCache(): void {
   cachedInput = null

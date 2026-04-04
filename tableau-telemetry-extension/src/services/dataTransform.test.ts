@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { parseFieldHierarchy, clearParseCache, buildSparseGridModel } from './dataTransform'
+import { parseFieldHierarchy, clearParseCache, buildSparseGridModel, reconstructNestedObject } from './dataTransform'
 import { MOCK_SCHEMA, MOCK_ROWS_100 } from '../__mocks__/mockData'
 import type { ColumnInfo } from '../models/tableauTypes'
 import type { FieldNode } from '../models/fieldHierarchy'
@@ -236,5 +236,34 @@ describe('buildSparseGridModel', () => {
     const result = buildSparseGridModel(MOCK_ROWS_100, SELECTED_FIELDS)
     const ids = result.map((r) => r.rowId)
     expect(new Set(ids).size).toBe(ids.length)
+  })
+})
+
+describe('reconstructNestedObject', () => {
+  it('reconstructs dotted paths into nested structure', () => {
+    const row = {
+      rowId: 'r1',
+      timestamp: '2026-04-03T14:30:00.000Z',
+      messageType: 'nav.gps',
+      'nav.gps.lat': 32.7,
+      'nav.gps.lon': -117.2,
+    } as import('../models/gridData').GridRowData
+    const result = reconstructNestedObject(row)
+    expect((result as { nav: { gps: { lat: number } } }).nav.gps.lat).toBe(32.7)
+    expect((result as { nav: { gps: { lon: number } } }).nav.gps.lon).toBe(-117.2)
+    expect(result.timestamp).toBe('2026-04-03T14:30:00.000Z')
+    expect(result.messageType).toBe('nav.gps')
+  })
+
+  it('excludes rowId from output', () => {
+    const row = { rowId: 'r1', timestamp: 't', messageType: 'm' } as import('../models/gridData').GridRowData
+    const result = reconstructNestedObject(row)
+    expect(result.rowId).toBeUndefined()
+  })
+
+  it('handles single-segment keys', () => {
+    const row = { rowId: 'r1', timestamp: 't', messageType: 'm', simple: 'val' } as import('../models/gridData').GridRowData
+    const result = reconstructNestedObject(row)
+    expect(result.simple).toBe('val')
   })
 })

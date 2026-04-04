@@ -11,11 +11,13 @@ import 'ag-grid-community/styles/ag-theme-balham.css'
 import PanelLayout from './components/PanelLayout/PanelLayout'
 import TreeSelector from './components/TreeSelector/TreeSelector'
 import GridArea from './components/GridArea/GridArea'
+import DetailPanel from './components/DetailPanel/DetailPanel'
 import { GRID_DROP_ZONE_ID } from './components/GridArea/DropZoneOverlay'
 import { useFieldHierarchy } from './hooks/useFieldHierarchy'
 import { useTableauData } from './hooks/useTableauData'
 import { useStore } from './store/store'
 import { COLORS } from './theme/designTokens'
+import type { GridRowData } from './models/gridData'
 
 interface ActiveDragData {
   shortName: string
@@ -29,6 +31,7 @@ function App() {
 
   const addField = useStore((state) => state.addField)
   const [activeDrag, setActiveDrag] = useState<ActiveDragData | null>(null)
+  const [detailRow, setDetailRow] = useState<GridRowData | null>(null)
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
@@ -53,11 +56,24 @@ function App() {
     [addField],
   )
 
+  const handleRowClick = useCallback((row: GridRowData) => {
+    setDetailRow(row)
+  }, [])
+
+  const handleCloseDetail = useCallback(() => {
+    setDetailRow(null)
+  }, [])
+
   return (
     <ThemeProvider theme={muiTheme}>
       <CssBaseline />
       <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-        <PanelLayout treeContent={<TreeSelector />} gridContent={<GridArea />} />
+        <PanelLayout
+          treeContent={<TreeSelector />}
+          gridContent={<GridArea onRowClick={handleRowClick} />}
+          detailContent={detailRow ? <DetailPanel row={detailRow} onClose={handleCloseDetail} /> : undefined}
+          detailOpen={detailRow !== null}
+        />
         <DragOverlay dropAnimation={null}>
           {activeDrag ? (
             <Chip

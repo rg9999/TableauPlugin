@@ -69,7 +69,7 @@ development_status:
   # Epic 4: Grid Interaction — Filtering, Sorting & Row Detail
   epic-4: in-progress
   4-1-column-sorting-and-filtering: done
-  4-2-row-detail-panel: backlog
+  4-2-row-detail-panel: done
   4-3-tree-panel-collapse-from-grid-view: backlog
   epic-4-retrospective: optional
 
