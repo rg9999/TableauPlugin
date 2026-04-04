@@ -1,10 +1,18 @@
-import { useMemo, useState, useCallback } from 'react'
+import { useMemo, useState, useCallback, useRef } from 'react'
 import { AgGridReact } from 'ag-grid-react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import type { ColumnHeaderClickedEvent, RowClassParams, GetRowIdParams } from 'ag-grid-community'
+import type {
+  ColumnHeaderClickedEvent,
+  RowClassParams,
+  GetRowIdParams,
+  SortChangedEvent,
+  FilterChangedEvent,
+  RowClickedEvent,
+  GridApi,
+} from 'ag-grid-community'
 import { useStore } from '../../store/store'
 import { buildColumnDefs } from './columnDefBuilder'
 import { getMessageTypeColor } from './messageTypeColors'
@@ -19,13 +27,21 @@ interface ContextMenuState {
   field: string
 }
 
-export default function GridArea() {
+interface GridAreaProps {
+  onRowClick?: (row: GridRowData) => void
+}
+
+export default function GridArea({ onRowClick }: GridAreaProps) {
   const selectedFields = useStore((state) => state.selectedFields)
   const gridData = useStore((state) => state.gridData)
   const removeField = useStore((state) => state.removeField)
+  const setSortModel = useStore((state) => state.setSortModel)
+  const setFilterModel = useStore((state) => state.setFilterModel)
   const columnDefs = useMemo(() => buildColumnDefs(selectedFields), [selectedFields])
   const hasFields = selectedFields.length > 0
   const [contextMenu, setContextMenu] = useState<ContextMenuState | null>(null)
+  const [selectedRowId, setSelectedRowId] = useState<string | null>(null)
+  const gridApiRef = useRef<GridApi | null>(null)
 
   const handleHeaderContextMenu = useCallback((event: ColumnHeaderClickedEvent) => {
     const field = event.column.getColDef().field
@@ -51,7 +67,33 @@ export default function GridArea() {
   const getRowStyle = useCallback((params: RowClassParams<GridRowData>) => {
     if (!params.data) return undefined
     const color = getMessageTypeColor(params.data.messageType)
-    return { borderLeft: `4px solid ${color}` }
+    const isSelected = params.data.rowId === selectedRowId
+    return {
+      borderLeft: `4px solid ${color}`,
+      backgroundColor: isSelected ? `${COLORS.accent}14` : undefined,
+    }
+  }, [selectedRowId])
+
+  const handleSortChanged = useCallback((event: SortChangedEvent) => {
+    const sortModel = event.api.getColumnState()
+      .filter((col) => col.sort != null)
+      .map((col) => ({ colId: col.colId, sort: col.sort! }))
+    setSortModel(sortModel)
+  }, [setSortModel])
+
+  const handleFilterChanged = useCallback((event: FilterChangedEvent) => {
+    const filterModel = event.api.getFilterModel()
+    setFilterModel(filterModel as Record<string, unknown>)
+  }, [setFilterModel])
+
+  const handleRowClicked = useCallback((event: RowClickedEvent<GridRowData>) => {
+    if (!event.data) return
+    setSelectedRowId(event.data.rowId)
+    onRowClick?.(event.data)
+  }, [onRowClick])
+
+  const handleClearFilters = useCallback(() => {
+    gridApiRef.current?.setFilterModel(null)
   }, [])
 
   return (
@@ -87,6 +129,11 @@ export default function GridArea() {
             rowBuffer={20}
             suppressMovableColumns={false}
             animateRows={false}
+            rowSelection="single"
+            onGridReady={(params) => { gridApiRef.current = params.api }}
+            onSortChanged={handleSortChanged}
+            onFilterChanged={handleFilterChanged}
+            onRowClicked={handleRowClicked}
             onColumnHeaderContextMenu={handleHeaderContextMenu}
           />
         </Box>
@@ -99,6 +146,7 @@ export default function GridArea() {
         anchorPosition={contextMenu ? { top: contextMenu.mouseY, left: contextMenu.mouseX } : undefined}
       >
         <MenuItem onClick={handleRemoveField}>Remove field</MenuItem>
+        <MenuItem onClick={handleClearFilters}>Clear all filters</MenuItem>
       </Menu>
     </Box>
   )

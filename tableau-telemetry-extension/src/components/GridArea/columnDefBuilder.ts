@@ -18,6 +18,8 @@ export function buildColumnDefs(selectedFields: FieldNode[]): ColDef[] {
     pinned: 'left',
     sort: 'asc',
     sortIndex: 0,
+    sortable: true,
+    filter: true,
     cellStyle: { backgroundColor: `${COLORS.accent}08` },
     minWidth: 160,
   }
@@ -28,6 +30,8 @@ export function buildColumnDefs(selectedFields: FieldNode[]): ColDef[] {
     headerTooltip: field.dottedPath,
     minWidth: 80,
     flex: 1,
+    sortable: true,
+    filter: true,
     cellRenderer: ArrayCellRenderer,
   }))
 
