@@ -134,7 +134,7 @@ export default function TreeSelector() {
 
   if (!fieldHierarchy) {
     return (
-      <Box sx={{ p: SPACING.md, color: COLORS.textMuted, fontSize: TYPOGRAPHY.treeNode.fontSize }}>
+      <Box sx={{ p: SPACING.md, color: COLORS.textMuted, fontSize: TYPOGRAPHY.treeNode.size }}>
         Loading fields...
       </Box>
     )
