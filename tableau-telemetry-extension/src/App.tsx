@@ -6,12 +6,16 @@ import './theme/agGridStyles.css'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-balham.css'
 import PanelLayout from './components/PanelLayout/PanelLayout'
+import TreeSelector from './components/TreeSelector/TreeSelector'
+import { useFieldHierarchy } from './hooks/useFieldHierarchy'
 
 function App() {
+  useFieldHierarchy()
+
   return (
     <ThemeProvider theme={muiTheme}>
       <CssBaseline />
-      <PanelLayout />
+      <PanelLayout treeContent={<TreeSelector />} />
     </ThemeProvider>
   )
 }

@@ -1,6 +1,6 @@
 # Story 2.1: Field Hierarchy Parsing & Tree Rendering
 
-Status: ready-for-dev
+Status: review
 
 ## Story
 
@@ -19,46 +19,46 @@ so that I can navigate nested field structures intuitively without memorizing do
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Create `src/services/dataTransform.ts` with `parseFieldHierarchy()` (AC: #1, #5)
-  - [ ] 1.1: Implement `parseFieldHierarchy(columns: ColumnInfo[]): TreeNode` — converts flat `ColumnInfo[]` into `TreeNode` tree
-  - [ ] 1.2: Handle edge cases: empty columns, single-segment paths, duplicate prefixes, 6-level nesting
-  - [ ] 1.3: Sort nodes alphabetically at each level (message types first, fields after)
-  - [ ] 1.4: Set `isField: true` only on leaf nodes; set `messageType` on all nodes from the top-level segment
-  - [ ] 1.5: Memoize with a simple cache (same input → same output reference)
-- [ ] Task 2: Create `src/services/dataTransform.test.ts` with unit tests (AC: #6)
-  - [ ] 2.1: Test with `MOCK_SCHEMA` from `src/__mocks__/mockData.ts` — verify 15 message types produce correct tree
-  - [ ] 2.2: Test edge cases: empty array, single field, deeply nested (6 levels), fields sharing common prefixes
-  - [ ] 2.3: Test that leaf nodes have `isField: true`, branch nodes have `isField: false`
-  - [ ] 2.4: Test that `messageType` is set correctly on all nodes
-  - [ ] 2.5: Test memoization — same input returns same reference
-- [ ] Task 3: Populate `src/store/fieldSelectionSlice.ts` with state and actions (AC: #5)
-  - [ ] 3.1: Add state: `selectedFields: FieldNode[]`, `fieldHierarchy: TreeNode | null`
-  - [ ] 3.2: Add actions: `addField(field: FieldNode)`, `removeField(fieldPath: string)`, `setFieldHierarchy(hierarchy: TreeNode)`, `clearAllFields()`
-  - [ ] 3.3: Ensure `addField` prevents duplicates (check by `dottedPath`)
-  - [ ] 3.4: Update `AppState` type in `src/store/store.ts` if needed
-- [ ] Task 4: Create `src/components/TreeSelector/TreeSelector.tsx` (AC: #2, #3, #4)
-  - [ ] 4.1: Use MUI `TreeView` (from `@mui/x-tree-view` or `@mui/lab` — check installed version) to render the `TreeNode` hierarchy
-  - [ ] 4.2: Render branch nodes with expand/collapse arrows; render leaf nodes with checkboxes or selection indicators
-  - [ ] 4.3: Show `node.name` as the display text for all nodes
-  - [ ] 4.4: Show full `dottedPath` on leaf nodes (as secondary text or tooltip — FR5)
-  - [ ] 4.5: Read `fieldHierarchy` from Zustand `useStore(state => state.fieldHierarchy)`
-  - [ ] 4.6: Read `selectedFields` from Zustand to show selected state on leaf nodes
-  - [ ] 4.7: On leaf node click/check, call `addField()` or `removeField()` depending on current selection state
-- [ ] Task 5: Create `src/hooks/useFieldHierarchy.ts` — load and parse schema on mount (AC: #1, #5)
-  - [ ] 5.1: Call `tableauAdapter.getDataSourceSchema()` on mount
-  - [ ] 5.2: Pass result through `dataTransform.parseFieldHierarchy()`
-  - [ ] 5.3: Store result in Zustand via `setFieldHierarchy()`
-  - [ ] 5.4: Handle errors: catch `TableauDataError`, log via `logger.warn`, set hierarchy to null
-  - [ ] 5.5: Use `useMemo` or `useRef` to avoid re-parsing on re-renders
-- [ ] Task 6: Wire TreeSelector into PanelLayout (AC: #2)
-  - [ ] 6.1: In `App.tsx`, call `useFieldHierarchy()` to load schema on init
-  - [ ] 6.2: Pass `<TreeSelector />` as `treeContent` prop to `<PanelLayout />`
-  - [ ] 6.3: Verify tree renders in the 240px left panel
-- [ ] Task 7: Create `src/components/TreeSelector/TreeSelector.test.tsx` (AC: #2, #3, #4)
-  - [ ] 7.1: Test that TreeSelector renders hierarchy from mock data
-  - [ ] 7.2: Test expand/collapse of parent nodes
-  - [ ] 7.3: Test that leaf nodes show field short names
-  - [ ] 7.4: Test that clicking a leaf node dispatches `addField` action
+- [x] Task 1: Create `src/services/dataTransform.ts` with `parseFieldHierarchy()` (AC: #1, #5)
+  - [x] 1.1: Implement `parseFieldHierarchy(columns: ColumnInfo[]): TreeNode` — converts flat `ColumnInfo[]` into `TreeNode` tree
+  - [x] 1.2: Handle edge cases: empty columns, single-segment paths, duplicate prefixes, 6-level nesting
+  - [x] 1.3: Sort nodes alphabetically at each level (message types first, fields after)
+  - [x] 1.4: Set `isField: true` only on leaf nodes; set `messageType` on all nodes from the top-level segment
+  - [x] 1.5: Memoize with a simple cache (same input → same output reference)
+- [x] Task 2: Create `src/services/dataTransform.test.ts` with unit tests (AC: #6)
+  - [x] 2.1: Test with `MOCK_SCHEMA` from `src/__mocks__/mockData.ts` — verify 15 message types produce correct tree
+  - [x] 2.2: Test edge cases: empty array, single field, deeply nested (6 levels), fields sharing common prefixes
+  - [x] 2.3: Test that leaf nodes have `isField: true`, branch nodes have `isField: false`
+  - [x] 2.4: Test that `messageType` is set correctly on all nodes
+  - [x] 2.5: Test memoization — same input returns same reference
+- [x] Task 3: Populate `src/store/fieldSelectionSlice.ts` with state and actions (AC: #5)
+  - [x] 3.1: Add state: `selectedFields: FieldNode[]`, `fieldHierarchy: TreeNode | null`
+  - [x] 3.2: Add actions: `addField(field: FieldNode)`, `removeField(fieldPath: string)`, `setFieldHierarchy(hierarchy: TreeNode)`, `clearAllFields()`
+  - [x] 3.3: Ensure `addField` prevents duplicates (check by `dottedPath`)
+  - [x] 3.4: Update `AppState` type in `src/store/store.ts` if needed
+- [x] Task 4: Create `src/components/TreeSelector/TreeSelector.tsx` (AC: #2, #3, #4)
+  - [x] 4.1: Built custom recursive tree with MUI List/ListItemButton/Collapse (no @mui/x-tree-view needed)
+  - [x] 4.2: Render branch nodes with expand/collapse arrows; render leaf nodes with checkboxes
+  - [x] 4.3: Show `node.name` as the display text for all nodes
+  - [x] 4.4: Show full `dottedPath` on leaf nodes as secondary text + MUI Tooltip (FR5)
+  - [x] 4.5: Read `fieldHierarchy` from Zustand `useStore(state => state.fieldHierarchy)`
+  - [x] 4.6: Read `selectedFields` from Zustand to show selected state on leaf nodes
+  - [x] 4.7: On leaf node click/check, call `addField()` or `removeField()` depending on current selection state
+- [x] Task 5: Create `src/hooks/useFieldHierarchy.ts` — load and parse schema on mount (AC: #1, #5)
+  - [x] 5.1: Call `tableauAdapter.getDataSourceSchema()` on mount
+  - [x] 5.2: Pass result through `dataTransform.parseFieldHierarchy()`
+  - [x] 5.3: Store result in Zustand via `setFieldHierarchy()`
+  - [x] 5.4: Handle errors: catch `TableauDataError`, log via `logger.warn`, set hierarchy to null
+  - [x] 5.5: Use `useRef` guard to avoid re-parsing on re-renders
+- [x] Task 6: Wire TreeSelector into PanelLayout (AC: #2)
+  - [x] 6.1: In `App.tsx`, call `useFieldHierarchy()` to load schema on init
+  - [x] 6.2: Pass `<TreeSelector />` as `treeContent` prop to `<PanelLayout />`
+  - [x] 6.3: Verify tree renders in the 240px left panel
+- [x] Task 7: Create `src/components/TreeSelector/TreeSelector.test.tsx` (AC: #2, #3, #4)
+  - [x] 7.1: Test that TreeSelector renders hierarchy from mock data
+  - [x] 7.2: Test expand/collapse of parent nodes
+  - [x] 7.3: Test that leaf nodes show field short names
+  - [x] 7.4: Test that clicking a leaf node dispatches `addField` action
 
 ## Dev Notes
 
@@ -207,8 +207,33 @@ root
 
 ### Agent Model Used
 
+Claude Opus 4.6 (1M context)
+
 ### Debug Log References
+
+- TypeScript compile: zero errors
+- Vitest: 8 test files, 95 tests, all passing (0 regressions)
+- 13 dataTransform tests: hierarchy parsing, edge cases, memoization
+- 7 TreeSelector tests: rendering, expand/collapse, selection, dispatch
 
 ### Completion Notes List
 
+- dataTransform.ts: `parseFieldHierarchy()` pure function with module-level memoization cache
+- Sort order: branches before leaves, alphabetical within each group
+- fieldSelectionSlice.ts: populated with selectedFields/fieldHierarchy state and addField/removeField/setFieldHierarchy/clearAllFields actions
+- addField prevents duplicates by dottedPath check
+- TreeSelector.tsx: custom recursive tree using MUI List/Collapse (no @mui/x-tree-view dependency needed)
+- TreeNodeItem is React.memo'd for performance with ~200 message types
+- Leaf nodes show checkboxes + secondary text with full dotted path + MUI Tooltip
+- useFieldHierarchy.ts: loads schema via tableauAdapter, parses, stores in Zustand, with useRef guard and error handling
+- App.tsx: wired useFieldHierarchy() + TreeSelector as treeContent prop to PanelLayout
+
 ### File List
+
+- src/services/dataTransform.ts (created)
+- src/services/dataTransform.test.ts (created)
+- src/store/fieldSelectionSlice.ts (modified — populated from skeleton)
+- src/components/TreeSelector/TreeSelector.tsx (created)
+- src/components/TreeSelector/TreeSelector.test.tsx (created)
+- src/hooks/useFieldHierarchy.ts (created)
+- src/App.tsx (modified — added useFieldHierarchy + TreeSelector)
