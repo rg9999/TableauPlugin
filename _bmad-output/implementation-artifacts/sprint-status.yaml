@@ -67,10 +67,10 @@ development_status:
   epic-3-retrospective: optional
 
   # Epic 4: Grid Interaction — Filtering, Sorting & Row Detail
-  epic-4: in-progress
+  epic-4: done
   4-1-column-sorting-and-filtering: done
   4-2-row-detail-panel: done
-  4-3-tree-panel-collapse-from-grid-view: backlog
+  4-3-tree-panel-collapse-from-grid-view: done
   epic-4-retrospective: optional
 
   # Epic 5: Tableau Filter Integration & Live Refresh
