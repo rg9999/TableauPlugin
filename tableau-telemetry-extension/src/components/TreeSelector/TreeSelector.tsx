@@ -1,3 +1,19 @@
+/**
+ * TreeSelector.tsx — Hierarchical field browser for message types and fields.
+ *
+ * Renders the TreeNode hierarchy as an expandable/collapsible list with:
+ *   - Branch nodes: expand arrow + checkbox (bulk select/deselect all descendants)
+ *   - Leaf nodes: checkbox + field name + dotted-path tooltip (draggable via DraggableTreeItem)
+ *   - Search/filter input at the top (TreeSearchInput + filterTree)
+ *   - Indeterminate checkbox state on parents when some but not all children are selected
+ *
+ * State is driven entirely by Zustand (fieldHierarchy, selectedFields).
+ * TreeNodeItem is React.memo'd for performance with ~200 message types.
+ *
+ * Exported utilities:
+ *   - collectLeafFields(): recursively collects all leaf FieldNodes from a branch
+ *   - filterTree(): filters tree to nodes matching a search query (preserves ancestors)
+ */
 import { useState, useCallback, useMemo, memo } from 'react'
 import List from '@mui/material/List'
 import ListItemButton from '@mui/material/ListItemButton'

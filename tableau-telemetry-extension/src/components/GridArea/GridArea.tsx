@@ -1,3 +1,18 @@
+/**
+ * GridArea.tsx — AG Grid wrapper with sparse data rendering and interaction handling.
+ *
+ * Reads selectedFields and gridData from Zustand, builds column definitions via
+ * columnDefBuilder, and renders the AG Grid Community component. Features:
+ *   - Empty state ("Drag fields from the tree...") when no fields selected
+ *   - DropZoneOverlay for @dnd-kit drop target (accent border on drag-over)
+ *   - Row-type color stripes via getRowStyle (4px left border per message type)
+ *   - Selected row highlight (accent 8% opacity background)
+ *   - Native right-click context menu on column headers (Remove field, Clear filters)
+ *   - Sort/filter model synced to Zustand via onSortChanged/onFilterChanged
+ *   - Row click dispatches to parent for DetailPanel display
+ *
+ * AG Grid API boundary: only this component and useLiveRefresh touch gridApi.
+ */
 import { useMemo, useState, useCallback, useRef } from 'react'
 import { AgGridReact } from 'ag-grid-react'
 import Box from '@mui/material/Box'

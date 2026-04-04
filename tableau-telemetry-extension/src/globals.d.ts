@@ -1,3 +1,11 @@
+/**
+ * globals.d.ts — Global type declarations for the Tableau Telemetry Explorer.
+ *
+ * Declares ambient types that are not provided by npm packages:
+ *   - __APP_VERSION__: string injected by Vite at build time from package.json
+ *   - tableau: the global Tableau Extensions API object (available in Tableau iframe)
+ */
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /** App version injected by Vite at build time from package.json */
 declare const __APP_VERSION__: string

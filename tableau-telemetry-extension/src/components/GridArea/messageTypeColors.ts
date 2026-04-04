@@ -1,3 +1,10 @@
+/**
+ * messageTypeColors.ts — Maps message types to the 8-color categorical palette.
+ *
+ * Uses a deterministic hash of the top-level category name (first segment
+ * of the dotted-path message type) to pick a color. Same category always
+ * gets the same color across renders and sessions. Results are cached.
+ */
 import { MESSAGE_TYPE_COLORS } from '../../theme/designTokens'
 
 const colorCache = new Map<string, string>()

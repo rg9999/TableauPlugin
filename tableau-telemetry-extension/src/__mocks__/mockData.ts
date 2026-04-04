@@ -1,3 +1,17 @@
+/**
+ * mockData.ts — Realistic telemetry test data for all test suites.
+ *
+ * Provides 15 message types with 124+ dotted-path fields matching the
+ * aerospace/defense telemetry domain. Data is deterministic (seeded PRNG)
+ * and typed with production interfaces (ColumnInfo, FlatRowData).
+ *
+ * Exports:
+ *   - MESSAGE_TYPES: field definitions for each message type
+ *   - MOCK_SCHEMA: ColumnInfo[] for all 124+ columns
+ *   - generateMockRows(count, types, seed): produces sparse FlatRowData[]
+ *   - MOCK_ROWS_100, MOCK_ROWS_1K: pre-built datasets
+ *   - getMockRows10K(): lazily generated 10K dataset for performance tests
+ */
 import type { ColumnInfo, FlatRowData } from '../models/tableauTypes'
 
 /** Message type definitions with realistic dotted-path field names */

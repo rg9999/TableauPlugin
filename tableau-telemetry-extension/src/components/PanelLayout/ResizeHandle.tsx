@@ -1,3 +1,10 @@
+/**
+ * ResizeHandle.tsx — Draggable splitter between the tree panel and grid panel.
+ *
+ * Tracks mouse drag on the document level (mousedown on handle → mousemove on document).
+ * Reports deltaX to the parent PanelLayout which constrains the tree panel width
+ * to 120px–50% of container. Double-click triggers collapse/expand toggle.
+ */
 import { useCallback, useRef } from 'react'
 import Box from '@mui/material/Box'
 import { COLORS } from '../../theme/designTokens'

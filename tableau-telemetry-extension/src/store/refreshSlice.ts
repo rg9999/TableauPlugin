@@ -1,3 +1,14 @@
+/**
+ * refreshSlice.ts — Zustand slice for live data refresh state.
+ *
+ * Tracks the 10-second polling cycle: whether a refresh is in progress,
+ * when the last successful refresh occurred, how many new rows arrived,
+ * and consecutive failure count for error escalation in the StatusBar.
+ *
+ * State:  isRefreshing, lastRefreshTime, newRowCount, consecutiveFailures, errorMessage
+ * Actions: setRefreshing, setLastRefreshTime, setNewRowCount,
+ *          recordRefreshFailure (increments failures), recordRefreshSuccess (resets)
+ */
 import type { StateCreator } from 'zustand'
 
 export interface RefreshSlice {

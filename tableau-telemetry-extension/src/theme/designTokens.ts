@@ -1,3 +1,14 @@
+/**
+ * designTokens.ts — Shared design tokens consumed by both AG Grid and MUI themes.
+ *
+ * Single source of truth for all visual constants: colors, spacing, typography,
+ * and layout dimensions. Both muiTheme.ts and agGridTheme.ts import from here
+ * to ensure visual consistency across the AG Grid (70% of UI) and MUI components.
+ *
+ * MESSAGE_TYPE_COLORS: 8-color categorical palette for row-type color stripes.
+ * LAYOUT: fixed dimensions for the three-panel layout (tree, grid, detail, status bar).
+ */
+
 // Base palette — Tableau-harmonious neutrals
 export const COLORS = {
   background: '#FFFFFF',

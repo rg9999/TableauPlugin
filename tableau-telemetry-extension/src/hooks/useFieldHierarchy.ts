@@ -1,3 +1,12 @@
+/**
+ * useFieldHierarchy.ts — Loads the Tableau data source schema on mount,
+ * parses it into a TreeNode hierarchy via parseFieldHierarchy(), and stores
+ * the result in Zustand. Runs once per mount cycle (guarded by useRef).
+ *
+ * This is the first data hook that fires — it provides the tree structure
+ * that the TreeSelector renders and that useSettingsPersistence needs to
+ * restore saved field selections.
+ */
 import { useEffect, useRef } from 'react'
 import { useStore } from '../store/store'
 import { tableauAdapter } from '../services/tableauAdapter'

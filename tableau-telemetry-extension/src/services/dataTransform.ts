@@ -1,3 +1,20 @@
+/**
+ * dataTransform.ts — Pure data transformation functions (no React, no side effects).
+ *
+ * This is the core data pipeline for the extension. Three functions handle
+ * the full lifecycle of Tableau data:
+ *
+ *   1. parseFieldHierarchy()       — Flat dotted-path columns → TreeNode hierarchy
+ *                                    (runs once on schema load, result cached)
+ *
+ *   2. buildSparseGridModel()      — Flat Tableau rows → sparse GridRowData[]
+ *                                    (runs on every data fetch/refresh)
+ *
+ *   3. reconstructNestedObject()   — Flat GridRowData → nested object for detail view
+ *                                    (runs on-demand when analyst clicks a row)
+ *
+ * All functions are pure, independently testable, and have no React dependencies.
+ */
 import type { ColumnInfo, FlatRowData } from '../models/tableauTypes'
 import type { TreeNode } from '../models/fieldHierarchy'
 import type { FieldNode } from '../models/fieldHierarchy'

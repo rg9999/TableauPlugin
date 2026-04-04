@@ -1,3 +1,11 @@
+/**
+ * DetailPanel.tsx — Bottom panel showing the full nested structure of a clicked row.
+ *
+ * When the analyst clicks a row in the grid, this 180px panel opens at the bottom.
+ * It uses reconstructNestedObject() to convert the flat GridRowData back into a
+ * nested object, then renders it via DetailTreeView. Header shows message type name
+ * with a ✕ close button that reclaims the space for the grid.
+ */
 import { useMemo } from 'react'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'

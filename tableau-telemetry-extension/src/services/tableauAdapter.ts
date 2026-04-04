@@ -1,3 +1,20 @@
+/**
+ * tableauAdapter.ts — Single entry point for ALL Tableau Extensions API calls.
+ *
+ * ARCHITECTURAL BOUNDARY: No other file in the project may import `tableau.extensions`
+ * directly. All Tableau interaction flows through this adapter, which:
+ *   - Translates Tableau-native types to our domain types (ColumnInfo, FlatRowData, etc.)
+ *   - Catches native Tableau errors and wraps them as typed errors
+ *   - Provides a mockable interface for testing (see src/__mocks__/mockTableauAdapter.ts)
+ *
+ * Methods:
+ *   initialize()             — Init the Tableau Extensions API on extension load
+ *   getDataSourceSchema()    — Get column names/types from the active worksheet
+ *   queryData()              — Fetch all rows from the active worksheet
+ *   subscribeToFilterChange() — Listen for dashboard filter change events
+ *   saveSettings()           — Persist ExtensionSettings JSON to the workbook
+ *   loadSettings()           — Retrieve saved settings on workbook reopen
+ */
 import { TableauConnectionError, TableauDataError, SettingsPersistError } from '../models/errors'
 import type { ColumnInfo, FlatRowData, FilterChangeCallback, Unsubscribe } from '../models/tableauTypes'
 import type { ExtensionSettings } from '../models/extensionSettings'

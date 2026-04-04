@@ -1,3 +1,15 @@
+/**
+ * mockTableauAdapter.ts — Mock implementation of tableauAdapter for testing.
+ *
+ * Implements the same interface as the real tableauAdapter but uses in-memory
+ * data instead of the Tableau Extensions API. Configurable to:
+ *   - Return custom queryData results
+ *   - Simulate connection, data, or settings errors
+ *   - Programmatically trigger filter change events
+ *   - Store/retrieve settings in memory
+ *
+ * Usage: import in test files, call configureMock() to set behavior, resetMock() to clear.
+ */
 import type { ColumnInfo, FlatRowData, FilterChangeCallback, Unsubscribe } from '../models/tableauTypes'
 import type { ExtensionSettings } from '../models/extensionSettings'
 import { TableauConnectionError, TableauDataError, SettingsPersistError } from '../models/errors'

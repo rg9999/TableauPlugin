@@ -1,3 +1,15 @@
+/**
+ * StatusBar.tsx — Fixed 24px bar at the bottom showing grid state and refresh status.
+ *
+ * Displays (left to right):
+ *   - Row count: "{N} rows"
+ *   - Message type count: "{N} message types"
+ *   - New row indicator: "+{N} new" in green (when useLiveRefresh finds new rows)
+ *   - Refresh dot: green (active), orange (1-2 failures), red (3+ failures)
+ *   - Last refresh time: "just now", "Xs ago", "Xm ago", or "never"
+ *   - Error message: shown in red after 3 consecutive refresh failures
+ *   - Version: "v1.0.X" right-aligned (injected at build time via __APP_VERSION__)
+ */
 import { useMemo } from 'react'
 import Box from '@mui/material/Box'
 import { useStore } from '../../store/store'

@@ -1,3 +1,11 @@
+/**
+ * columnDefBuilder.ts — Builds AG Grid ColDef[] from selected fields.
+ *
+ * Column definitions are DERIVED from Zustand state — never stored as primary state.
+ * Timestamp column is auto-added and pinned left when any field is selected.
+ * All field columns use ArrayCellRenderer (handles both arrays and primitives).
+ * Sort and filter are enabled on every column.
+ */
 import type { ColDef } from 'ag-grid-community'
 import type { FieldNode } from '../../models/fieldHierarchy'
 import { COLORS } from '../../theme/designTokens'

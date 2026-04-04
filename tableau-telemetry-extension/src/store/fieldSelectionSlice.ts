@@ -1,3 +1,14 @@
+/**
+ * fieldSelectionSlice.ts — Zustand slice for tree hierarchy and field selection state.
+ *
+ * Manages which fields the analyst has selected (via tree checkboxes or drag-and-drop)
+ * and the parsed field hierarchy. This is the primary state that drives both the
+ * TreeSelector (checkmarks) and GridArea (column definitions).
+ *
+ * State:  selectedFields (FieldNode[]), fieldHierarchy (TreeNode | null)
+ * Actions: addField, removeField, addFields (bulk), removeFieldsByMessageType,
+ *          setFieldHierarchy, clearAllFields
+ */
 import type { StateCreator } from 'zustand'
 import type { TreeNode, FieldNode } from '../models/fieldHierarchy'
 

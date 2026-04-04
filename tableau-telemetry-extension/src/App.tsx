@@ -1,3 +1,17 @@
+/**
+ * App.tsx — Root component and orchestration layer for the Tableau Telemetry Explorer.
+ *
+ * Responsibilities:
+ *   1. Initializes all data hooks: useFieldHierarchy, useTableauData, useTableauFilters,
+ *      useLiveRefresh, useSettingsPersistence
+ *   2. Wraps the entire UI in @dnd-kit DndContext for drag-and-drop from tree to grid
+ *   3. Manages drag state (DragOverlay showing accent pill with field name)
+ *   4. Manages detail row state (which row is clicked → DetailPanel display)
+ *   5. Composes PanelLayout with TreeSelector, GridArea, DetailPanel, StatusBar
+ *
+ * This is the only component that touches @dnd-kit DndContext and DragOverlay.
+ * Drop handling: onDragEnd checks if the drop target is the grid zone, then adds the field.
+ */
 import { useState, useCallback } from 'react'
 import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'

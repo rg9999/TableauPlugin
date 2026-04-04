@@ -1,3 +1,11 @@
+/**
+ * agGridTheme.ts — AG Grid Community theme configuration.
+ *
+ * Uses Balham as the base theme (data-dense, professional) and overrides
+ * colors, fonts, and spacing to match the shared design tokens.
+ * AG_GRID_THEME is the CSS class name applied to the grid wrapper.
+ * agGridThemeParams are CSS custom properties for fine-tuning.
+ */
 import { COLORS, TYPOGRAPHY, SPACING } from './designTokens'
 
 // AG Grid theme configuration params

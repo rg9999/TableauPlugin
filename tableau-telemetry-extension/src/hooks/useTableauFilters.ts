@@ -1,3 +1,11 @@
+/**
+ * useTableauFilters.ts — Subscribes to Tableau dashboard filter change events.
+ *
+ * When the analyst changes any filter in the Tableau dashboard (time range,
+ * categorical filters, etc.), this hook re-queries data from the worksheet
+ * and rebuilds the sparse grid model. On failure, the grid retains its last
+ * good data — no data is cleared on error.
+ */
 import { useEffect, useRef } from 'react'
 import { useStore } from '../store/store'
 import { tableauAdapter } from '../services/tableauAdapter'

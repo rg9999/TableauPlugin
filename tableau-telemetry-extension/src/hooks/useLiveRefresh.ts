@@ -1,3 +1,14 @@
+/**
+ * useLiveRefresh.ts — Polls Tableau for new data every 10 seconds.
+ *
+ * Diffs incoming data against existing gridData by rowId to identify
+ * truly new rows. New rows are merged and re-sorted by timestamp —
+ * the grid's scroll position, sort model, and filter model are preserved.
+ *
+ * Pauses polling when document.hidden (Tableau tab not active).
+ * On failure, retains last good data and increments consecutiveFailures
+ * in refreshSlice (StatusBar escalates after 3 failures).
+ */
 import { useEffect, useRef, useCallback } from 'react'
 import { useStore } from '../store/store'
 import { tableauAdapter } from '../services/tableauAdapter'

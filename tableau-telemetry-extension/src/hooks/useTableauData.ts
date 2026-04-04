@@ -1,3 +1,11 @@
+/**
+ * useTableauData.ts — Fetches row data from Tableau whenever selectedFields change.
+ *
+ * Calls tableauAdapter.queryData(), transforms with buildSparseGridModel(),
+ * and stores the result in Zustand gridSlice. This provides the initial data
+ * load; subsequent updates come from useTableauFilters (filter changes) and
+ * useLiveRefresh (10-second polling).
+ */
 import { useEffect, useRef } from 'react'
 import { useStore } from '../store/store'
 import { tableauAdapter } from '../services/tableauAdapter'

@@ -1,3 +1,11 @@
+/**
+ * muiTheme.ts — MUI theme configured to match AG Grid's visual language.
+ *
+ * Consumes shared design tokens so that MUI components (TreeView, menus,
+ * tooltips, buttons, checkboxes) visually harmonize with the AG Grid that
+ * occupies ~70% of the extension's UI. The Tableau-neutral color palette
+ * ensures the extension feels native inside a Tableau dashboard.
+ */
 import { createTheme } from '@mui/material/styles'
 import { COLORS, SEMANTIC, SPACING, TYPOGRAPHY } from './designTokens'
 

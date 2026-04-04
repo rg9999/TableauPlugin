@@ -1,3 +1,22 @@
+/**
+ * PanelLayout.tsx — Three-panel flex layout: tree selector + grid + detail panel.
+ *
+ * Layout structure:
+ *   ┌──────────┬─────────────────────────┐
+ *   │  Tree    │  Grid Area              │
+ *   │  (240px) │  (flex: 1)              │
+ *   │          ├─────────────────────────┤
+ *   │          │  Detail Panel (180px)   │
+ *   ├──────────┴─────────────────────────┤
+ *   │  Status Bar (24px)                 │
+ *   └───────────────────────────────────-┘
+ *
+ * Features:
+ *   - ResizeHandle between tree and grid (drag to resize, double-click to collapse)
+ *   - Collapse button (◀) in tree header; collapsed state shows 32px "▶ Fields" strip
+ *   - Zone-responsive: auto-collapses tree below 600px width, disables detail below 300px height
+ *   - All content areas accept ReactNode props from parent (App.tsx)
+ */
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'

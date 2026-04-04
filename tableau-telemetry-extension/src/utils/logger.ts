@@ -1,3 +1,13 @@
+/**
+ * logger.ts — Environment-aware structured logging utility.
+ *
+ * Replaces direct console.log calls throughout the codebase.
+ * Log level is configurable via VITE_LOG_LEVEL environment variable
+ * (defaults to 'info'). Messages below the configured level are suppressed.
+ *
+ * Output format: [LEVEL] message ...args
+ * Levels (ascending): debug < info < warn < error
+ */
 type LogLevel = 'debug' | 'info' | 'warn' | 'error'
 
 const VALID_LEVELS: LogLevel[] = ['debug', 'info', 'warn', 'error']

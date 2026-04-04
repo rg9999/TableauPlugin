@@ -1,3 +1,14 @@
+/**
+ * DetailTreeView.tsx — Recursive name-value tree for displaying nested objects.
+ *
+ * Renders a Wireshark-style detail view: field name on the left, value on the right.
+ * Handles three value types:
+ *   - Primitives (string, number, boolean): displayed inline as text
+ *   - Objects: expandable with ▶/▼ toggle, shows nested entries
+ *   - Arrays: shows "[N items]" label, expandable to show indexed entries
+ *
+ * Top 2 levels auto-expanded by default. TreeEntry is React.memo'd for performance.
+ */
 import { useState, memo } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'

@@ -1,3 +1,12 @@
+/**
+ * gridSlice.ts — Zustand slice for AG Grid data and interaction state.
+ *
+ * Holds the transformed sparse grid row data and syncs sort/filter models
+ * from AG Grid events back to Zustand for state preservation during refresh.
+ *
+ * State:  gridData (GridRowData[]), sortModel, filterModel
+ * Actions: setGridData, setSortModel, setFilterModel, clearFilters
+ */
 import type { StateCreator } from 'zustand'
 import type { GridRowData } from '../models/gridData'
 import type { SortModelItem } from 'ag-grid-community'

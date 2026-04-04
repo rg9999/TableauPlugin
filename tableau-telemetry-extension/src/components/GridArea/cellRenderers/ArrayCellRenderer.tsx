@@ -1,3 +1,13 @@
+/**
+ * ArrayCellRenderer.tsx — AG Grid custom cell renderer for array and scalar values.
+ *
+ * Applied to all field columns via columnDefBuilder. Behavior:
+ *   - Non-array values: renders as plain text (String(value))
+ *   - Null/undefined: renders as empty string
+ *   - Array values: renders compact "[N items]" summary in accent color
+ *     Click opens a MUI Popover with a scrollable list of all elements
+ *     Popover is dismissible by clicking outside
+ */
 import { useState, useCallback } from 'react'
 import Box from '@mui/material/Box'
 import Popover from '@mui/material/Popover'

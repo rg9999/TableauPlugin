@@ -1,3 +1,10 @@
+/**
+ * TreeSearchInput.tsx — Search/filter input displayed above the tree list.
+ *
+ * Controlled component: parent (TreeSelector) owns the search term state.
+ * Typing filters the tree instantly (synchronous — no loading indicator).
+ * Clear button (✕) resets the search and restores the full tree.
+ */
 import TextField from '@mui/material/TextField'
 import InputAdornment from '@mui/material/InputAdornment'
 import IconButton from '@mui/material/IconButton'

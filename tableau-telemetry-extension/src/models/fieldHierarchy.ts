@@ -1,3 +1,16 @@
+/**
+ * fieldHierarchy.ts — Types for the field/message-type tree structure.
+ *
+ * Tableau data sources expose flat columns with dotted-path names like
+ * "navigation.gps.position.latitude". parseFieldHierarchy() converts
+ * these into a TreeNode hierarchy that the TreeSelector component renders
+ * as an expandable/collapsible tree with checkboxes.
+ *
+ * TreeNode = the full hierarchy (branches + leaves)
+ * FieldNode = a selected leaf field (carried in Zustand selectedFields)
+ * MessageType = a top-level grouping (e.g., "Navigation", "Sensors")
+ */
+
 /** A node in the message type / field hierarchy tree */
 export interface TreeNode {
   /** Short display name (leaf segment of dotted path) */
@@ -12,7 +25,11 @@ export interface TreeNode {
   messageType: string
 }
 
-/** A leaf field node selected for grid display */
+/**
+ * A leaf field node selected for grid display.
+ * Created when an analyst drags a field from the tree to the grid,
+ * or checks a leaf node's checkbox in the TreeSelector.
+ */
 export interface FieldNode {
   /** Short display name */
   shortName: string

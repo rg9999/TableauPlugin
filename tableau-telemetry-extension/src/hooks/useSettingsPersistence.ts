@@ -1,3 +1,15 @@
+/**
+ * useSettingsPersistence.ts — Saves and restores extension state via Tableau Settings API.
+ *
+ * On init (once the field hierarchy is loaded): reads saved settings from the
+ * workbook and restores field selections by resolving saved dotted-path strings
+ * back to FieldNode objects via a tree walk.
+ *
+ * On field change: debounced save (2 seconds) serializes current selections
+ * as compact path strings to stay under Tableau's ~2MB Settings API limit.
+ *
+ * Graceful degradation: corrupted or incompatible settings → empty state (no crash).
+ */
 import { useEffect, useRef } from 'react'
 import { useStore } from '../store/store'
 import { tableauAdapter } from '../services/tableauAdapter'

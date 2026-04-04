@@ -1,3 +1,13 @@
+/**
+ * gridData.ts — Types for the AG Grid data model.
+ *
+ * The extension uses a "sparse mixed-line" grid where rows from different
+ * message types are interleaved by timestamp. Each row only has values for
+ * fields belonging to its own message type — all other columns are blank.
+ *
+ * Data flow: Tableau flat rows → buildSparseGridModel() → GridRowData[] → AG Grid rowData
+ */
+
 /** A single row in the sparse mixed-line grid */
 export interface GridRowData {
   /** Unique row identifier (timestamp + messageType + sequence) */
