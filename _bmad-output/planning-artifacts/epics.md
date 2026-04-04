@@ -82,7 +82,7 @@ NFR24: Version updates deployable without requiring dashboard reconfiguration
 ### Additional Requirements
 
 - ARCH-1: Project scaffolded with Vite + React + TypeScript (npm create vite@latest -- --template react-ts)
-- ARCH-2: AG Grid Enterprise, MUI, Zustand, @dnd-kit installed and configured
+- ARCH-2: AG Grid Community (open source), MUI, Zustand, @dnd-kit installed and configured
 - ARCH-3: Tableau Extensions API types installed (@tableau/extensions-api-types v1.15.0)
 - ARCH-4: Zustand store with slices: fieldSelectionSlice, gridSlice, refreshSlice, settingsSlice
 - ARCH-5: tableauAdapter service — single entry point for all Tableau API calls; no component imports tableau.extensions directly
@@ -203,7 +203,7 @@ So that the extension loads inside a Tableau dashboard and establishes the found
 **Acceptance Criteria:**
 
 **Given** the project is scaffolded with `npm create vite@latest -- --template react-ts`
-**When** all dependencies are installed (AG Grid Enterprise, MUI, Zustand, @dnd-kit, @tableau/extensions-api-types)
+**When** all dependencies are installed (AG Grid Community, MUI, Zustand, @dnd-kit, @tableau/extensions-api-types)
 **Then** the project compiles with zero errors in TypeScript strict mode
 **And** ESLint + Prettier are configured and pass on all files
 **And** Vitest is configured with a passing smoke test
@@ -605,7 +605,7 @@ So that I can deploy it to our air-gapped Tableau Server.
 **And** `base` is set to `'./'` for relative paths (FR36)
 **And** no external dependencies — everything is bundled (no CDN references)
 **And** code splitting is disabled (single JS bundle)
-**And** AG Grid Enterprise license key is injected via `VITE_AG_GRID_LICENSE_KEY` environment variable
+**And** AG Grid Community is used (no license key required)
 **And** production source maps are excluded from the bundle
 **And** the bundle contains zero `fetch()`, `XMLHttpRequest`, or `import()` calls to external URLs
 **And** `docs/deployment-guide.md` documents the deployment process

@@ -122,11 +122,11 @@ export function buildColumnDefs(selectedFields: FieldNode[]): ColDef[] {
 
 ### AG Grid Setup
 
-**AG Grid Enterprise** is installed (`ag-grid-enterprise@^35.2.0`, `ag-grid-react@^35.2.0`).
-
-**Key consideration:** AG Grid Enterprise requires license setup. Use `LicenseManager.setLicenseKey()` with `VITE_AG_GRID_LICENSE_KEY` env var. For dev/test, AG Grid works without a license key but shows a watermark.
+**AG Grid Community** is installed (`ag-grid-community@^35.2.0`, `ag-grid-react@^35.2.0`). No Enterprise license required.
 
 **AG Grid in this story:** GridArea renders the grid shell with column headers. Actual data rows come in Epic 3 (buildSparseGridModel). For now, the grid shows headers only (empty rows).
+
+**Context menu:** Uses native `onContextMenu` handler on the grid wrapper div, detecting `.ag-header-cell` right-clicks via DOM traversal (not Enterprise's `onColumnHeaderContextMenu`).
 
 ### Existing Code to Reuse
 

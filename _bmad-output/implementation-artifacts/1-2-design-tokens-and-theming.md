@@ -15,7 +15,7 @@ so that the extension has a consistent, Tableau-harmonious visual identity.
 3. `src/theme/agGridTheme.ts` configures AG Grid theme consuming design tokens
 4. MUI and AG Grid themes produce visually consistent results (matching fonts, colors, spacing)
 5. 8-color message-type stripe palette is defined as an exportable array
-6. AG Grid Enterprise license key is configured via environment variable
+6. ~~AG Grid Enterprise license key is configured via environment variable~~ (N/A — using Community edition)
 7. App.tsx wraps content in MUI ThemeProvider
 
 ## Tasks / Subtasks
@@ -132,14 +132,8 @@ so that the extension has a consistent, Tableau-harmonious visual identity.
 - [x] Task 3: Create AG Grid theme (AC: #3, #4, #6)
   - [ ] Create `src/theme/agGridTheme.ts`:
     ```typescript
-    import { LicenseManager } from 'ag-grid-enterprise'
     import { COLORS, TYPOGRAPHY, SPACING } from './designTokens'
-
-    // AG Grid Enterprise license
-    const licenseKey = import.meta.env.VITE_AG_GRID_LICENSE_KEY
-    if (licenseKey) {
-      LicenseManager.setLicenseKey(licenseKey)
-    }
+    // AG Grid Community — no license key needed
 
     // AG Grid theme overrides (applied via CSS custom properties or theme params)
     export const agGridThemeParams = {
@@ -196,10 +190,7 @@ so that the extension has a consistent, Tableau-harmonious visual identity.
 
     export default App
     ```
-  - [ ] Import AG Grid Enterprise module to register enterprise features:
-    ```typescript
-    import 'ag-grid-enterprise'
-    ```
+  - [ ] ~~Import AG Grid Enterprise module~~ (N/A — using Community edition)
   - [ ] Verify both MUI and AG Grid styles load without conflicts
 
 - [x] Task 5: Tests (AC: all)
@@ -283,7 +274,7 @@ Claude Opus 4.6 (1M context)
 - muiTheme.ts: createTheme with palette from tokens, 4px spacing unit, tooltip/CssBaseline overrides
 - agGridTheme.ts: Balham base theme, license key from env var, theme params from tokens
 - agGridStyles.css: CSS custom properties matching design tokens
-- App.tsx: ThemeProvider + CssBaseline + AG Grid CSS imports + enterprise module registration
+- App.tsx: ThemeProvider + CssBaseline + AG Grid CSS imports
 - 9 new design token tests verifying color formats, spacing multiples, type scale structure
 
 ### File List
