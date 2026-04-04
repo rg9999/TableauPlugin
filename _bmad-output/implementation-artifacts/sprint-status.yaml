@@ -1,5 +1,5 @@
 # generated: 2026-04-03
-# last_updated: 2026-04-03
+# last_updated: 2026-04-04
 # project: TableauPlugin
 # project_key: NOKEY
 # tracking_system: file-system
@@ -35,7 +35,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: 2026-04-03
-last_updated: 2026-04-03
+last_updated: 2026-04-04
 project: TableauPlugin
 project_key: NOKEY
 tracking_system: file-system
@@ -52,8 +52,8 @@ development_status:
   epic-1-retrospective: optional
 
   # Epic 2: Field Selection & Tree Navigation
-  epic-2: backlog
-  2-1-field-hierarchy-parsing-and-tree-rendering: backlog
+  epic-2: in-progress
+  2-1-field-hierarchy-parsing-and-tree-rendering: ready-for-dev
   2-2-drag-and-drop-field-to-grid: backlog
   2-3-field-removal-and-bidirectional-sync: backlog
   2-4-tree-search-and-filter: backlog
