@@ -55,7 +55,7 @@ development_status:
   epic-2: in-progress
   2-1-field-hierarchy-parsing-and-tree-rendering: done
   2-2-drag-and-drop-field-to-grid: done
-  2-3-field-removal-and-bidirectional-sync: backlog
+  2-3-field-removal-and-bidirectional-sync: done
   2-4-tree-search-and-filter: backlog
   epic-2-retrospective: optional
 

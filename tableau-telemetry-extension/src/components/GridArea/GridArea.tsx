@@ -1,17 +1,47 @@
-import { useMemo } from 'react'
+import { useMemo, useState, useCallback } from 'react'
 import { AgGridReact } from 'ag-grid-react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
+import type { ColumnHeaderClickedEvent } from 'ag-grid-community'
 import { useStore } from '../../store/store'
 import { buildColumnDefs } from './columnDefBuilder'
 import DropZoneOverlay from './DropZoneOverlay'
 import { AG_GRID_THEME } from '../../theme/agGridTheme'
 import { COLORS, TYPOGRAPHY, SPACING } from '../../theme/designTokens'
 
+interface ContextMenuState {
+  mouseX: number
+  mouseY: number
+  field: string
+}
+
 export default function GridArea() {
   const selectedFields = useStore((state) => state.selectedFields)
+  const removeField = useStore((state) => state.removeField)
   const columnDefs = useMemo(() => buildColumnDefs(selectedFields), [selectedFields])
   const hasFields = selectedFields.length > 0
+  const [contextMenu, setContextMenu] = useState<ContextMenuState | null>(null)
+
+  const handleHeaderContextMenu = useCallback((event: ColumnHeaderClickedEvent) => {
+    const field = event.column.getColDef().field
+    if (!field || field === 'timestamp') return // don't allow removing timestamp
+    const mouseEvent = event.event as MouseEvent
+    mouseEvent.preventDefault()
+    setContextMenu({ mouseX: mouseEvent.clientX, mouseY: mouseEvent.clientY, field })
+  }, [])
+
+  const handleRemoveField = useCallback(() => {
+    if (contextMenu) {
+      removeField(contextMenu.field)
+      setContextMenu(null)
+    }
+  }, [contextMenu, removeField])
+
+  const handleCloseMenu = useCallback(() => {
+    setContextMenu(null)
+  }, [])
 
   return (
     <Box sx={{ position: 'relative', height: '100%', width: '100%' }}>
@@ -42,9 +72,19 @@ export default function GridArea() {
             headerHeight={32}
             suppressMovableColumns={false}
             animateRows={false}
+            onColumnHeaderContextMenu={handleHeaderContextMenu}
           />
         </Box>
       )}
+
+      <Menu
+        open={contextMenu !== null}
+        onClose={handleCloseMenu}
+        anchorReference="anchorPosition"
+        anchorPosition={contextMenu ? { top: contextMenu.mouseY, left: contextMenu.mouseX } : undefined}
+      >
+        <MenuItem onClick={handleRemoveField}>Remove field</MenuItem>
+      </Menu>
     </Box>
   )
 }

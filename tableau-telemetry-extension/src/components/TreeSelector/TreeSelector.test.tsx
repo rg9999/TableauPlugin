@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { ThemeProvider } from '@mui/material/styles'
 import { muiTheme } from '../../theme/muiTheme'
-import TreeSelector from './TreeSelector'
+import TreeSelector, { collectLeafFields } from './TreeSelector'
 import { useStore } from '../../store/store'
 import { parseFieldHierarchy, clearParseCache } from '../../services/dataTransform'
 import { MOCK_SCHEMA } from '../../__mocks__/mockData'
@@ -108,6 +108,48 @@ describe('TreeSelector', () => {
 
     const state = useStore.getState()
     expect(state.selectedFields).toHaveLength(0)
+  })
+
+  it('selects all leaf fields when parent checkbox is clicked', () => {
+    const hierarchy = parseFieldHierarchy(SMALL_SCHEMA)
+    useStore.setState({ fieldHierarchy: hierarchy })
+
+    renderTreeSelector()
+    // The "nav" node should have a checkbox — click it to select all nav leaves
+    const checkboxes = screen.getAllByRole('checkbox')
+    // First checkbox should be the "nav" parent checkbox
+    fireEvent.click(checkboxes[0])
+
+    const state = useStore.getState()
+    // nav has 3 leaves: lat, lon, roll
+    expect(state.selectedFields).toHaveLength(3)
+    expect(state.selectedFields.map((f) => f.dottedPath).sort()).toEqual([
+      'nav.gps.lat',
+      'nav.gps.lon',
+      'nav.ins.roll',
+    ])
+  })
+
+  it('deselects all leaf fields when parent checkbox is clicked again', () => {
+    const hierarchy = parseFieldHierarchy(SMALL_SCHEMA)
+    const navLeaves = collectLeafFields(hierarchy.children.find((c) => c.name === 'nav')!)
+    useStore.setState({ fieldHierarchy: hierarchy, selectedFields: navLeaves })
+
+    renderTreeSelector()
+    // Click the nav parent checkbox to deselect all
+    const checkboxes = screen.getAllByRole('checkbox')
+    fireEvent.click(checkboxes[0])
+
+    const state = useStore.getState()
+    expect(state.selectedFields).toHaveLength(0)
+  })
+
+  it('collectLeafFields collects all leaves from a branch', () => {
+    const hierarchy = parseFieldHierarchy(SMALL_SCHEMA)
+    const navNode = hierarchy.children.find((c) => c.name === 'nav')!
+    const leaves = collectLeafFields(navNode)
+    expect(leaves).toHaveLength(3)
+    expect(leaves.map((l) => l.dottedPath).sort()).toEqual(['nav.gps.lat', 'nav.gps.lon', 'nav.ins.roll'])
   })
 
   it('renders with full MOCK_SCHEMA hierarchy', () => {

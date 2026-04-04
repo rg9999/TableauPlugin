@@ -7,6 +7,8 @@ export interface FieldSelectionSlice {
 
   addField: (field: FieldNode) => void
   removeField: (fieldPath: string) => void
+  addFields: (fields: FieldNode[]) => void
+  removeFieldsByMessageType: (messageType: string) => void
   setFieldHierarchy: (hierarchy: TreeNode) => void
   clearAllFields: () => void
 }
@@ -26,6 +28,19 @@ export const createFieldSelectionSlice: StateCreator<FieldSelectionSlice> = (set
   removeField: (fieldPath) =>
     set((state) => ({
       selectedFields: state.selectedFields.filter((f) => f.dottedPath !== fieldPath),
+    })),
+
+  addFields: (fields) =>
+    set((state) => {
+      const existingPaths = new Set(state.selectedFields.map((f) => f.dottedPath))
+      const newFields = fields.filter((f) => !existingPaths.has(f.dottedPath))
+      if (newFields.length === 0) return state
+      return { selectedFields: [...state.selectedFields, ...newFields] }
+    }),
+
+  removeFieldsByMessageType: (messageType) =>
+    set((state) => ({
+      selectedFields: state.selectedFields.filter((f) => f.messageType !== messageType),
     })),
 
   setFieldHierarchy: (hierarchy) => set({ fieldHierarchy: hierarchy }),
