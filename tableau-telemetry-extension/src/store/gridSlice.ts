@@ -1,10 +1,25 @@
 import type { StateCreator } from 'zustand'
+import type { GridRowData } from '../models/gridData'
+import type { SortModelItem } from 'ag-grid-community'
 
 export interface GridSlice {
-  // TODO: State — sortModel, filterModel, scrollPosition, gridData
-  // TODO: Actions — setGridData, setSortModel, setFilterModel
+  gridData: GridRowData[]
+  sortModel: SortModelItem[]
+  filterModel: Record<string, unknown>
+
+  setGridData: (data: GridRowData[]) => void
+  setSortModel: (model: SortModelItem[]) => void
+  setFilterModel: (model: Record<string, unknown>) => void
+  clearFilters: () => void
 }
 
-export const createGridSlice: StateCreator<GridSlice> = () => ({
-  // Empty skeleton — populated in Epic 3
+export const createGridSlice: StateCreator<GridSlice> = (set) => ({
+  gridData: [],
+  sortModel: [],
+  filterModel: {},
+
+  setGridData: (data) => set({ gridData: data }),
+  setSortModel: (model) => set({ sortModel: model }),
+  setFilterModel: (model) => set({ filterModel: model }),
+  clearFilters: () => set({ filterModel: {} }),
 })

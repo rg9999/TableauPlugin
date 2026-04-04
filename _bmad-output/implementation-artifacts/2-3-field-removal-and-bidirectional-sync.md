@@ -46,7 +46,7 @@ so that I can refine my view without confusion about what's selected.
 
 ### Context Menu Pattern
 
-Use AG Grid's `getContextMenuItems` for Enterprise, or intercept right-click on the header area and show a MUI Menu. MUI approach is simpler and consistent with the design system:
+Using native `onContextMenu` on the grid wrapper div with DOM traversal to detect `.ag-header-cell` right-clicks, then showing a MUI Menu. This works with AG Grid Community (no Enterprise needed):
 
 ```typescript
 // In GridArea: track context menu state

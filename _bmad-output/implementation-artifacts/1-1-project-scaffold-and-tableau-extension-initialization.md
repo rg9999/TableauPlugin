@@ -11,7 +11,7 @@ so that the extension loads inside a Tableau dashboard and establishes the found
 ## Acceptance Criteria
 
 1. Project scaffolded with `npm create vite@latest -- --template react-ts`
-2. All core dependencies installed: AG Grid Enterprise, MUI, Zustand, @dnd-kit, @tableau/extensions-api-types
+2. All core dependencies installed: AG Grid Community, MUI, Zustand, @dnd-kit, @tableau/extensions-api-types
 3. TypeScript strict mode enabled — zero compile errors
 4. ESLint + Prettier configured and passing on all files
 5. Vitest configured with a passing smoke test
@@ -208,8 +208,7 @@ so that the extension loads inside a Tableau dashboard and establishes the found
 
 | Package | Purpose | Notes |
 |---------|---------|-------|
-| `ag-grid-community` | AG Grid core | Required alongside enterprise |
-| `ag-grid-enterprise` | AG Grid Enterprise features | Column pinning, virtual scrolling, row grouping |
+| `ag-grid-community` | AG Grid Community (open source) | Sorting, filtering, virtual scrolling, row styling |
 | `ag-grid-react` | React wrapper | Must match ag-grid version |
 | `@mui/material` | Component library | Tree view, text fields, menus, tooltips |
 | `@mui/icons-material` | MUI icons | Collapse/expand, search, close icons |
@@ -218,12 +217,11 @@ so that the extension loads inside a Tableau dashboard and establishes the found
 | `@dnd-kit/core` + `@dnd-kit/sortable` + `@dnd-kit/utilities` | Drag-and-drop | Pointer Events-based, cross-browser (Chrome + Edge) |
 | `@tableau/extensions-api-types` | Tableau TS types | Dev dependency only — types, not runtime |
 
-### AG Grid Enterprise License
+### AG Grid Community
 
-- AG Grid Enterprise requires a license key for production use
-- Injected via `VITE_AG_GRID_LICENSE_KEY` environment variable
-- In this story, just install the package — license configuration happens in Story 1.2 (theming) or can be deferred
-- AG Grid will show a watermark without a license key — acceptable for development
+- Using AG Grid Community (open source) — no license key required
+- Sorting, filtering, virtual scrolling, and row styling all available in Community edition
+- No `ag-grid-enterprise` package installed
 
 ### Tableau Extensions API Loading
 

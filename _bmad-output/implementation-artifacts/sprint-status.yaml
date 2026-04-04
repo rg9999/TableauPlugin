@@ -60,17 +60,17 @@ development_status:
   epic-2-retrospective: optional
 
   # Epic 3: Mixed-Line Data Grid
-  epic-3: backlog
-  3-1-sparse-grid-model-and-data-rendering: backlog
-  3-2-row-type-visual-distinction-and-virtual-scrolling: backlog
-  3-3-array-cell-handling: backlog
+  epic-3: done
+  3-1-sparse-grid-model-and-data-rendering: done
+  3-2-row-type-visual-distinction-and-virtual-scrolling: done
+  3-3-array-cell-handling: done
   epic-3-retrospective: optional
 
   # Epic 4: Grid Interaction — Filtering, Sorting & Row Detail
-  epic-4: backlog
-  4-1-column-sorting-and-filtering: backlog
-  4-2-row-detail-panel: backlog
-  4-3-tree-panel-collapse-from-grid-view: backlog
+  epic-4: done
+  4-1-column-sorting-and-filtering: done
+  4-2-row-detail-panel: done
+  4-3-tree-panel-collapse-from-grid-view: done
   epic-4-retrospective: optional
 
   # Epic 5: Tableau Filter Integration & Live Refresh

@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
+import IconButton from '@mui/material/IconButton'
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import { COLORS, LAYOUT, SPACING, TYPOGRAPHY } from '../../theme/designTokens'
 import ResizeHandle from './ResizeHandle'
 
@@ -145,19 +147,46 @@ export default function PanelLayout({
             }}
             data-testid="tree-panel"
           >
-            {treeContent ?? (
-              <Box sx={{ padding: `${SPACING.md}px`, color: COLORS.textMuted }}>
-                <Typography
-                  sx={{
-                    fontSize: TYPOGRAPHY.panelHeader.size,
-                    fontWeight: TYPOGRAPHY.panelHeader.weight,
-                    marginBottom: `${SPACING.sm}px`,
-                  }}
-                >
-                  Fields
-                </Typography>
-              </Box>
-            )}
+            {/* Tree panel header with collapse button */}
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                px: `${SPACING.sm}px`,
+                py: `${SPACING.xs}px`,
+                borderBottom: `1px solid ${COLORS.border}`,
+                minHeight: 28,
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: TYPOGRAPHY.panelHeader.size,
+                  fontWeight: TYPOGRAPHY.panelHeader.weight,
+                  color: COLORS.textPrimary,
+                }}
+              >
+                Fields
+              </Typography>
+              <IconButton
+                size="small"
+                onClick={handleCollapseToggle}
+                aria-label="collapse tree panel"
+                data-testid="tree-collapse-button"
+                sx={{ p: 0.25 }}
+              >
+                <ChevronLeftIcon sx={{ fontSize: 18 }} />
+              </IconButton>
+            </Box>
+
+            {/* Tree content */}
+            <Box sx={{ flex: 1, overflow: 'hidden' }}>
+              {treeContent ?? (
+                <Box sx={{ padding: `${SPACING.md}px`, color: COLORS.textMuted }}>
+                  No fields loaded
+                </Box>
+              )}
+            </Box>
           </Box>
         )}
 
