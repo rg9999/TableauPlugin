@@ -1,10 +1,42 @@
 import type { StateCreator } from 'zustand'
 
 export interface RefreshSlice {
-  // TODO: State — isRefreshing, lastRefreshTime, newRowCount, errorState
-  // TODO: Actions — setRefreshing, setLastRefreshTime, setNewRowCount, setErrorState
+  isRefreshing: boolean
+  lastRefreshTime: Date | null
+  newRowCount: number
+  consecutiveFailures: number
+  errorMessage: string | null
+
+  setRefreshing: (refreshing: boolean) => void
+  setLastRefreshTime: (time: Date) => void
+  setNewRowCount: (count: number) => void
+  recordRefreshFailure: (message: string) => void
+  recordRefreshSuccess: () => void
 }
 
-export const createRefreshSlice: StateCreator<RefreshSlice> = () => ({
-  // Empty skeleton — populated in Epic 5
+export const createRefreshSlice: StateCreator<RefreshSlice> = (set) => ({
+  isRefreshing: false,
+  lastRefreshTime: null,
+  newRowCount: 0,
+  consecutiveFailures: 0,
+  errorMessage: null,
+
+  setRefreshing: (refreshing) => set({ isRefreshing: refreshing }),
+  setLastRefreshTime: (time) => set({ lastRefreshTime: time }),
+  setNewRowCount: (count) => set({ newRowCount: count }),
+
+  recordRefreshFailure: (message) =>
+    set((state) => ({
+      consecutiveFailures: state.consecutiveFailures + 1,
+      errorMessage: message,
+      isRefreshing: false,
+    })),
+
+  recordRefreshSuccess: () =>
+    set({
+      consecutiveFailures: 0,
+      errorMessage: null,
+      isRefreshing: false,
+      lastRefreshTime: new Date(),
+    }),
 })

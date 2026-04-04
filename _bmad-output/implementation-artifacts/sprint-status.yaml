@@ -74,10 +74,10 @@ development_status:
   epic-4-retrospective: optional
 
   # Epic 5: Tableau Filter Integration & Live Refresh
-  epic-5: backlog
-  5-1-tableau-filter-event-subscription: backlog
-  5-2-live-data-refresh-with-state-preservation: backlog
-  5-3-status-bar-and-new-data-indicators: backlog
+  epic-5: done
+  5-1-tableau-filter-event-subscription: done
+  5-2-live-data-refresh-with-state-preservation: done
+  5-3-status-bar-and-new-data-indicators: done
   epic-5-retrospective: optional
 
   # Epic 6: State Persistence & Deployment
