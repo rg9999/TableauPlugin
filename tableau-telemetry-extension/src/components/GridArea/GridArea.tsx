@@ -19,6 +19,7 @@ interface ContextMenuState {
 
 export default function GridArea() {
   const selectedFields = useStore((state) => state.selectedFields)
+  const gridData = useStore((state) => state.gridData)
   const removeField = useStore((state) => state.removeField)
   const columnDefs = useMemo(() => buildColumnDefs(selectedFields), [selectedFields])
   const hasFields = selectedFields.length > 0
@@ -68,7 +69,7 @@ export default function GridArea() {
         <Box className={AG_GRID_THEME} sx={{ height: '100%', width: '100%' }}>
           <AgGridReact
             columnDefs={columnDefs}
-            rowData={[]}
+            rowData={gridData}
             headerHeight={32}
             suppressMovableColumns={false}
             animateRows={false}

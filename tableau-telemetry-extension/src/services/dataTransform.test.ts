@@ -1,7 +1,8 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { parseFieldHierarchy, clearParseCache } from './dataTransform'
-import { MOCK_SCHEMA } from '../__mocks__/mockData'
+import { parseFieldHierarchy, clearParseCache, buildSparseGridModel } from './dataTransform'
+import { MOCK_SCHEMA, MOCK_ROWS_100 } from '../__mocks__/mockData'
 import type { ColumnInfo } from '../models/tableauTypes'
+import type { FieldNode } from '../models/fieldHierarchy'
 
 describe('parseFieldHierarchy', () => {
   beforeEach(() => {
@@ -179,5 +180,61 @@ describe('parseFieldHierarchy', () => {
     countLeaves(tree)
     // MOCK_SCHEMA has timestamp + messageType + all field paths
     expect(leafCount).toBe(MOCK_SCHEMA.length)
+  })
+})
+
+describe('buildSparseGridModel', () => {
+  const SELECTED_FIELDS: FieldNode[] = [
+    { shortName: 'latitude', dottedPath: 'navigation.gps.position.latitude', messageType: 'navigation', dataType: 'float' },
+    { shortName: 'roll', dottedPath: 'navigation.ins.roll', messageType: 'navigation', dataType: 'float' },
+    { shortName: 'target_id', dottedPath: 'sensors.radar.track.target_id', messageType: 'sensors', dataType: 'float' },
+  ]
+
+  it('returns empty array for empty rows', () => {
+    expect(buildSparseGridModel([], SELECTED_FIELDS)).toEqual([])
+  })
+
+  it('returns empty array for empty selected fields', () => {
+    expect(buildSparseGridModel(MOCK_ROWS_100, [])).toEqual([])
+  })
+
+  it('transforms MOCK_ROWS_100 into GridRowData with correct structure', () => {
+    const result = buildSparseGridModel(MOCK_ROWS_100, SELECTED_FIELDS)
+    expect(result.length).toBe(100)
+    for (const row of result) {
+      expect(row.rowId).toBeDefined()
+      expect(row.timestamp).toBeDefined()
+      expect(row.messageType).toBeDefined()
+    }
+  })
+
+  it('sorts rows by timestamp ascending', () => {
+    const result = buildSparseGridModel(MOCK_ROWS_100, SELECTED_FIELDS)
+    for (let i = 1; i < result.length; i++) {
+      expect(result[i].timestamp >= result[i - 1].timestamp).toBe(true)
+    }
+  })
+
+  it('only populates selected fields that belong to the row message type', () => {
+    const result = buildSparseGridModel(MOCK_ROWS_100, SELECTED_FIELDS)
+
+    for (const row of result) {
+      if (row.messageType === 'navigation.gps.position') {
+        // latitude should be populated
+        expect(row['navigation.gps.position.latitude']).toBeDefined()
+        // target_id should NOT be populated (different message type)
+        expect(row['sensors.radar.track.target_id']).toBeUndefined()
+      }
+      if (row.messageType === 'sensors.radar.track') {
+        expect(row['sensors.radar.track.target_id']).toBeDefined()
+        expect(row['navigation.gps.position.latitude']).toBeUndefined()
+      }
+    }
+  })
+
+  it('generates unique rowIds', () => {
+    const result = buildSparseGridModel(MOCK_ROWS_100, SELECTED_FIELDS)
+    const ids = result.map((r) => r.rowId)
+    expect(new Set(ids).size).toBe(ids.length)
   })
 })

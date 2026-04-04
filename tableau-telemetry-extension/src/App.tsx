@@ -13,6 +13,7 @@ import TreeSelector from './components/TreeSelector/TreeSelector'
 import GridArea from './components/GridArea/GridArea'
 import { GRID_DROP_ZONE_ID } from './components/GridArea/DropZoneOverlay'
 import { useFieldHierarchy } from './hooks/useFieldHierarchy'
+import { useTableauData } from './hooks/useTableauData'
 import { useStore } from './store/store'
 import { COLORS } from './theme/designTokens'
 
@@ -24,6 +25,7 @@ interface ActiveDragData {
 
 function App() {
   useFieldHierarchy()
+  useTableauData()
 
   const addField = useStore((state) => state.addField)
   const [activeDrag, setActiveDrag] = useState<ActiveDragData | null>(null)

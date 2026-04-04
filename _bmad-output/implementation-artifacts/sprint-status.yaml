@@ -60,8 +60,8 @@ development_status:
   epic-2-retrospective: optional
 
   # Epic 3: Mixed-Line Data Grid
-  epic-3: backlog
-  3-1-sparse-grid-model-and-data-rendering: backlog
+  epic-3: in-progress
+  3-1-sparse-grid-model-and-data-rendering: done
   3-2-row-type-visual-distinction-and-virtual-scrolling: backlog
   3-3-array-cell-handling: backlog
   epic-3-retrospective: optional

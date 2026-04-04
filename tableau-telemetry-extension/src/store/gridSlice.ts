@@ -1,10 +1,14 @@
 import type { StateCreator } from 'zustand'
+import type { GridRowData } from '../models/gridData'
 
 export interface GridSlice {
-  // TODO: State — sortModel, filterModel, scrollPosition, gridData
-  // TODO: Actions — setGridData, setSortModel, setFilterModel
+  gridData: GridRowData[]
+
+  setGridData: (data: GridRowData[]) => void
 }
 
-export const createGridSlice: StateCreator<GridSlice> = () => ({
-  // Empty skeleton — populated in Epic 3
+export const createGridSlice: StateCreator<GridSlice> = (set) => ({
+  gridData: [],
+
+  setGridData: (data) => set({ gridData: data }),
 })

@@ -1,5 +1,7 @@
-import type { ColumnInfo } from '../models/tableauTypes'
+import type { ColumnInfo, FlatRowData } from '../models/tableauTypes'
 import type { TreeNode } from '../models/fieldHierarchy'
+import type { FieldNode } from '../models/fieldHierarchy'
+import type { GridRowData } from '../models/gridData'
 
 /**
  * Converts flat dotted-path column names into a hierarchical TreeNode structure.
@@ -74,6 +76,43 @@ function sortTree(node: TreeNode): void {
   for (const child of node.children) {
     sortTree(child)
   }
+}
+
+/**
+ * Transforms flat Tableau rows into sparse grid model.
+ * Each output row contains only the selected fields that belong to that row's message type.
+ * Output is sorted by timestamp ascending.
+ */
+export function buildSparseGridModel(
+  rows: FlatRowData[],
+  selectedFields: FieldNode[],
+): GridRowData[] {
+  if (rows.length === 0 || selectedFields.length === 0) return []
+
+  // Group selected field paths by their dotted path for quick lookup
+  const selectedPaths = new Set(selectedFields.map((f) => f.dottedPath))
+
+  const gridRows: GridRowData[] = rows.map((row, index) => {
+    const timestamp = String(row.timestamp ?? '')
+    const messageType = String(row.messageType ?? '')
+    const rowId = `${timestamp}-${messageType}-${index}`
+
+    const gridRow: GridRowData = { rowId, timestamp, messageType }
+
+    // Only include selected fields that exist in this row
+    for (const path of selectedPaths) {
+      if (row[path] !== undefined) {
+        gridRow[path] = row[path]
+      }
+    }
+
+    return gridRow
+  })
+
+  // Sort by timestamp ascending
+  gridRows.sort((a, b) => a.timestamp.localeCompare(b.timestamp))
+
+  return gridRows
 }
 
 /** Reset memoization cache (for testing) */
