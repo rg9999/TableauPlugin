@@ -11,6 +11,7 @@ interface PanelLayoutProps {
   gridContent?: ReactNode
   detailContent?: ReactNode
   detailOpen?: boolean
+  statusBarContent?: ReactNode
 }
 
 export default function PanelLayout({
@@ -18,6 +19,7 @@ export default function PanelLayout({
   gridContent,
   detailContent,
   detailOpen = false,
+  statusBarContent,
 }: PanelLayoutProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [treeWidth, setTreeWidth] = useState<number>(LAYOUT.treePanelWidth)
@@ -259,7 +261,7 @@ export default function PanelLayout({
         }}
         data-testid="status-bar"
       >
-        Ready
+        {statusBarContent ?? 'Ready'}
       </Box>
     </Box>
   )

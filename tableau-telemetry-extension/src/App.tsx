@@ -12,9 +12,13 @@ import PanelLayout from './components/PanelLayout/PanelLayout'
 import TreeSelector from './components/TreeSelector/TreeSelector'
 import GridArea from './components/GridArea/GridArea'
 import DetailPanel from './components/DetailPanel/DetailPanel'
+import StatusBar from './components/StatusBar/StatusBar'
 import { GRID_DROP_ZONE_ID } from './components/GridArea/DropZoneOverlay'
 import { useFieldHierarchy } from './hooks/useFieldHierarchy'
 import { useTableauData } from './hooks/useTableauData'
+import { useTableauFilters } from './hooks/useTableauFilters'
+import { useLiveRefresh } from './hooks/useLiveRefresh'
+import { useSettingsPersistence } from './hooks/useSettingsPersistence'
 import { useStore } from './store/store'
 import { COLORS } from './theme/designTokens'
 import type { GridRowData } from './models/gridData'
@@ -28,6 +32,9 @@ interface ActiveDragData {
 function App() {
   useFieldHierarchy()
   useTableauData()
+  useTableauFilters()
+  useLiveRefresh()
+  useSettingsPersistence()
 
   const addField = useStore((state) => state.addField)
   const [activeDrag, setActiveDrag] = useState<ActiveDragData | null>(null)
@@ -73,6 +80,7 @@ function App() {
           gridContent={<GridArea onRowClick={handleRowClick} />}
           detailContent={detailRow ? <DetailPanel row={detailRow} onClose={handleCloseDetail} /> : undefined}
           detailOpen={detailRow !== null}
+          statusBarContent={<StatusBar />}
         />
         <DragOverlay dropAnimation={null}>
           {activeDrag ? (

@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/** App version injected by Vite at build time from package.json */
+declare const __APP_VERSION__: string
 /** Global Tableau Extensions API object — available when running inside Tableau */
 declare const tableau: {
   extensions: {

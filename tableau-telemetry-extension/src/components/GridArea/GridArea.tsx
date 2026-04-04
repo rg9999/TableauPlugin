@@ -72,10 +72,11 @@ export default function GridArea({ onRowClick }: GridAreaProps) {
     if (!params.data) return undefined
     const color = getMessageTypeColor(params.data.messageType)
     const isSelected = params.data.rowId === selectedRowId
-    return {
-      borderLeft: `4px solid ${color}`,
-      backgroundColor: isSelected ? `${COLORS.accent}14` : undefined,
+    const style: Record<string, string> = { borderLeft: `4px solid ${color}` }
+    if (isSelected) {
+      style.backgroundColor = `${COLORS.accent}14`
     }
+    return style
   }, [selectedRowId])
 
   const handleSortChanged = useCallback((event: SortChangedEvent) => {

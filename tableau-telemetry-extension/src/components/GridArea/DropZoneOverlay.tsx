@@ -16,7 +16,7 @@ export default function DropZoneOverlay() {
         pointerEvents: 'none',
         zIndex: 10,
         border: isOver ? `3px solid ${COLORS.accent}` : 'none',
-        backgroundColor: isOver ? COLORS.dropTarget : 'transparent',
+        backgroundColor: isOver ? 'rgba(78, 121, 167, 0.2)' : 'transparent',
         transition: 'all 0.15s ease',
       }}
     />
