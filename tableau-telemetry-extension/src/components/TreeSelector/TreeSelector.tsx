@@ -14,6 +14,7 @@ import type { TreeNode } from '../../models/fieldHierarchy'
 import type { FieldNode } from '../../models/fieldHierarchy'
 import { TYPOGRAPHY, SPACING, COLORS } from '../../theme/designTokens'
 import DraggableTreeItem from './DraggableTreeItem'
+import TreeSearchInput from './TreeSearchInput'
 
 /** Recursively collect all leaf FieldNodes from a branch */
 export function collectLeafFields(node: TreeNode): FieldNode[] {
@@ -23,24 +24,41 @@ export function collectLeafFields(node: TreeNode): FieldNode[] {
   return node.children.flatMap(collectLeafFields)
 }
 
+/** Filter tree to only include nodes matching query (and their ancestor hierarchy) */
+export function filterTree(node: TreeNode, query: string): TreeNode | null {
+  const lowerQuery = query.toLowerCase()
+  const nameMatch = node.name.toLowerCase().includes(lowerQuery)
+  const pathMatch = node.dottedPath.toLowerCase().includes(lowerQuery)
+  const selfMatch = nameMatch || pathMatch
+
+  const filteredChildren = node.children
+    .map((child) => filterTree(child, query))
+    .filter((c): c is TreeNode => c !== null)
+
+  if (selfMatch || filteredChildren.length > 0) {
+    return { ...node, children: filteredChildren }
+  }
+  return null
+}
+
 interface TreeNodeItemProps {
   node: TreeNode
   depth: number
+  forceExpanded?: boolean
 }
 
-const TreeNodeItem = memo(function TreeNodeItem({ node, depth }: TreeNodeItemProps) {
+const TreeNodeItem = memo(function TreeNodeItem({ node, depth, forceExpanded = false }: TreeNodeItemProps) {
   const [isExpanded, setIsExpanded] = useState(false)
   const selectedFields = useStore((state) => state.selectedFields)
   const addField = useStore((state) => state.addField)
   const removeField = useStore((state) => state.removeField)
   const addFields = useStore((state) => state.addFields)
-  const removeFieldsByMessageType = useStore((state) => state.removeFieldsByMessageType)
 
   const isLeaf = node.isField && node.children.length === 0
   const isBranch = node.children.length > 0
   const isSelected = isLeaf && selectedFields.some((f) => f.dottedPath === node.dottedPath)
+  const effectiveExpanded = forceExpanded || isExpanded
 
-  // Parent selection state: check how many leaf descendants are selected
   const branchSelectionState = useMemo(() => {
     if (!isBranch) return { allSelected: false, someSelected: false }
     const leaves = collectLeafFields(node)
@@ -54,10 +72,10 @@ const TreeNodeItem = memo(function TreeNodeItem({ node, depth }: TreeNodeItemPro
   }, [isBranch, node, selectedFields])
 
   const handleToggle = useCallback(() => {
-    if (isBranch) {
+    if (isBranch && !forceExpanded) {
       setIsExpanded((prev) => !prev)
     }
-  }, [isBranch])
+  }, [isBranch, forceExpanded])
 
   const handleFieldSelect = useCallback(() => {
     if (!isLeaf) return
@@ -77,12 +95,10 @@ const TreeNodeItem = memo(function TreeNodeItem({ node, depth }: TreeNodeItemPro
     if (!isBranch) return
     const leaves = collectLeafFields(node)
     if (branchSelectionState.allSelected) {
-      // Deselect all: remove by each leaf's dottedPath
       for (const leaf of leaves) {
         removeField(leaf.dottedPath)
       }
     } else {
-      // Select all leaves
       addFields(leaves)
     }
   }, [isBranch, node, branchSelectionState.allSelected, addFields, removeField])
@@ -99,7 +115,7 @@ const TreeNodeItem = memo(function TreeNodeItem({ node, depth }: TreeNodeItemPro
     >
       {isBranch && (
         <ListItemIcon sx={{ minWidth: 24 }}>
-          {isExpanded ? (
+          {effectiveExpanded ? (
             <ExpandMoreIcon sx={{ fontSize: 18 }} />
           ) : (
             <ChevronRightIcon sx={{ fontSize: 18 }} />
@@ -177,10 +193,10 @@ const TreeNodeItem = memo(function TreeNodeItem({ node, depth }: TreeNodeItemPro
       {isLeaf ? <DraggableTreeItem node={node}>{listItem}</DraggableTreeItem> : listItem}
 
       {isBranch && (
-        <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+        <Collapse in={effectiveExpanded} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             {node.children.map((child) => (
-              <TreeNodeItem key={child.dottedPath} node={child} depth={depth + 1} />
+              <TreeNodeItem key={child.dottedPath} node={child} depth={depth + 1} forceExpanded={forceExpanded} />
             ))}
           </List>
         </Collapse>
@@ -191,6 +207,15 @@ const TreeNodeItem = memo(function TreeNodeItem({ node, depth }: TreeNodeItemPro
 
 export default function TreeSelector() {
   const fieldHierarchy = useStore((state) => state.fieldHierarchy)
+  const [searchTerm, setSearchTerm] = useState('')
+
+  const displayTree = useMemo(() => {
+    if (!fieldHierarchy) return null
+    if (!searchTerm.trim()) return fieldHierarchy
+    return filterTree(fieldHierarchy, searchTerm.trim())
+  }, [fieldHierarchy, searchTerm])
+
+  const isFiltering = searchTerm.trim().length > 0
 
   if (!fieldHierarchy) {
     return (
@@ -204,15 +229,26 @@ export default function TreeSelector() {
     <Box
       sx={{
         height: '100%',
-        overflow: 'auto',
+        display: 'flex',
+        flexDirection: 'column',
         bgcolor: COLORS.background,
       }}
     >
-      <List component="nav" dense disablePadding>
-        {fieldHierarchy.children.map((node) => (
-          <TreeNodeItem key={node.dottedPath} node={node} depth={0} />
-        ))}
-      </List>
+      <TreeSearchInput value={searchTerm} onChange={setSearchTerm} />
+
+      <Box sx={{ flex: 1, overflow: 'auto' }}>
+        {displayTree && displayTree.children.length > 0 ? (
+          <List component="nav" dense disablePadding>
+            {displayTree.children.map((node) => (
+              <TreeNodeItem key={node.dottedPath} node={node} depth={0} forceExpanded={isFiltering} />
+            ))}
+          </List>
+        ) : (
+          <Box sx={{ p: SPACING.md, color: COLORS.textMuted, fontSize: TYPOGRAPHY.treeNode.size }}>
+            No matching fields
+          </Box>
+        )}
+      </Box>
     </Box>
   )
 }

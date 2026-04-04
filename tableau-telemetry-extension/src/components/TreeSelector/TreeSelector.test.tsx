@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { ThemeProvider } from '@mui/material/styles'
 import { muiTheme } from '../../theme/muiTheme'
-import TreeSelector, { collectLeafFields } from './TreeSelector'
+import TreeSelector, { collectLeafFields, filterTree } from './TreeSelector'
 import { useStore } from '../../store/store'
 import { parseFieldHierarchy, clearParseCache } from '../../services/dataTransform'
 import { MOCK_SCHEMA } from '../../__mocks__/mockData'
@@ -161,5 +161,93 @@ describe('TreeSelector', () => {
     expect(screen.getByText('navigation')).toBeInTheDocument()
     expect(screen.getByText('sensors')).toBeInTheDocument()
     expect(screen.getByText('power')).toBeInTheDocument()
+  })
+
+  it('renders search input above the tree', () => {
+    const hierarchy = parseFieldHierarchy(SMALL_SCHEMA)
+    useStore.setState({ fieldHierarchy: hierarchy })
+
+    renderTreeSelector()
+    expect(screen.getByPlaceholderText('Search fields...')).toBeInTheDocument()
+  })
+
+  it('filters tree when search term is entered', () => {
+    const hierarchy = parseFieldHierarchy(SMALL_SCHEMA)
+    useStore.setState({ fieldHierarchy: hierarchy })
+
+    renderTreeSelector()
+    const searchInput = screen.getByPlaceholderText('Search fields...')
+    fireEvent.change(searchInput, { target: { value: 'lat' } })
+
+    // "nav" should still be visible (ancestor of "lat")
+    expect(screen.getByText('nav')).toBeInTheDocument()
+    // "lat" should be visible (matches)
+    expect(screen.getByText('lat')).toBeInTheDocument()
+    // "sensors" should be hidden (no match)
+    expect(screen.queryByText('sensors')).not.toBeInTheDocument()
+  })
+
+  it('restores full tree when search is cleared', () => {
+    const hierarchy = parseFieldHierarchy(SMALL_SCHEMA)
+    useStore.setState({ fieldHierarchy: hierarchy })
+
+    renderTreeSelector()
+    const searchInput = screen.getByPlaceholderText('Search fields...')
+
+    // Filter first
+    fireEvent.change(searchInput, { target: { value: 'lat' } })
+    expect(screen.queryByText('sensors')).not.toBeInTheDocument()
+
+    // Clear search
+    fireEvent.change(searchInput, { target: { value: '' } })
+    expect(screen.getByText('sensors')).toBeInTheDocument()
+    expect(screen.getByText('nav')).toBeInTheDocument()
+  })
+
+  it('shows "No matching fields" when search has no results', () => {
+    const hierarchy = parseFieldHierarchy(SMALL_SCHEMA)
+    useStore.setState({ fieldHierarchy: hierarchy })
+
+    renderTreeSelector()
+    const searchInput = screen.getByPlaceholderText('Search fields...')
+    fireEvent.change(searchInput, { target: { value: 'zzzznonexistent' } })
+
+    expect(screen.getByText('No matching fields')).toBeInTheDocument()
+  })
+})
+
+describe('filterTree', () => {
+  it('returns null when no nodes match', () => {
+    const hierarchy = parseFieldHierarchy(SMALL_SCHEMA)
+    const result = filterTree(hierarchy, 'nonexistent')
+    // Root may be returned but with empty children
+    expect(result === null || result.children.length === 0).toBe(true)
+  })
+
+  it('preserves parent hierarchy for matching leaves', () => {
+    const hierarchy = parseFieldHierarchy(SMALL_SCHEMA)
+    const result = filterTree(hierarchy, 'lat')
+    expect(result).not.toBeNull()
+    // Should have nav → gps → lat path
+    const nav = result!.children.find((c) => c.name === 'nav')
+    expect(nav).toBeDefined()
+    const gps = nav!.children.find((c) => c.name === 'gps')
+    expect(gps).toBeDefined()
+    const lat = gps!.children.find((c) => c.name === 'lat')
+    expect(lat).toBeDefined()
+  })
+
+  it('matches against dotted paths', () => {
+    const hierarchy = parseFieldHierarchy(SMALL_SCHEMA)
+    // Search by dotted path segment "gps" — should match nav.gps.lat and nav.gps.lon
+    const result = filterTree(hierarchy, 'gps')
+    expect(result).not.toBeNull()
+    const nav = result!.children.find((c) => c.name === 'nav')
+    expect(nav).toBeDefined()
+    const gps = nav!.children.find((c) => c.name === 'gps')
+    expect(gps).toBeDefined()
+    // "ins" should not be present (doesn't match "gps")
+    const ins = nav!.children.find((c) => c.name === 'ins')
+    expect(ins).toBeUndefined()
   })
 })
