@@ -1,7 +1,7 @@
 {
   "name": "tableau-telemetry-extension",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,7 +10,8 @@
     "format": "prettier --write src",
     "test": "vitest",
     "test:ci": "vitest run",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "bash scripts/deploy.sh"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

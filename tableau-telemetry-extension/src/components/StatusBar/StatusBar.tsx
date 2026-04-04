@@ -95,6 +95,11 @@ export default function StatusBar() {
           </span>
         </>
       )}
+
+      {/* Version — pushed to the right */}
+      <Box sx={{ ml: 'auto', color: COLORS.textMuted }}>
+        v{__APP_VERSION__}
+      </Box>
     </Box>
   )
 }
