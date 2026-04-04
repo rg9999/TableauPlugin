@@ -1,15 +1,4 @@
-import { LicenseManager } from 'ag-grid-enterprise'
 import { COLORS, TYPOGRAPHY, SPACING } from './designTokens'
-
-// AG Grid Enterprise license
-const licenseKey = import.meta.env.VITE_AG_GRID_LICENSE_KEY as string | undefined
-if (licenseKey?.trim()) {
-  try {
-    LicenseManager.setLicenseKey(licenseKey.trim())
-  } catch (e) {
-    console.error('AG Grid license key error:', e)
-  }
-}
 
 // AG Grid theme configuration params
 // Use Balham theme as base (data-dense, professional)

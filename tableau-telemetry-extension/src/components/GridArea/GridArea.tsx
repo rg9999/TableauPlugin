@@ -5,7 +5,6 @@ import Typography from '@mui/material/Typography'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import type {
-  ColumnHeaderClickedEvent,
   RowClassParams,
   GetRowIdParams,
   SortChangedEvent,
@@ -43,12 +42,17 @@ export default function GridArea({ onRowClick }: GridAreaProps) {
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null)
   const gridApiRef = useRef<GridApi | null>(null)
 
-  const handleHeaderContextMenu = useCallback((event: ColumnHeaderClickedEvent) => {
-    const field = event.column.getColDef().field
-    if (!field || field === 'timestamp') return
-    const mouseEvent = event.event as MouseEvent
-    mouseEvent.preventDefault()
-    setContextMenu({ mouseX: mouseEvent.clientX, mouseY: mouseEvent.clientY, field })
+  // Native right-click handler on the grid wrapper — detects column header clicks
+  const handleGridContextMenu = useCallback((event: React.MouseEvent) => {
+    const target = event.target as HTMLElement
+    const headerCell = target.closest('.ag-header-cell')
+    if (!headerCell) return
+
+    const colId = headerCell.getAttribute('col-id')
+    if (!colId || colId === 'timestamp') return
+
+    event.preventDefault()
+    setContextMenu({ mouseX: event.clientX, mouseY: event.clientY, field: colId })
   }, [])
 
   const handleRemoveField = useCallback(() => {
@@ -118,7 +122,11 @@ export default function GridArea({ onRowClick }: GridAreaProps) {
           </Typography>
         </Box>
       ) : (
-        <Box className={AG_GRID_THEME} sx={{ height: '100%', width: '100%' }}>
+        <Box
+          className={AG_GRID_THEME}
+          sx={{ height: '100%', width: '100%' }}
+          onContextMenu={handleGridContextMenu}
+        >
           <AgGridReact
             columnDefs={columnDefs}
             rowData={gridData}
@@ -134,7 +142,6 @@ export default function GridArea({ onRowClick }: GridAreaProps) {
             onSortChanged={handleSortChanged}
             onFilterChanged={handleFilterChanged}
             onRowClicked={handleRowClicked}
-            onColumnHeaderContextMenu={handleHeaderContextMenu}
           />
         </Box>
       )}
