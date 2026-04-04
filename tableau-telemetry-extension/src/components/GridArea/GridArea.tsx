@@ -4,12 +4,14 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import type { ColumnHeaderClickedEvent } from 'ag-grid-community'
+import type { ColumnHeaderClickedEvent, RowClassParams, GetRowIdParams } from 'ag-grid-community'
 import { useStore } from '../../store/store'
 import { buildColumnDefs } from './columnDefBuilder'
+import { getMessageTypeColor } from './messageTypeColors'
 import DropZoneOverlay from './DropZoneOverlay'
 import { AG_GRID_THEME } from '../../theme/agGridTheme'
 import { COLORS, TYPOGRAPHY, SPACING } from '../../theme/designTokens'
+import type { GridRowData } from '../../models/gridData'
 
 interface ContextMenuState {
   mouseX: number
@@ -27,7 +29,7 @@ export default function GridArea() {
 
   const handleHeaderContextMenu = useCallback((event: ColumnHeaderClickedEvent) => {
     const field = event.column.getColDef().field
-    if (!field || field === 'timestamp') return // don't allow removing timestamp
+    if (!field || field === 'timestamp') return
     const mouseEvent = event.event as MouseEvent
     mouseEvent.preventDefault()
     setContextMenu({ mouseX: mouseEvent.clientX, mouseY: mouseEvent.clientY, field })
@@ -42,6 +44,14 @@ export default function GridArea() {
 
   const handleCloseMenu = useCallback(() => {
     setContextMenu(null)
+  }, [])
+
+  const getRowId = useCallback((params: GetRowIdParams<GridRowData>) => params.data.rowId, [])
+
+  const getRowStyle = useCallback((params: RowClassParams<GridRowData>) => {
+    if (!params.data) return undefined
+    const color = getMessageTypeColor(params.data.messageType)
+    return { borderLeft: `4px solid ${color}` }
   }, [])
 
   return (
@@ -70,7 +80,11 @@ export default function GridArea() {
           <AgGridReact
             columnDefs={columnDefs}
             rowData={gridData}
+            getRowId={getRowId}
+            getRowStyle={getRowStyle}
             headerHeight={32}
+            rowHeight={28}
+            rowBuffer={20}
             suppressMovableColumns={false}
             animateRows={false}
             onColumnHeaderContextMenu={handleHeaderContextMenu}

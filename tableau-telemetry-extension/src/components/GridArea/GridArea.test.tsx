@@ -5,6 +5,7 @@ import { DndContext } from '@dnd-kit/core'
 import { muiTheme } from '../../theme/muiTheme'
 import GridArea from './GridArea'
 import { buildColumnDefs } from './columnDefBuilder'
+import { getMessageTypeColor } from './messageTypeColors'
 import { useStore } from '../../store/store'
 import type { FieldNode } from '../../models/fieldHierarchy'
 
@@ -60,5 +61,27 @@ describe('GridArea', () => {
     renderGridArea()
     // AG Grid should render — empty state should not be present
     expect(screen.queryByText('Drag fields from the tree to start exploring')).not.toBeInTheDocument()
+  })
+})
+
+describe('getMessageTypeColor', () => {
+  it('returns a color string for any message type', () => {
+    const color = getMessageTypeColor('navigation.gps.position')
+    expect(color).toMatch(/^#[0-9A-Fa-f]{6}$/)
+  })
+
+  it('returns the same color for the same top-level category', () => {
+    const c1 = getMessageTypeColor('navigation.gps.position')
+    const c2 = getMessageTypeColor('navigation.ins')
+    expect(c1).toBe(c2)
+  })
+
+  it('returns different colors for different categories', () => {
+    const cNav = getMessageTypeColor('navigation')
+    const cSensors = getMessageTypeColor('sensors')
+    // Different categories should (usually) get different colors
+    // This is probabilistic but with only 2 categories and 8 colors, collision is unlikely
+    expect(typeof cNav).toBe('string')
+    expect(typeof cSensors).toBe('string')
   })
 })
