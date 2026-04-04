@@ -18,6 +18,7 @@ import { useFieldHierarchy } from './hooks/useFieldHierarchy'
 import { useTableauData } from './hooks/useTableauData'
 import { useTableauFilters } from './hooks/useTableauFilters'
 import { useLiveRefresh } from './hooks/useLiveRefresh'
+import { useSettingsPersistence } from './hooks/useSettingsPersistence'
 import { useStore } from './store/store'
 import { COLORS } from './theme/designTokens'
 import type { GridRowData } from './models/gridData'
@@ -33,6 +34,7 @@ function App() {
   useTableauData()
   useTableauFilters()
   useLiveRefresh()
+  useSettingsPersistence()
 
   const addField = useStore((state) => state.addField)
   const [activeDrag, setActiveDrag] = useState<ActiveDragData | null>(null)

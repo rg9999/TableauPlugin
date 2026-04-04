@@ -81,8 +81,8 @@ development_status:
   epic-5-retrospective: optional
 
   # Epic 6: State Persistence & Deployment
-  epic-6: backlog
-  6-1-state-persistence-via-tableau-settings-api: backlog
-  6-2-air-gapped-build-configuration: backlog
-  6-3-tableau-server-deployment-and-version-updates: backlog
+  epic-6: done
+  6-1-state-persistence-via-tableau-settings-api: done
+  6-2-air-gapped-build-configuration: done
+  6-3-tableau-server-deployment-and-version-updates: done
   epic-6-retrospective: optional
