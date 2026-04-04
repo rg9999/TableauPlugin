@@ -12,6 +12,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import { useStore } from '../../store/store'
 import type { TreeNode } from '../../models/fieldHierarchy'
 import { TYPOGRAPHY, SPACING, COLORS } from '../../theme/designTokens'
+import DraggableTreeItem from './DraggableTreeItem'
 
 interface TreeNodeItemProps {
   node: TreeNode
@@ -48,73 +49,77 @@ const TreeNodeItem = memo(function TreeNodeItem({ node, depth }: TreeNodeItemPro
     }
   }, [isLeaf, isSelected, node, addField, removeField])
 
-  return (
-    <>
-      <ListItemButton
-        onClick={isBranch ? handleToggle : handleFieldSelect}
-        sx={{
-          pl: SPACING.sm + depth * SPACING.lg,
-          py: 0.25,
-          minHeight: 28,
-        }}
-        dense
-      >
-        {isBranch && (
-          <ListItemIcon sx={{ minWidth: 24 }}>
-            {isExpanded ? (
-              <ExpandMoreIcon sx={{ fontSize: 18 }} />
-            ) : (
-              <ChevronRightIcon sx={{ fontSize: 18 }} />
-            )}
-          </ListItemIcon>
-        )}
+  const listItem = (
+    <ListItemButton
+      onClick={isBranch ? handleToggle : handleFieldSelect}
+      sx={{
+        pl: SPACING.sm + depth * SPACING.lg,
+        py: 0.25,
+        minHeight: 28,
+      }}
+      dense
+    >
+      {isBranch && (
+        <ListItemIcon sx={{ minWidth: 24 }}>
+          {isExpanded ? (
+            <ExpandMoreIcon sx={{ fontSize: 18 }} />
+          ) : (
+            <ChevronRightIcon sx={{ fontSize: 18 }} />
+          )}
+        </ListItemIcon>
+      )}
 
-        {isLeaf && (
-          <ListItemIcon sx={{ minWidth: 32 }}>
-            <Checkbox
-              edge="start"
-              checked={isSelected}
-              size="small"
-              tabIndex={-1}
-              disableRipple
-              onClick={(e) => {
-                e.stopPropagation()
-                handleFieldSelect()
-              }}
-              sx={{ p: 0.25 }}
-            />
-          </ListItemIcon>
-        )}
+      {isLeaf && (
+        <ListItemIcon sx={{ minWidth: 32 }}>
+          <Checkbox
+            edge="start"
+            checked={isSelected}
+            size="small"
+            tabIndex={-1}
+            disableRipple
+            onClick={(e) => {
+              e.stopPropagation()
+              handleFieldSelect()
+            }}
+            sx={{ p: 0.25 }}
+          />
+        </ListItemIcon>
+      )}
 
-        {isLeaf ? (
-          <Tooltip title={node.dottedPath} placement="right" enterDelay={500}>
-            <ListItemText
-              primary={node.name}
-              primaryTypographyProps={{
-                fontSize: TYPOGRAPHY.treeNode.size,
-                fontWeight: isSelected ? TYPOGRAPHY.treeNodeSelected.weight : TYPOGRAPHY.treeNode.weight,
-                noWrap: true,
-              }}
-              secondary={node.dottedPath}
-              secondaryTypographyProps={{
-                fontSize: 10,
-                noWrap: true,
-                sx: { color: COLORS.textMuted },
-              }}
-            />
-          </Tooltip>
-        ) : (
+      {isLeaf ? (
+        <Tooltip title={node.dottedPath} placement="right" enterDelay={500}>
           <ListItemText
             primary={node.name}
             primaryTypographyProps={{
               fontSize: TYPOGRAPHY.treeNode.size,
-              fontWeight: 600,
+              fontWeight: isSelected ? TYPOGRAPHY.treeNodeSelected.weight : TYPOGRAPHY.treeNode.weight,
               noWrap: true,
             }}
-            sx={{ ml: !isBranch ? 3 : 0 }}
+            secondary={node.dottedPath}
+            secondaryTypographyProps={{
+              fontSize: 10,
+              noWrap: true,
+              sx: { color: COLORS.textMuted },
+            }}
           />
-        )}
-      </ListItemButton>
+        </Tooltip>
+      ) : (
+        <ListItemText
+          primary={node.name}
+          primaryTypographyProps={{
+            fontSize: TYPOGRAPHY.treeNode.size,
+            fontWeight: 600,
+            noWrap: true,
+          }}
+          sx={{ ml: !isBranch ? 3 : 0 }}
+        />
+      )}
+    </ListItemButton>
+  )
+
+  return (
+    <>
+      {isLeaf ? <DraggableTreeItem node={node}>{listItem}</DraggableTreeItem> : listItem}
 
       {isBranch && (
         <Collapse in={isExpanded} timeout="auto" unmountOnExit>
