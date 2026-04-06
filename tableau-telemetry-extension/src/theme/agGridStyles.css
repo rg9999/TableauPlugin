@@ -18,6 +18,20 @@
   --ag-odd-row-background-color: #ffffff;
   --ag-even-row-background-color: #fafafa;
   --ag-row-border-color: #e8e8e8;
+  --ag-tooltip-background-color: #333333;
+}
+
+/* ── Solid tooltip ─────────────────────────────────────────────────── */
+.ag-theme-balham .ag-tooltip {
+  background-color: #333333 !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 4px !important;
+  padding: 6px 10px !important;
+  font-size: 12px !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
+  opacity: 1 !important;
 }
 
 /* ── Visible column borders in header AND data cells ───────────────
