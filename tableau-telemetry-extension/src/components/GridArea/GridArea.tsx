@@ -16,6 +16,7 @@ import { useStore } from '../../store/store'
 import { buildColumnDefs } from './columnDefBuilder'
 import { getMessageTypeColor } from './messageTypeColors'
 import DropZoneOverlay from './DropZoneOverlay'
+import CustomHeader from './CustomHeader'
 import { AG_GRID_THEME } from '../../theme/agGridTheme'
 import { agGridIcons } from '../../theme/agGridIcons'
 import { COLORS, TYPOGRAPHY, SPACING } from '../../theme/designTokens'
@@ -43,7 +44,7 @@ export default function GridArea({ onRowClick }: GridAreaProps) {
     sortable: true,
     filter: true,
     unSortIcon: true,
-    headerStyle: { color: '#333333', fontWeight: '600', fontSize: '12px' },
+    headerComponent: CustomHeader,
   }), [])
   const hasFields = selectedFields.length > 0
   const [contextMenu, setContextMenu] = useState<ContextMenuState | null>(null)
