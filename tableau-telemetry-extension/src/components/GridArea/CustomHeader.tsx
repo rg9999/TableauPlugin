@@ -9,9 +9,10 @@ import type { IHeaderParams } from 'ag-grid-community'
  * chain for --ag-header-foreground-color is broken in the light variant).
  */
 export default function CustomHeader(props: IHeaderParams) {
-  const { displayName, column, enableSorting, api } = props
+  const { displayName, column, enableSorting, enableMenu, api, showColumnMenu } = props
   const [sortState, setSortState] = useState<'asc' | 'desc' | null>(null)
-  const headerRef = useRef<HTMLDivElement>(null)
+  const [filterActive, setFilterActive] = useState(false)
+  const menuButtonRef = useRef<HTMLSpanElement>(null)
 
   // Sync sort state from AG Grid
   useEffect(() => {
@@ -26,9 +27,23 @@ export default function CustomHeader(props: IHeaderParams) {
     }
   }, [api, column])
 
+  // Track whether this column has an active filter
+  useEffect(() => {
+    const updateFilter = () => {
+      setFilterActive(api.isColumnFilterPresent() && column.isFilterActive())
+    }
+    updateFilter()
+    api.addEventListener('filterChanged', updateFilter)
+    return () => {
+      api.removeEventListener('filterChanged', updateFilter)
+    }
+  }, [api, column])
+
   const handleClick = useCallback(
     (event: React.MouseEvent) => {
       if (!enableSorting) return
+      // Don't sort when clicking the menu button
+      if ((event.target as HTMLElement).closest('[data-menu-btn]')) return
       // Cycle: none → asc → desc → none
       const nextSort = sortState === null ? 'asc' : sortState === 'asc' ? 'desc' : null
       api.applyColumnState({
@@ -37,6 +52,16 @@ export default function CustomHeader(props: IHeaderParams) {
       })
     },
     [enableSorting, sortState, api, column],
+  )
+
+  const handleMenuClick = useCallback(
+    (event: React.MouseEvent) => {
+      event.stopPropagation()
+      if (showColumnMenu) {
+        showColumnMenu(menuButtonRef.current ?? undefined)
+      }
+    },
+    [showColumnMenu],
   )
 
   const sortArrow =
@@ -48,19 +73,19 @@ export default function CustomHeader(props: IHeaderParams) {
 
   return (
     <div
-      ref={headerRef}
       onClick={handleClick}
       style={{
         display: 'flex',
         alignItems: 'center',
         width: '100%',
         height: '100%',
-        padding: '0 8px',
+        padding: '0 4px 0 8px',
         cursor: enableSorting ? 'pointer' : 'default',
         userSelect: 'none',
         overflow: 'hidden',
       }}
     >
+      {/* Column name */}
       <span
         style={{
           color: '#333333',
@@ -70,20 +95,57 @@ export default function CustomHeader(props: IHeaderParams) {
           overflow: 'hidden',
           textOverflow: 'ellipsis',
           whiteSpace: 'nowrap',
+          flex: 1,
+          minWidth: 0,
         }}
       >
         {displayName}
       </span>
+
+      {/* Sort indicator */}
       {sortArrow && (
         <span
           style={{
             color: '#4E79A7',
             fontSize: '10px',
-            marginLeft: '4px',
+            marginLeft: '2px',
             flexShrink: 0,
           }}
         >
           {sortArrow}
+        </span>
+      )}
+
+      {/* Filter / menu button */}
+      {enableMenu && (
+        <span
+          ref={menuButtonRef}
+          data-menu-btn="true"
+          onClick={handleMenuClick}
+          style={{
+            marginLeft: '4px',
+            flexShrink: 0,
+            cursor: 'pointer',
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '18px',
+            height: '18px',
+            borderRadius: '3px',
+            color: filterActive ? '#4E79A7' : '#999',
+            fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+            fontSize: '11px',
+            lineHeight: 1,
+          }}
+          title="Filter"
+        >
+          {/* Simple funnel icon using CSS borders */}
+          <svg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M1 1h10L7.5 5.5V10l-3 1V5.5z"
+              fill={filterActive ? '#4E79A7' : '#999'}
+            />
+          </svg>
         </span>
       )}
     </div>
