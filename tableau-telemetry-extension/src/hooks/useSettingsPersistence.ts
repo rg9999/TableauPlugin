@@ -3,14 +3,15 @@ import { useStore } from '../store/store'
 import { tableauAdapter } from '../services/tableauAdapter'
 import { logger } from '../utils/logger'
 import type { ExtensionSettings } from '../models/extensionSettings'
-import type { FieldNode } from '../models/fieldHierarchy'
+import { resolveFieldNodes } from '../utils/resolveFieldNodes'
 
-const SETTINGS_VERSION = 1
+const SETTINGS_VERSION = 2
 const SAVE_DEBOUNCE_MS = 2000
 
 /**
- * Persists extension state (field selections, column order, panel config)
- * to Tableau Settings API. Loads on init, saves on field changes (debounced).
+ * Persists extension state (field selections, column order, panel config,
+ * sort/filter, worksheet selection) to Tableau Settings API.
+ * Loads on init, saves on state changes (debounced).
  */
 export function useSettingsPersistence(): void {
   const selectedFields = useStore((state) => state.selectedFields)
@@ -19,6 +20,29 @@ export function useSettingsPersistence(): void {
   const settingsLoaded = useStore((state) => state.settingsLoaded)
   const setSettingsLoaded = useStore((state) => state.setSettingsLoaded)
   const setSavingSettings = useStore((state) => state.setSavingSettings)
+
+  // Layout state
+  const treePanelWidth = useStore((state) => state.treePanelWidth)
+  const treePanelCollapsed = useStore((state) => state.treePanelCollapsed)
+  const detailPanelWidth = useStore((state) => state.detailPanelWidth)
+  const detailPanelCollapsed = useStore((state) => state.detailPanelCollapsed)
+  const setTreePanelWidth = useStore((state) => state.setTreePanelWidth)
+  const setTreePanelCollapsed = useStore((state) => state.setTreePanelCollapsed)
+  const setDetailPanelWidth = useStore((state) => state.setDetailPanelWidth)
+  const setDetailPanelCollapsed = useStore((state) => state.setDetailPanelCollapsed)
+
+  // Worksheet state
+  const selectedWorksheet = useStore((state) => state.selectedWorksheet)
+  const setSelectedWorksheet = useStore((state) => state.setSelectedWorksheet)
+
+  // Grid state (sort/filter)
+  const sortModel = useStore((state) => state.sortModel)
+  const filterModel = useStore((state) => state.filterModel)
+  const setSortModel = useStore((state) => state.setSortModel)
+  const setFilterModel = useStore((state) => state.setFilterModel)
+
+  // Presets
+  const setLayoutPresets = useStore((state) => state.setLayoutPresets)
 
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const isRestoringRef = useRef(false)
@@ -30,7 +54,19 @@ export function useSettingsPersistence(): void {
     async function restoreSettings() {
       try {
         const settings = await tableauAdapter.loadSettings()
+
+        // Also load saved presets
+        const presets = await tableauAdapter.loadPresets()
+        if (presets.length > 0) {
+          setLayoutPresets(presets)
+          logger.info(`Restored ${presets.length} layout presets`)
+        }
+
         if (!settings || !settings.selectedFieldPaths?.length) {
+          // Restore layout state even if no fields selected
+          if (settings) {
+            restoreLayoutState(settings)
+          }
           setSettingsLoaded(true)
           return
         }
@@ -43,16 +79,30 @@ export function useSettingsPersistence(): void {
           isRestoringRef.current = false
           logger.info(`Restored ${restoredFields.length} field selections from saved settings`)
         }
+
+        // Restore layout & grid state
+        restoreLayoutState(settings)
       } catch (err) {
         logger.warn('Failed to restore settings — starting with empty state', err)
       }
       setSettingsLoaded(true)
     }
 
-    restoreSettings()
-  }, [fieldHierarchy, settingsLoaded, setSettingsLoaded, addFields])
+    function restoreLayoutState(settings: ExtensionSettings) {
+      if (settings.treePanelWidth != null) setTreePanelWidth(settings.treePanelWidth)
+      if (settings.treePanelCollapsed != null) setTreePanelCollapsed(settings.treePanelCollapsed)
+      if (settings.detailPanelWidth != null) setDetailPanelWidth(settings.detailPanelWidth)
+      if (settings.detailPanelCollapsed != null) setDetailPanelCollapsed(settings.detailPanelCollapsed)
+      if (settings.selectedWorksheet) setSelectedWorksheet(settings.selectedWorksheet)
+      if (settings.sortModel?.length) setSortModel(settings.sortModel as { colId: string; sort: 'asc' | 'desc' }[])
+      if (settings.filterModel && Object.keys(settings.filterModel).length > 0) setFilterModel(settings.filterModel)
+    }
 
-  // Save settings when selectedFields change (debounced)
+    restoreSettings()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fieldHierarchy, settingsLoaded])
+
+  // Save settings when state changes (debounced)
   useEffect(() => {
     // Don't save during initial restore or before settings are loaded
     if (!settingsLoaded || isRestoringRef.current) return
@@ -65,8 +115,13 @@ export function useSettingsPersistence(): void {
       const settings: ExtensionSettings = {
         selectedFieldPaths: selectedFields.map((f) => f.dottedPath),
         columnOrder: selectedFields.map((f) => f.dottedPath),
-        treePanelWidth: null, // TODO: read from PanelLayout state if needed
-        treePanelCollapsed: false,
+        treePanelWidth,
+        treePanelCollapsed,
+        detailPanelWidth,
+        detailPanelCollapsed,
+        selectedWorksheet,
+        sortModel: sortModel.map((s) => ({ colId: s.colId, sort: s.sort as string })),
+        filterModel,
         version: SETTINGS_VERSION,
       }
 
@@ -82,32 +137,11 @@ export function useSettingsPersistence(): void {
     return () => {
       if (saveTimerRef.current) clearTimeout(saveTimerRef.current)
     }
-  }, [selectedFields, settingsLoaded, setSavingSettings])
+  }, [
+    selectedFields, settingsLoaded, setSavingSettings,
+    treePanelWidth, treePanelCollapsed,
+    detailPanelWidth, detailPanelCollapsed,
+    selectedWorksheet, sortModel, filterModel,
+  ])
 }
 
-/**
- * Resolves saved dotted-path strings back to FieldNode objects
- * by walking the TreeNode hierarchy.
- */
-function resolveFieldNodes(
-  paths: string[],
-  hierarchy: import('../models/fieldHierarchy').TreeNode,
-): FieldNode[] {
-  const result: FieldNode[] = []
-  const pathSet = new Set(paths)
-
-  function walk(node: import('../models/fieldHierarchy').TreeNode): void {
-    if (node.isField && node.children.length === 0 && pathSet.has(node.dottedPath)) {
-      result.push({
-        shortName: node.name,
-        dottedPath: node.dottedPath,
-        messageType: node.messageType,
-        dataType: 'string',
-      })
-    }
-    for (const child of node.children) walk(child)
-  }
-
-  walk(hierarchy)
-  return result
-}

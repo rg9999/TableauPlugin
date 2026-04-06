@@ -3,6 +3,13 @@ import type { FieldNode } from '../../models/fieldHierarchy'
 import { COLORS } from '../../theme/designTokens'
 import ArrayCellRenderer from './cellRenderers/ArrayCellRenderer'
 
+/** Shared header style to force text visibility in all environments */
+const HEADER_STYLE = {
+  color: '#333333',
+  fontWeight: '600',
+  fontSize: '12px',
+}
+
 /**
  * Builds AG Grid column definitions from selected fields.
  * Timestamp column is auto-added and pinned left when fields are selected.
@@ -22,6 +29,7 @@ export function buildColumnDefs(selectedFields: FieldNode[]): ColDef[] {
     filter: true,
     resizable: true,
     cellStyle: { backgroundColor: `${COLORS.accent}08` },
+    headerStyle: HEADER_STYLE,
     minWidth: 140,
     width: 180,
   }
@@ -35,6 +43,7 @@ export function buildColumnDefs(selectedFields: FieldNode[]): ColDef[] {
     resizable: true,
     sortable: true,
     filter: true,
+    headerStyle: HEADER_STYLE,
     cellRenderer: ArrayCellRenderer,
   }))
 

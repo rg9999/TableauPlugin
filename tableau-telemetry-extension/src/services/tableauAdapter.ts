@@ -1,9 +1,10 @@
 import { TableauConnectionError, TableauDataError, SettingsPersistError } from '../models/errors'
 import type { ColumnInfo, FlatRowData, FilterChangeCallback, Unsubscribe } from '../models/tableauTypes'
-import type { ExtensionSettings } from '../models/extensionSettings'
+import type { ExtensionSettings, LayoutPreset, PresetCollection } from '../models/extensionSettings'
 import { logger } from '../utils/logger'
 
 const SETTINGS_KEY = 'telemetry-extension-settings'
+const PRESETS_KEY = 'telemetry-extension-presets'
 
 /**
  * Normalize a Tableau column name by stripping aggregation/calculation wrappers.
@@ -312,6 +313,50 @@ export const tableauAdapter = {
     } catch (err) {
       logger.error('Failed to parse saved settings — returning null', err)
       return null
+    }
+  },
+
+  /** Save layout presets to Tableau workbook */
+  async savePresets(presets: LayoutPreset[]): Promise<void> {
+    const tab = getTableau()
+    if (!tab) {
+      logger.warn('Cannot save presets — not in Tableau')
+      return
+    }
+    try {
+      const collection: PresetCollection = { presets }
+      const serialized = JSON.stringify(collection)
+      const sizeKB = new Blob([serialized]).size / 1024
+      if (sizeKB > 1800) {
+        logger.warn(`Presets size (${sizeKB.toFixed(0)}KB) approaching 2MB Tableau limit`)
+      }
+      tab.extensions.settings.set(PRESETS_KEY, serialized)
+      await tab.extensions.settings.saveAsync()
+      logger.debug(`Presets saved (${sizeKB.toFixed(1)}KB, ${presets.length} presets)`)
+    } catch (err) {
+      throw new SettingsPersistError(
+        'Failed to save layout presets',
+        { cause: err instanceof Error ? err : undefined },
+      )
+    }
+  },
+
+  /** Load layout presets from Tableau workbook */
+  async loadPresets(): Promise<LayoutPreset[]> {
+    const tab = getTableau()
+    if (!tab) {
+      logger.warn('Cannot load presets — not in Tableau')
+      return []
+    }
+    try {
+      const raw = tab.extensions.settings.get(PRESETS_KEY)
+      if (!raw) return []
+      const collection = JSON.parse(raw) as PresetCollection
+      logger.debug(`Presets loaded: ${collection.presets.length} presets`)
+      return collection.presets ?? []
+    } catch (err) {
+      logger.error('Failed to parse saved presets — returning empty', err)
+      return []
     }
   },
 }

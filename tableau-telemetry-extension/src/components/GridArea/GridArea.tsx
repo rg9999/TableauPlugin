@@ -17,6 +17,7 @@ import { buildColumnDefs } from './columnDefBuilder'
 import { getMessageTypeColor } from './messageTypeColors'
 import DropZoneOverlay from './DropZoneOverlay'
 import { AG_GRID_THEME } from '../../theme/agGridTheme'
+import { agGridIcons } from '../../theme/agGridIcons'
 import { COLORS, TYPOGRAPHY, SPACING } from '../../theme/designTokens'
 import type { GridRowData } from '../../models/gridData'
 
@@ -37,6 +38,13 @@ export default function GridArea({ onRowClick }: GridAreaProps) {
   const setSortModel = useStore((state) => state.setSortModel)
   const setFilterModel = useStore((state) => state.setFilterModel)
   const columnDefs = useMemo(() => buildColumnDefs(selectedFields), [selectedFields])
+  const defaultColDef = useMemo(() => ({
+    resizable: true,
+    sortable: true,
+    filter: true,
+    unSortIcon: true,
+    headerStyle: { color: '#333333', fontWeight: '600', fontSize: '12px' },
+  }), [])
   const hasFields = selectedFields.length > 0
   const [contextMenu, setContextMenu] = useState<ContextMenuState | null>(null)
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null)
@@ -130,6 +138,8 @@ export default function GridArea({ onRowClick }: GridAreaProps) {
         >
           <AgGridReact
             columnDefs={columnDefs}
+            defaultColDef={defaultColDef}
+            icons={agGridIcons}
             rowData={gridData}
             getRowId={getRowId}
             getRowStyle={getRowStyle}

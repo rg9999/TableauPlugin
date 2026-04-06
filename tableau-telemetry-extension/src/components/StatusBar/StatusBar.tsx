@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import Box from '@mui/material/Box'
 import { useStore } from '../../store/store'
 import { COLORS, SPACING, TYPOGRAPHY, SEMANTIC } from '../../theme/designTokens'
+import LayoutPresetControls from '../LayoutPresets/LayoutPresetControls'
 
 function formatTimeSince(date: Date | null): string {
   if (!date) return 'never'
@@ -19,6 +20,7 @@ export default function StatusBar() {
   const newRowCount = useStore((state) => state.newRowCount)
   const consecutiveFailures = useStore((state) => state.consecutiveFailures)
   const errorMessage = useStore((state) => state.errorMessage)
+  const isSavingSettings = useStore((state) => state.isSavingSettings)
 
   const messageTypeCount = useMemo(() => {
     const types = new Set(gridData.map((r) => r.messageType))
@@ -86,6 +88,14 @@ export default function StatusBar() {
         </span>
       </Box>
 
+      {/* Save indicator */}
+      {isSavingSettings && (
+        <>
+          <span>|</span>
+          <span style={{ color: COLORS.accent, fontStyle: 'italic' }}>Saving...</span>
+        </>
+      )}
+
       {/* Persistent error warning */}
       {consecutiveFailures >= 3 && (
         <>
@@ -96,9 +106,10 @@ export default function StatusBar() {
         </>
       )}
 
-      {/* Version — pushed to the right */}
-      <Box sx={{ ml: 'auto', color: COLORS.textMuted }}>
-        v{__APP_VERSION__}
+      {/* Layout preset controls — pushed right along with version */}
+      <Box sx={{ ml: 'auto', display: 'flex', alignItems: 'center', gap: `${SPACING.sm}px` }}>
+        <LayoutPresetControls />
+        <span style={{ color: COLORS.textMuted }}>v{__APP_VERSION__}</span>
       </Box>
     </Box>
   )

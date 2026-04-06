@@ -6,6 +6,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { COLORS, LAYOUT, SPACING, TYPOGRAPHY } from '../../theme/designTokens'
+import { useStore } from '../../store/store'
 import ResizeHandle from './ResizeHandle'
 
 import LogConsole from '../LogConsole/LogConsole'
@@ -32,11 +33,19 @@ export default function PanelLayout({
   onBackToWorksheets,
 }: PanelLayoutProps) {
   const containerRef = useRef<HTMLDivElement>(null)
-  const [treeWidth, setTreeWidth] = useState<number>(LAYOUT.treePanelWidth)
-  const [collapsed, setCollapsed] = useState(false)
+
+  // Panel dimensions from store (persisted via settings)
+  const treeWidth = useStore((s) => s.treePanelWidth)
+  const setTreeWidth = useStore((s) => s.setTreePanelWidth)
+  const collapsed = useStore((s) => s.treePanelCollapsed)
+  const setCollapsed = useStore((s) => s.setTreePanelCollapsed)
+  const detailWidth = useStore((s) => s.detailPanelWidth)
+  const setDetailWidth = useStore((s) => s.setDetailPanelWidth)
+  const detailCollapsed = useStore((s) => s.detailPanelCollapsed)
+  const setDetailCollapsed = useStore((s) => s.setDetailPanelCollapsed)
+
+  // Local-only state (not persisted)
   const [prevWidth, setPrevWidth] = useState<number>(LAYOUT.treePanelWidth)
-  const [detailWidth, setDetailWidth] = useState<number>(LAYOUT.detailPanelWidth)
-  const [detailCollapsed, setDetailCollapsed] = useState(false)
   const [prevDetailWidth, setPrevDetailWidth] = useState<number>(LAYOUT.detailPanelWidth)
   const [containerWidth, setContainerWidth] = useState(1000)
   // Default to a reasonable size so features work before ResizeObserver fires
@@ -84,12 +93,9 @@ export default function PanelLayout({
   const handleResize = useCallback(
     (deltaX: number) => {
       if (collapsed) return
-      setTreeWidth((w) => {
-        const newWidth = Math.max(120, Math.min(w + deltaX, containerWidth * 0.5))
-        return newWidth
-      })
+      setTreeWidth(Math.max(120, Math.min(treeWidth + deltaX, containerWidth * 0.5)))
     },
-    [collapsed, containerWidth],
+    [collapsed, containerWidth, treeWidth, setTreeWidth],
   )
 
   const handleCollapseToggle = useCallback(() => {
@@ -106,12 +112,9 @@ export default function PanelLayout({
   const handleDetailResize = useCallback(
     (deltaX: number) => {
       if (detailCollapsed) return
-      setDetailWidth((w) => {
-        const newWidth = Math.max(150, Math.min(w - deltaX, containerWidth * 0.5))
-        return newWidth
-      })
+      setDetailWidth(Math.max(150, Math.min(detailWidth - deltaX, containerWidth * 0.5)))
     },
-    [detailCollapsed, containerWidth],
+    [detailCollapsed, containerWidth, detailWidth, setDetailWidth],
   )
 
   const handleDetailCollapseToggle = useCallback(() => {
