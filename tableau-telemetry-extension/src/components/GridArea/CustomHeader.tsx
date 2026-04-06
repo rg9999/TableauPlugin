@@ -4,17 +4,19 @@ import type { IHeaderParams } from 'ag-grid-community'
 /**
  * Custom AG Grid header component that renders column names as plain DOM
  * elements with inline styles. This completely bypasses the balham theme's
- * CSS/font pipeline which breaks in Tableau Desktop's embedded Chromium
- * (the agGridBalham icon font renders as black boxes and the CSS variable
- * chain for --ag-header-foreground-color is broken in the light variant).
+ * CSS/font pipeline which breaks in Tableau Desktop's embedded Chromium.
  */
 export default function CustomHeader(props: IHeaderParams) {
-  const { displayName, column, enableSorting, enableMenu, api, showColumnMenu } = props
+  const { displayName, column, enableSorting, enableMenu, api } = props
   const [sortState, setSortState] = useState<'asc' | 'desc' | null>(null)
   const [filterActive, setFilterActive] = useState(false)
-  const menuButtonRef = useRef<HTMLSpanElement>(null)
+  const menuButtonRef = useRef<HTMLDivElement>(null)
 
-  // Sync sort state from AG Grid
+  // Check if filtering is enabled on this column
+  const colDef = column.getColDef()
+  const hasFilter = colDef.filter !== false && colDef.filter !== undefined
+
+  // Sync sort state
   useEffect(() => {
     const updateSort = () => {
       const colState = api.getColumnState().find((c) => c.colId === column.getColId())
@@ -22,29 +24,23 @@ export default function CustomHeader(props: IHeaderParams) {
     }
     updateSort()
     api.addEventListener('sortChanged', updateSort)
-    return () => {
-      api.removeEventListener('sortChanged', updateSort)
-    }
+    return () => { api.removeEventListener('sortChanged', updateSort) }
   }, [api, column])
 
-  // Track whether this column has an active filter
+  // Track active filter state
   useEffect(() => {
     const updateFilter = () => {
-      setFilterActive(api.isColumnFilterPresent() && column.isFilterActive())
+      setFilterActive(column.isFilterActive())
     }
     updateFilter()
     api.addEventListener('filterChanged', updateFilter)
-    return () => {
-      api.removeEventListener('filterChanged', updateFilter)
-    }
+    return () => { api.removeEventListener('filterChanged', updateFilter) }
   }, [api, column])
 
-  const handleClick = useCallback(
+  // Sort on header text click
+  const handleSort = useCallback(
     (event: React.MouseEvent) => {
       if (!enableSorting) return
-      // Don't sort when clicking the menu button
-      if ((event.target as HTMLElement).closest('[data-menu-btn]')) return
-      // Cycle: none → asc → desc → none
       const nextSort = sortState === null ? 'asc' : sortState === 'asc' ? 'desc' : null
       api.applyColumnState({
         state: [{ colId: column.getColId(), sort: nextSort }],
@@ -54,39 +50,58 @@ export default function CustomHeader(props: IHeaderParams) {
     [enableSorting, sortState, api, column],
   )
 
+  // Open filter/menu — try multiple AG Grid API approaches
   const handleMenuClick = useCallback(
     (event: React.MouseEvent) => {
       event.stopPropagation()
-      if (showColumnMenu) {
-        showColumnMenu(menuButtonRef.current ?? undefined)
-      }
+      const colId = column.getColId()
+      try {
+        // v35: showColumnMenu via header params
+        if (enableMenu && (props as Record<string, unknown>).showColumnMenu) {
+          ;(props as Record<string, unknown> & { showColumnMenu: (el?: HTMLElement) => void })
+            .showColumnMenu(menuButtonRef.current ?? undefined)
+          return
+        }
+      } catch { /* fallback below */ }
+      try {
+        // v35: open filter popup directly
+        if ((api as Record<string, unknown>).showColumnFilter) {
+          ;(api as Record<string, unknown> & { showColumnFilter: (colId: string) => void })
+            .showColumnFilter(colId)
+          return
+        }
+      } catch { /* fallback below */ }
+      try {
+        // Older API: menuFactory approach
+        ;(api as Record<string, unknown> & { showColumnMenu: (colId: string) => void })
+          .showColumnMenu(colId)
+      } catch { /* no menu available */ }
     },
-    [showColumnMenu],
+    [enableMenu, props, api, column],
   )
 
   const sortArrow =
-    sortState === 'asc'
-      ? ' ▲'
-      : sortState === 'desc'
-        ? ' ▼'
-        : ''
+    sortState === 'asc' ? ' ▲'
+    : sortState === 'desc' ? ' ▼'
+    : ''
 
   return (
     <div
-      onClick={handleClick}
       style={{
         display: 'flex',
         alignItems: 'center',
         width: '100%',
         height: '100%',
         padding: '0 4px 0 8px',
-        cursor: enableSorting ? 'pointer' : 'default',
         userSelect: 'none',
         overflow: 'hidden',
+        borderRight: '1px solid #d4d4d4',
+        boxSizing: 'border-box',
       }}
     >
-      {/* Column name */}
+      {/* Column name — clickable for sort */}
       <span
+        onClick={handleSort}
         style={{
           color: '#333333',
           fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
@@ -97,30 +112,21 @@ export default function CustomHeader(props: IHeaderParams) {
           whiteSpace: 'nowrap',
           flex: 1,
           minWidth: 0,
+          cursor: enableSorting ? 'pointer' : 'default',
         }}
       >
         {displayName}
+        {sortArrow && (
+          <span style={{ color: '#4E79A7', fontSize: '9px', marginLeft: '3px' }}>
+            {sortArrow}
+          </span>
+        )}
       </span>
 
-      {/* Sort indicator */}
-      {sortArrow && (
-        <span
-          style={{
-            color: '#4E79A7',
-            fontSize: '10px',
-            marginLeft: '2px',
-            flexShrink: 0,
-          }}
-        >
-          {sortArrow}
-        </span>
-      )}
-
-      {/* Filter / menu button */}
-      {enableMenu && (
-        <span
+      {/* Filter button — always visible when column has filter */}
+      {hasFilter && (
+        <div
           ref={menuButtonRef}
-          data-menu-btn="true"
           onClick={handleMenuClick}
           style={{
             marginLeft: '4px',
@@ -129,24 +135,33 @@ export default function CustomHeader(props: IHeaderParams) {
             display: 'inline-flex',
             alignItems: 'center',
             justifyContent: 'center',
-            width: '18px',
-            height: '18px',
+            width: '20px',
+            height: '20px',
             borderRadius: '3px',
-            color: filterActive ? '#4E79A7' : '#999',
-            fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-            fontSize: '11px',
-            lineHeight: 1,
+            opacity: filterActive ? 1 : 0.4,
+            transition: 'opacity 0.15s',
           }}
-          title="Filter"
+          onMouseEnter={(e) => { e.currentTarget.style.opacity = '1' }}
+          onMouseLeave={(e) => { if (!filterActive) e.currentTarget.style.opacity = '0.4' }}
+          title={filterActive ? 'Filter active — click to edit' : 'Click to filter'}
         >
-          {/* Simple funnel icon using CSS borders */}
-          <svg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M1 1h10L7.5 5.5V10l-3 1V5.5z"
-              fill={filterActive ? '#4E79A7' : '#999'}
-            />
-          </svg>
-        </span>
+          {/* Funnel rendered as pure CSS triangle + rectangle — no SVG, no font */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div style={{
+              width: 0,
+              height: 0,
+              borderLeft: '5px solid transparent',
+              borderRight: '5px solid transparent',
+              borderTop: `6px solid ${filterActive ? '#4E79A7' : '#888'}`,
+            }} />
+            <div style={{
+              width: '3px',
+              height: '4px',
+              backgroundColor: filterActive ? '#4E79A7' : '#888',
+              marginTop: '-1px',
+            }} />
+          </div>
+        </div>
       )}
     </div>
   )
