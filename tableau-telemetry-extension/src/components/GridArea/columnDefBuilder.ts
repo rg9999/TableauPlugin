@@ -20,16 +20,19 @@ export function buildColumnDefs(selectedFields: FieldNode[]): ColDef[] {
     sortIndex: 0,
     sortable: true,
     filter: true,
+    resizable: true,
     cellStyle: { backgroundColor: `${COLORS.accent}08` },
-    minWidth: 160,
+    minWidth: 140,
+    width: 180,
   }
 
   const fieldCols: ColDef[] = selectedFields.map((field) => ({
     field: field.dottedPath,
     headerName: field.shortName,
     headerTooltip: field.dottedPath,
-    minWidth: 80,
-    flex: 1,
+    minWidth: 70,
+    width: 130,
+    resizable: true,
     sortable: true,
     filter: true,
     cellRenderer: ArrayCellRenderer,

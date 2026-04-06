@@ -10,10 +10,12 @@ import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-balham.css'
 import PanelLayout from './components/PanelLayout/PanelLayout'
 import TreeSelector from './components/TreeSelector/TreeSelector'
+import WorksheetSelector from './components/WorksheetSelector/WorksheetSelector'
 import GridArea from './components/GridArea/GridArea'
 import DetailPanel from './components/DetailPanel/DetailPanel'
 import StatusBar from './components/StatusBar/StatusBar'
 import { GRID_DROP_ZONE_ID } from './components/GridArea/DropZoneOverlay'
+import { useWorksheetDiscovery } from './hooks/useWorksheetDiscovery'
 import { useFieldHierarchy } from './hooks/useFieldHierarchy'
 import { useTableauData } from './hooks/useTableauData'
 import { useTableauFilters } from './hooks/useTableauFilters'
@@ -30,12 +32,15 @@ interface ActiveDragData {
 }
 
 function App() {
+  useWorksheetDiscovery()
   useFieldHierarchy()
   useTableauData()
   useTableauFilters()
   useLiveRefresh()
   useSettingsPersistence()
 
+  const selectedWorksheet = useStore((state) => state.selectedWorksheet)
+  const setSelectedWorksheet = useStore((state) => state.setSelectedWorksheet)
   const addField = useStore((state) => state.addField)
   const [activeDrag, setActiveDrag] = useState<ActiveDragData | null>(null)
   const [detailRow, setDetailRow] = useState<GridRowData | null>(null)
@@ -71,16 +76,29 @@ function App() {
     setDetailRow(null)
   }, [])
 
+  const handleBackToWorksheets = useCallback(() => {
+    setSelectedWorksheet(null)
+    setDetailRow(null)
+  }, [setSelectedWorksheet])
+
+  // Show worksheet selector when no worksheet is selected yet,
+  // show field tree after a worksheet has been chosen
+  const treeContent = selectedWorksheet
+    ? <TreeSelector />
+    : <WorksheetSelector />
+
   return (
     <ThemeProvider theme={muiTheme}>
       <CssBaseline />
       <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
         <PanelLayout
-          treeContent={<TreeSelector />}
+          treeContent={treeContent}
           gridContent={<GridArea onRowClick={handleRowClick} />}
           detailContent={detailRow ? <DetailPanel row={detailRow} onClose={handleCloseDetail} /> : undefined}
           detailOpen={detailRow !== null}
           statusBarContent={<StatusBar />}
+          selectedWorksheet={selectedWorksheet}
+          onBackToWorksheets={handleBackToWorksheets}
         />
         <DragOverlay dropAnimation={null}>
           {activeDrag ? (

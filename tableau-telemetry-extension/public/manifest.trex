@@ -4,12 +4,12 @@
     <default-locale>en_US</default-locale>
     <name resource-id="name"/>
     <description>Telemetry Explorer - Tree-based field selection with mixed-line AG Grid for aerospace telemetry analysis</description>
-    <author name="Rgamz" email="" organization="" website=""/>
+    <author name="Rgamz" email="rgamzon@gmail.com" organization="Rgamz" website="https://github.com/rg9999"/>
     <min-api-version>1.4</min-api-version>
     <source-location>
-      <!-- For development: http://localhost:5173 -->
+      <!-- For development: https://localhost:5173 -->
       <!-- For production: update to your Tableau Server hosting URL -->
-      <url>http://localhost:5173</url>
+      <url>https://localhost:5173</url>
     </source-location>
     <icon/>
     <permissions>

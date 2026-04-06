@@ -7,40 +7,45 @@ import { TableauDataError } from '../models/errors'
 import type { TableauFilter } from '../models/tableauTypes'
 
 /**
- * Subscribes to Tableau filter change events.
+ * Subscribes to Tableau filter change events on the selected worksheet.
  * When any dashboard filter changes, re-queries data and updates the grid.
- * Retains last good data on failure.
+ * Re-subscribes when the selected worksheet changes.
  */
 export function useTableauFilters(): void {
   const selectedFields = useStore((state) => state.selectedFields)
+  const selectedWorksheet = useStore((state) => state.selectedWorksheet)
   const setGridData = useStore((state) => state.setGridData)
   const setRefreshing = useStore((state) => state.setRefreshing)
   const recordRefreshSuccess = useStore((state) => state.recordRefreshSuccess)
   const recordRefreshFailure = useStore((state) => state.recordRefreshFailure)
   const selectedFieldsRef = useRef(selectedFields)
   selectedFieldsRef.current = selectedFields
+  const worksheetRef = useRef(selectedWorksheet)
+  worksheetRef.current = selectedWorksheet
 
   useEffect(() => {
+    if (!selectedWorksheet) return
+
     const handleFilterChange = async (_filters: TableauFilter[]) => {
       const fields = selectedFieldsRef.current
-      if (fields.length === 0) return
+      const wsName = worksheetRef.current
+      if (fields.length === 0 || !wsName) return
 
       setRefreshing(true)
       try {
-        const rows = await tableauAdapter.queryData()
+        const rows = await tableauAdapter.queryData(wsName)
         const gridData = buildSparseGridModel(rows, fields)
         setGridData(gridData)
         recordRefreshSuccess()
-        logger.info(`Filter change: re-queried ${rows.length} rows`)
+        logger.info(`Filter change on "${wsName}": re-queried ${rows.length} rows`)
       } catch (err) {
         const message = err instanceof TableauDataError ? err.message : 'Filter re-query failed'
         recordRefreshFailure(message)
         logger.warn('Failed to re-query after filter change', message)
-        // Grid retains last good data — no setGridData call on error
       }
     }
 
-    const unsubscribe = tableauAdapter.subscribeToFilterChange(handleFilterChange)
+    const unsubscribe = tableauAdapter.subscribeToFilterChange(selectedWorksheet, handleFilterChange)
     return unsubscribe
-  }, [setGridData, setRefreshing, recordRefreshSuccess, recordRefreshFailure])
+  }, [selectedWorksheet, setGridData, setRefreshing, recordRefreshSuccess, recordRefreshFailure])
 }

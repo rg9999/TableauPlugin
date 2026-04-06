@@ -8,13 +8,14 @@ import { TableauDataError } from '../models/errors'
 const REFRESH_INTERVAL_MS = 10_000
 
 /**
- * Polls Tableau for new data every 10 seconds.
+ * Polls the selected Tableau worksheet for new data every 10 seconds.
  * Diffs new data against existing grid data, identifies new rows by rowId,
  * and merges them into the store. Preserves existing grid state (scroll, sort, filter).
  * Pauses when document is hidden (tab not active).
  */
 export function useLiveRefresh(): void {
   const selectedFields = useStore((state) => state.selectedFields)
+  const selectedWorksheet = useStore((state) => state.selectedWorksheet)
   const gridData = useStore((state) => state.gridData)
   const setGridData = useStore((state) => state.setGridData)
   const setRefreshing = useStore((state) => state.setRefreshing)
@@ -25,19 +26,22 @@ export function useLiveRefresh(): void {
   // Use refs for values accessed in the interval callback to avoid stale closures
   const selectedFieldsRef = useRef(selectedFields)
   const gridDataRef = useRef(gridData)
+  const worksheetRef = useRef(selectedWorksheet)
   selectedFieldsRef.current = selectedFields
   gridDataRef.current = gridData
+  worksheetRef.current = selectedWorksheet
 
   const doRefresh = useCallback(async () => {
     const fields = selectedFieldsRef.current
-    if (fields.length === 0) return
+    const wsName = worksheetRef.current
+    if (fields.length === 0 || !wsName) return
 
     // Skip if document is hidden (tab not active)
     if (document.hidden) return
 
     setRefreshing(true)
     try {
-      const rows = await tableauAdapter.queryData()
+      const rows = await tableauAdapter.queryData(wsName)
       const freshGridData = buildSparseGridModel(rows, fields)
 
       // Diff: find new rows not in current data
@@ -64,9 +68,9 @@ export function useLiveRefresh(): void {
   }, [setGridData, setRefreshing, setNewRowCount, recordRefreshSuccess, recordRefreshFailure])
 
   useEffect(() => {
-    if (selectedFields.length === 0) return
+    if (selectedFields.length === 0 || !selectedWorksheet) return
 
     const intervalId = setInterval(doRefresh, REFRESH_INTERVAL_MS)
     return () => clearInterval(intervalId)
-  }, [selectedFields.length, doRefresh])
+  }, [selectedFields.length, selectedWorksheet, doRefresh])
 }

@@ -107,7 +107,7 @@ const TreeNodeItem = memo(function TreeNodeItem({ node, depth, forceExpanded = f
     <ListItemButton
       onClick={isBranch ? handleToggle : handleFieldSelect}
       sx={{
-        pl: SPACING.sm + depth * SPACING.lg,
+        pl: SPACING.xs + depth * SPACING.sm,
         py: 0.25,
         minHeight: 28,
       }}
@@ -207,6 +207,7 @@ const TreeNodeItem = memo(function TreeNodeItem({ node, depth, forceExpanded = f
 
 export default function TreeSelector() {
   const fieldHierarchy = useStore((state) => state.fieldHierarchy)
+  const fieldLoadError = useStore((state) => state.fieldLoadError)
   const [searchTerm, setSearchTerm] = useState('')
 
   const displayTree = useMemo(() => {
@@ -216,6 +217,15 @@ export default function TreeSelector() {
   }, [fieldHierarchy, searchTerm])
 
   const isFiltering = searchTerm.trim().length > 0
+
+  if (fieldLoadError) {
+    return (
+      <Box sx={{ p: SPACING.md, fontSize: TYPOGRAPHY.treeNode.size }}>
+        <Box sx={{ color: '#e53935', fontWeight: 600, mb: 1 }}>Failed to load fields</Box>
+        <Box sx={{ color: COLORS.textMuted, fontSize: '0.85em' }}>{fieldLoadError}</Box>
+      </Box>
+    )
+  }
 
   if (!fieldHierarchy) {
     return (

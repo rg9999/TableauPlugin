@@ -1,8 +1,12 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community'
 import App from './App'
 import { tableauAdapter } from './services/tableauAdapter'
 import { logger } from './utils/logger'
+
+// Register AG Grid community modules (required in v35+)
+ModuleRegistry.registerModules([AllCommunityModule])
 
 const init = async () => {
   try {

@@ -60,5 +60,6 @@ export const LAYOUT = {
   treePanelWidth: 240,
   treePanelCollapsedWidth: 32,
   detailPanelHeight: 180,
+  detailPanelWidth: 300,
   statusBarHeight: 24,
 } as const

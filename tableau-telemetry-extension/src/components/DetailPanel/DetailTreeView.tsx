@@ -30,7 +30,7 @@ const TreeEntry = memo(function TreeEntry({ name, value, depth }: TreeEntryProps
       : String(value ?? '')
 
   return (
-    <Box sx={{ pl: depth * SPACING.lg }}>
+    <Box sx={{ pl: depth * SPACING.sm }}>
       <Box
         sx={{
           display: 'flex',

@@ -1,0 +1,1611 @@
+<?xml version='1.0' encoding='utf-8' ?>
+
+<!-- build 20261.26.0226.1626                               -->
+<workbook original-version='18.1' source-build='2026.1.0 (20261.26.0226.1626)' source-platform='win' version='18.1' xmlns:user='http://www.tableausoftware.com/xml/user'>
+  <document-format-change-manifest>
+    <AnimationOnByDefault />
+    <MarkAnimation />
+    <SheetIdentifierTracking />
+    <WindowsPersistSimpleIdentifiers />
+  </document-format-change-manifest>
+  <preferences>
+    <preference name='ui.encoding.shelf.height' value='24' />
+    <preference name='ui.shelf.height' value='26' />
+  </preferences>
+  <datasources>
+    <datasource caption='Navigation GPS Position' inline='true' name='federated.1194e2c903414dc7b5cb33ba8f93' version='18.1'>
+      <connection class='federated'>
+        <named-connections>
+          <named-connection caption='navigation_gps_position' name='hyper.97779cf1147b4739b2a571a8941a'>
+            <connection authentication='auth-none' author-locale='en_GB' class='hyper' dbname='PluginTestData/navigation_gps_position.hyper' default-settings='yes' server='' sslmode='' username='tableau_internal_user' />
+          </named-connection>
+        </named-connections>
+        <relation connection='hyper.97779cf1147b4739b2a571a8941a' name='navigation_gps_position' table='[Extract].[navigation_gps_position]' type='table' />
+        <metadata-records>
+          <metadata-record class='column'>
+            <remote-name>timestamp</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[timestamp]</local-name>
+            <parent-name>[navigation_gps_position]</parent-name>
+            <remote-alias>timestamp</remote-alias>
+            <ordinal>0</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>false</contains-null>
+            <collation flag='0' name='binary' />
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>messageType</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[messageType]</local-name>
+            <parent-name>[navigation_gps_position]</parent-name>
+            <remote-alias>messageType</remote-alias>
+            <ordinal>1</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>false</contains-null>
+            <collation flag='0' name='binary' />
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>navigation.gps.position.latitude</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[navigation.gps.position.latitude]</local-name>
+            <parent-name>[navigation_gps_position]</parent-name>
+            <remote-alias>navigation.gps.position.latitude</remote-alias>
+            <ordinal>2</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>navigation.gps.position.longitude</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[navigation.gps.position.longitude]</local-name>
+            <parent-name>[navigation_gps_position]</parent-name>
+            <remote-alias>navigation.gps.position.longitude</remote-alias>
+            <ordinal>3</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>navigation.gps.position.altitude_msl</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[navigation.gps.position.altitude_msl]</local-name>
+            <parent-name>[navigation_gps_position]</parent-name>
+            <remote-alias>navigation.gps.position.altitude_msl</remote-alias>
+            <ordinal>4</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>navigation.gps.position.altitude_agl</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[navigation.gps.position.altitude_agl]</local-name>
+            <parent-name>[navigation_gps_position]</parent-name>
+            <remote-alias>navigation.gps.position.altitude_agl</remote-alias>
+            <ordinal>5</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>navigation.gps.position.hdop</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[navigation.gps.position.hdop]</local-name>
+            <parent-name>[navigation_gps_position]</parent-name>
+            <remote-alias>navigation.gps.position.hdop</remote-alias>
+            <ordinal>6</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>navigation.gps.position.num_satellites</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[navigation.gps.position.num_satellites]</local-name>
+            <parent-name>[navigation_gps_position]</parent-name>
+            <remote-alias>navigation.gps.position.num_satellites</remote-alias>
+            <ordinal>7</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>navigation.gps.position.fix_type</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[navigation.gps.position.fix_type]</local-name>
+            <parent-name>[navigation_gps_position]</parent-name>
+            <remote-alias>navigation.gps.position.fix_type</remote-alias>
+            <ordinal>8</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='binary' />
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>navigation.gps.position.ground_speed_knots</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[navigation.gps.position.ground_speed_knots]</local-name>
+            <parent-name>[navigation_gps_position]</parent-name>
+            <remote-alias>navigation.gps.position.ground_speed_knots</remote-alias>
+            <ordinal>9</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+        </metadata-records>
+      </connection>
+    </datasource>
+    <datasource caption='Navigation INS Attitude' inline='true' name='federated.b5bb5f4a7faf44ebaa46ac8a3315' version='18.1'>
+      <connection class='federated'>
+        <named-connections>
+          <named-connection caption='navigation_ins_attitude' name='hyper.5df3d7cb37704735ad8524d1d8c7'>
+            <connection authentication='auth-none' author-locale='en_GB' class='hyper' dbname='PluginTestData/navigation_ins_attitude.hyper' default-settings='yes' server='' sslmode='' username='tableau_internal_user' />
+          </named-connection>
+        </named-connections>
+        <relation connection='hyper.5df3d7cb37704735ad8524d1d8c7' name='navigation_ins_attitude' table='[Extract].[navigation_ins_attitude]' type='table' />
+        <metadata-records>
+          <metadata-record class='column'>
+            <remote-name>timestamp</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[timestamp]</local-name>
+            <parent-name>[navigation_ins_attitude]</parent-name>
+            <remote-alias>timestamp</remote-alias>
+            <ordinal>0</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>false</contains-null>
+            <collation flag='0' name='binary' />
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>messageType</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[messageType]</local-name>
+            <parent-name>[navigation_ins_attitude]</parent-name>
+            <remote-alias>messageType</remote-alias>
+            <ordinal>1</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>false</contains-null>
+            <collation flag='0' name='binary' />
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>navigation.ins.attitude.roll</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[navigation.ins.attitude.roll]</local-name>
+            <parent-name>[navigation_ins_attitude]</parent-name>
+            <remote-alias>navigation.ins.attitude.roll</remote-alias>
+            <ordinal>2</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>navigation.ins.attitude.pitch</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[navigation.ins.attitude.pitch]</local-name>
+            <parent-name>[navigation_ins_attitude]</parent-name>
+            <remote-alias>navigation.ins.attitude.pitch</remote-alias>
+            <ordinal>3</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>navigation.ins.attitude.yaw</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[navigation.ins.attitude.yaw]</local-name>
+            <parent-name>[navigation_ins_attitude]</parent-name>
+            <remote-alias>navigation.ins.attitude.yaw</remote-alias>
+            <ordinal>4</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>navigation.ins.attitude.heading_true</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[navigation.ins.attitude.heading_true]</local-name>
+            <parent-name>[navigation_ins_attitude]</parent-name>
+            <remote-alias>navigation.ins.attitude.heading_true</remote-alias>
+            <ordinal>5</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>navigation.ins.attitude.heading_magnetic</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[navigation.ins.attitude.heading_magnetic]</local-name>
+            <parent-name>[navigation_ins_attitude]</parent-name>
+            <remote-alias>navigation.ins.attitude.heading_magnetic</remote-alias>
+            <ordinal>6</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>navigation.ins.attitude.vertical_speed_fpm</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[navigation.ins.attitude.vertical_speed_fpm]</local-name>
+            <parent-name>[navigation_ins_attitude]</parent-name>
+            <remote-alias>navigation.ins.attitude.vertical_speed_fpm</remote-alias>
+            <ordinal>7</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+        </metadata-records>
+      </connection>
+    </datasource>
+    <datasource caption='Navigation Barometric Pressure' inline='true' name='federated.5459a414b6cd4343b9c534a65625' version='18.1'>
+      <connection class='federated'>
+        <named-connections>
+          <named-connection caption='navigation_baro_pressure' name='hyper.e7c4aabddb0647e589df66ae56ca'>
+            <connection authentication='auth-none' author-locale='en_GB' class='hyper' dbname='PluginTestData/navigation_baro_pressure.hyper' default-settings='yes' server='' sslmode='' username='tableau_internal_user' />
+          </named-connection>
+        </named-connections>
+        <relation connection='hyper.e7c4aabddb0647e589df66ae56ca' name='navigation_baro_pressure' table='[Extract].[navigation_baro_pressure]' type='table' />
+        <metadata-records>
+          <metadata-record class='column'>
+            <remote-name>timestamp</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[timestamp]</local-name>
+            <parent-name>[navigation_baro_pressure]</parent-name>
+            <remote-alias>timestamp</remote-alias>
+            <ordinal>0</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>false</contains-null>
+            <collation flag='0' name='binary' />
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>messageType</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[messageType]</local-name>
+            <parent-name>[navigation_baro_pressure]</parent-name>
+            <remote-alias>messageType</remote-alias>
+            <ordinal>1</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>false</contains-null>
+            <collation flag='0' name='binary' />
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>navigation.baro.pressure.altitude_ft</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[navigation.baro.pressure.altitude_ft]</local-name>
+            <parent-name>[navigation_baro_pressure]</parent-name>
+            <remote-alias>navigation.baro.pressure.altitude_ft</remote-alias>
+            <ordinal>2</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>navigation.baro.pressure.qnh_hpa</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[navigation.baro.pressure.qnh_hpa]</local-name>
+            <parent-name>[navigation_baro_pressure]</parent-name>
+            <remote-alias>navigation.baro.pressure.qnh_hpa</remote-alias>
+            <ordinal>3</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>navigation.baro.pressure.qfe_hpa</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[navigation.baro.pressure.qfe_hpa]</local-name>
+            <parent-name>[navigation_baro_pressure]</parent-name>
+            <remote-alias>navigation.baro.pressure.qfe_hpa</remote-alias>
+            <ordinal>4</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>navigation.baro.pressure.vertical_rate_fpm</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[navigation.baro.pressure.vertical_rate_fpm]</local-name>
+            <parent-name>[navigation_baro_pressure]</parent-name>
+            <remote-alias>navigation.baro.pressure.vertical_rate_fpm</remote-alias>
+            <ordinal>5</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>navigation.baro.pressure.static_temp_c</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[navigation.baro.pressure.static_temp_c]</local-name>
+            <parent-name>[navigation_baro_pressure]</parent-name>
+            <remote-alias>navigation.baro.pressure.static_temp_c</remote-alias>
+            <ordinal>6</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+        </metadata-records>
+      </connection>
+    </datasource>
+    <datasource caption='Flight Control Surfaces' inline='true' name='federated.b08b6b5575ea484abbb235ca2323' version='18.1'>
+      <connection class='federated'>
+        <named-connections>
+          <named-connection caption='flightcontrol_surfaces' name='hyper.0058b593565a4c21af1c065a89b3'>
+            <connection authentication='auth-none' author-locale='en_GB' class='hyper' dbname='PluginTestData/flightcontrol_surfaces.hyper' default-settings='yes' server='' sslmode='' username='tableau_internal_user' />
+          </named-connection>
+        </named-connections>
+        <relation connection='hyper.0058b593565a4c21af1c065a89b3' name='flightcontrol_surfaces' table='[Extract].[flightcontrol_surfaces]' type='table' />
+        <metadata-records>
+          <metadata-record class='column'>
+            <remote-name>timestamp</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[timestamp]</local-name>
+            <parent-name>[flightcontrol_surfaces]</parent-name>
+            <remote-alias>timestamp</remote-alias>
+            <ordinal>0</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>false</contains-null>
+            <collation flag='0' name='binary' />
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>messageType</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[messageType]</local-name>
+            <parent-name>[flightcontrol_surfaces]</parent-name>
+            <remote-alias>messageType</remote-alias>
+            <ordinal>1</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>false</contains-null>
+            <collation flag='0' name='binary' />
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>flightcontrol.surfaces.aileron.left_deg</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[flightcontrol.surfaces.aileron.left_deg]</local-name>
+            <parent-name>[flightcontrol_surfaces]</parent-name>
+            <remote-alias>flightcontrol.surfaces.aileron.left_deg</remote-alias>
+            <ordinal>2</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>flightcontrol.surfaces.aileron.right_deg</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[flightcontrol.surfaces.aileron.right_deg]</local-name>
+            <parent-name>[flightcontrol_surfaces]</parent-name>
+            <remote-alias>flightcontrol.surfaces.aileron.right_deg</remote-alias>
+            <ordinal>3</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>flightcontrol.surfaces.elevator.position_deg</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[flightcontrol.surfaces.elevator.position_deg]</local-name>
+            <parent-name>[flightcontrol_surfaces]</parent-name>
+            <remote-alias>flightcontrol.surfaces.elevator.position_deg</remote-alias>
+            <ordinal>4</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>flightcontrol.surfaces.rudder.position_deg</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[flightcontrol.surfaces.rudder.position_deg]</local-name>
+            <parent-name>[flightcontrol_surfaces]</parent-name>
+            <remote-alias>flightcontrol.surfaces.rudder.position_deg</remote-alias>
+            <ordinal>5</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>flightcontrol.surfaces.flaps.position_pct</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[flightcontrol.surfaces.flaps.position_pct]</local-name>
+            <parent-name>[flightcontrol_surfaces]</parent-name>
+            <remote-alias>flightcontrol.surfaces.flaps.position_pct</remote-alias>
+            <ordinal>6</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>flightcontrol.surfaces.spoilers.deployed</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[flightcontrol.surfaces.spoilers.deployed]</local-name>
+            <parent-name>[flightcontrol_surfaces]</parent-name>
+            <remote-alias>flightcontrol.surfaces.spoilers.deployed</remote-alias>
+            <ordinal>7</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>flightcontrol.surfaces.trim.elevator_deg</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[flightcontrol.surfaces.trim.elevator_deg]</local-name>
+            <parent-name>[flightcontrol_surfaces]</parent-name>
+            <remote-alias>flightcontrol.surfaces.trim.elevator_deg</remote-alias>
+            <ordinal>8</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+        </metadata-records>
+      </connection>
+    </datasource>
+    <datasource caption='Flight Control Mode' inline='true' name='federated.c0fad58d32f347d1a229e5d58286' version='18.1'>
+      <connection class='federated'>
+        <named-connections>
+          <named-connection caption='flightcontrol_mode' name='hyper.dbe03eb921774010bf1214d7dae3'>
+            <connection authentication='auth-none' author-locale='en_GB' class='hyper' dbname='PluginTestData/flightcontrol_mode.hyper' default-settings='yes' server='' sslmode='' username='tableau_internal_user' />
+          </named-connection>
+        </named-connections>
+        <relation connection='hyper.dbe03eb921774010bf1214d7dae3' name='flightcontrol_mode' table='[Extract].[flightcontrol_mode]' type='table' />
+        <metadata-records>
+          <metadata-record class='column'>
+            <remote-name>timestamp</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[timestamp]</local-name>
+            <parent-name>[flightcontrol_mode]</parent-name>
+            <remote-alias>timestamp</remote-alias>
+            <ordinal>0</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>false</contains-null>
+            <collation flag='0' name='binary' />
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>messageType</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[messageType]</local-name>
+            <parent-name>[flightcontrol_mode]</parent-name>
+            <remote-alias>messageType</remote-alias>
+            <ordinal>1</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>false</contains-null>
+            <collation flag='0' name='binary' />
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>flightcontrol.mode.autopilot.engaged</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[flightcontrol.mode.autopilot.engaged]</local-name>
+            <parent-name>[flightcontrol_mode]</parent-name>
+            <remote-alias>flightcontrol.mode.autopilot.engaged</remote-alias>
+            <ordinal>2</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>flightcontrol.mode.autopilot.mode_name</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[flightcontrol.mode.autopilot.mode_name]</local-name>
+            <parent-name>[flightcontrol_mode]</parent-name>
+            <remote-alias>flightcontrol.mode.autopilot.mode_name</remote-alias>
+            <ordinal>3</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='binary' />
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>flightcontrol.mode.flight_phase</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[flightcontrol.mode.flight_phase]</local-name>
+            <parent-name>[flightcontrol_mode]</parent-name>
+            <remote-alias>flightcontrol.mode.flight_phase</remote-alias>
+            <ordinal>4</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='binary' />
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>flightcontrol.mode.control_law</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[flightcontrol.mode.control_law]</local-name>
+            <parent-name>[flightcontrol_mode]</parent-name>
+            <remote-alias>flightcontrol.mode.control_law</remote-alias>
+            <ordinal>5</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='binary' />
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>flightcontrol.mode.stick_priority</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[flightcontrol.mode.stick_priority]</local-name>
+            <parent-name>[flightcontrol_mode]</parent-name>
+            <remote-alias>flightcontrol.mode.stick_priority</remote-alias>
+            <ordinal>6</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='binary' />
+          </metadata-record>
+        </metadata-records>
+      </connection>
+    </datasource>
+    <datasource caption='Sensors Radar Track' inline='true' name='federated.44b3003341044fe48913011998fe' version='18.1'>
+      <connection class='federated'>
+        <named-connections>
+          <named-connection caption='sensors_radar_track' name='hyper.062552eee53d47c8a2cb286deaee'>
+            <connection authentication='auth-none' author-locale='en_GB' class='hyper' dbname='PluginTestData/sensors_radar_track.hyper' default-settings='yes' server='' sslmode='' username='tableau_internal_user' />
+          </named-connection>
+        </named-connections>
+        <relation connection='hyper.062552eee53d47c8a2cb286deaee' name='sensors_radar_track' table='[Extract].[sensors_radar_track]' type='table' />
+        <metadata-records>
+          <metadata-record class='column'>
+            <remote-name>timestamp</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[timestamp]</local-name>
+            <parent-name>[sensors_radar_track]</parent-name>
+            <remote-alias>timestamp</remote-alias>
+            <ordinal>0</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>false</contains-null>
+            <collation flag='0' name='binary' />
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>messageType</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[messageType]</local-name>
+            <parent-name>[sensors_radar_track]</parent-name>
+            <remote-alias>messageType</remote-alias>
+            <ordinal>1</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>false</contains-null>
+            <collation flag='0' name='binary' />
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>sensors.radar.track.target_count</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[sensors.radar.track.target_count]</local-name>
+            <parent-name>[sensors_radar_track]</parent-name>
+            <remote-alias>sensors.radar.track.target_count</remote-alias>
+            <ordinal>2</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>sensors.radar.track.primary.range_nm</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[sensors.radar.track.primary.range_nm]</local-name>
+            <parent-name>[sensors_radar_track]</parent-name>
+            <remote-alias>sensors.radar.track.primary.range_nm</remote-alias>
+            <ordinal>3</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>sensors.radar.track.primary.azimuth_deg</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[sensors.radar.track.primary.azimuth_deg]</local-name>
+            <parent-name>[sensors_radar_track]</parent-name>
+            <remote-alias>sensors.radar.track.primary.azimuth_deg</remote-alias>
+            <ordinal>4</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>sensors.radar.track.primary.elevation_deg</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[sensors.radar.track.primary.elevation_deg]</local-name>
+            <parent-name>[sensors_radar_track]</parent-name>
+            <remote-alias>sensors.radar.track.primary.elevation_deg</remote-alias>
+            <ordinal>5</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>sensors.radar.track.primary.velocity_kts</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[sensors.radar.track.primary.velocity_kts]</local-name>
+            <parent-name>[sensors_radar_track]</parent-name>
+            <remote-alias>sensors.radar.track.primary.velocity_kts</remote-alias>
+            <ordinal>6</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>sensors.radar.track.primary.rcs_dbsm</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[sensors.radar.track.primary.rcs_dbsm]</local-name>
+            <parent-name>[sensors_radar_track]</parent-name>
+            <remote-alias>sensors.radar.track.primary.rcs_dbsm</remote-alias>
+            <ordinal>7</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>sensors.radar.track.primary.quality</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[sensors.radar.track.primary.quality]</local-name>
+            <parent-name>[sensors_radar_track]</parent-name>
+            <remote-alias>sensors.radar.track.primary.quality</remote-alias>
+            <ordinal>8</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>sensors.radar.track.scan_mode</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[sensors.radar.track.scan_mode]</local-name>
+            <parent-name>[sensors_radar_track]</parent-name>
+            <remote-alias>sensors.radar.track.scan_mode</remote-alias>
+            <ordinal>9</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='binary' />
+          </metadata-record>
+        </metadata-records>
+      </connection>
+    </datasource>
+    <datasource caption='Sensors EO' inline='true' name='federated.2a97ccc4ef214f1ebeeebd1acba0' version='18.1'>
+      <connection class='federated'>
+        <named-connections>
+          <named-connection caption='sensors_eo' name='hyper.beb756c3671342fb90b42c6d215d'>
+            <connection authentication='auth-none' author-locale='en_GB' class='hyper' dbname='PluginTestData/sensors_eo.hyper' default-settings='yes' server='' sslmode='' username='tableau_internal_user' />
+          </named-connection>
+        </named-connections>
+        <relation connection='hyper.beb756c3671342fb90b42c6d215d' name='sensors_eo' table='[Extract].[sensors_eo]' type='table' />
+        <metadata-records>
+          <metadata-record class='column'>
+            <remote-name>timestamp</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[timestamp]</local-name>
+            <parent-name>[sensors_eo]</parent-name>
+            <remote-alias>timestamp</remote-alias>
+            <ordinal>0</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>false</contains-null>
+            <collation flag='0' name='binary' />
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>messageType</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[messageType]</local-name>
+            <parent-name>[sensors_eo]</parent-name>
+            <remote-alias>messageType</remote-alias>
+            <ordinal>1</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>false</contains-null>
+            <collation flag='0' name='binary' />
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>sensors.eo.camera.fov_horizontal_deg</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[sensors.eo.camera.fov_horizontal_deg]</local-name>
+            <parent-name>[sensors_eo]</parent-name>
+            <remote-alias>sensors.eo.camera.fov_horizontal_deg</remote-alias>
+            <ordinal>2</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>sensors.eo.camera.fov_vertical_deg</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[sensors.eo.camera.fov_vertical_deg]</local-name>
+            <parent-name>[sensors_eo]</parent-name>
+            <remote-alias>sensors.eo.camera.fov_vertical_deg</remote-alias>
+            <ordinal>3</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>sensors.eo.camera.zoom_level</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[sensors.eo.camera.zoom_level]</local-name>
+            <parent-name>[sensors_eo]</parent-name>
+            <remote-alias>sensors.eo.camera.zoom_level</remote-alias>
+            <ordinal>4</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>sensors.eo.gimbal.pan_deg</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[sensors.eo.gimbal.pan_deg]</local-name>
+            <parent-name>[sensors_eo]</parent-name>
+            <remote-alias>sensors.eo.gimbal.pan_deg</remote-alias>
+            <ordinal>5</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>sensors.eo.gimbal.tilt_deg</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[sensors.eo.gimbal.tilt_deg]</local-name>
+            <parent-name>[sensors_eo]</parent-name>
+            <remote-alias>sensors.eo.gimbal.tilt_deg</remote-alias>
+            <ordinal>6</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>sensors.eo.status.mode</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[sensors.eo.status.mode]</local-name>
+            <parent-name>[sensors_eo]</parent-name>
+            <remote-alias>sensors.eo.status.mode</remote-alias>
+            <ordinal>7</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='binary' />
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>sensors.eo.status.tracking</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[sensors.eo.status.tracking]</local-name>
+            <parent-name>[sensors_eo]</parent-name>
+            <remote-alias>sensors.eo.status.tracking</remote-alias>
+            <ordinal>8</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='binary' />
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>sensors.eo.status.lock_on</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[sensors.eo.status.lock_on]</local-name>
+            <parent-name>[sensors_eo]</parent-name>
+            <remote-alias>sensors.eo.status.lock_on</remote-alias>
+            <ordinal>9</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+        </metadata-records>
+      </connection>
+    </datasource>
+    <datasource caption='Communications Radio' inline='true' name='federated.db8d1ef745974cfe90a9e51c62dd' version='18.1'>
+      <connection class='federated'>
+        <named-connections>
+          <named-connection caption='communications_radio' name='hyper.a7304b5480a04b28864b8ed51e91'>
+            <connection authentication='auth-none' author-locale='en_GB' class='hyper' dbname='PluginTestData/communications_radio.hyper' default-settings='yes' server='' sslmode='' username='tableau_internal_user' />
+          </named-connection>
+        </named-connections>
+        <relation connection='hyper.a7304b5480a04b28864b8ed51e91' name='communications_radio' table='[Extract].[communications_radio]' type='table' />
+        <metadata-records>
+          <metadata-record class='column'>
+            <remote-name>timestamp</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[timestamp]</local-name>
+            <parent-name>[communications_radio]</parent-name>
+            <remote-alias>timestamp</remote-alias>
+            <ordinal>0</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>false</contains-null>
+            <collation flag='0' name='binary' />
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>messageType</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[messageType]</local-name>
+            <parent-name>[communications_radio]</parent-name>
+            <remote-alias>messageType</remote-alias>
+            <ordinal>1</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>false</contains-null>
+            <collation flag='0' name='binary' />
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>communications.radio.vhf.frequency_mhz</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[communications.radio.vhf.frequency_mhz]</local-name>
+            <parent-name>[communications_radio]</parent-name>
+            <remote-alias>communications.radio.vhf.frequency_mhz</remote-alias>
+            <ordinal>2</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>communications.radio.vhf.channel</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[communications.radio.vhf.channel]</local-name>
+            <parent-name>[communications_radio]</parent-name>
+            <remote-alias>communications.radio.vhf.channel</remote-alias>
+            <ordinal>3</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>communications.radio.vhf.mode</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[communications.radio.vhf.mode]</local-name>
+            <parent-name>[communications_radio]</parent-name>
+            <remote-alias>communications.radio.vhf.mode</remote-alias>
+            <ordinal>4</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='binary' />
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>communications.radio.vhf.squelch_level</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[communications.radio.vhf.squelch_level]</local-name>
+            <parent-name>[communications_radio]</parent-name>
+            <remote-alias>communications.radio.vhf.squelch_level</remote-alias>
+            <ordinal>5</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>communications.radio.vhf.signal_strength_dbm</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[communications.radio.vhf.signal_strength_dbm]</local-name>
+            <parent-name>[communications_radio]</parent-name>
+            <remote-alias>communications.radio.vhf.signal_strength_dbm</remote-alias>
+            <ordinal>6</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>communications.radio.uhf.frequency_mhz</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[communications.radio.uhf.frequency_mhz]</local-name>
+            <parent-name>[communications_radio]</parent-name>
+            <remote-alias>communications.radio.uhf.frequency_mhz</remote-alias>
+            <ordinal>7</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+        </metadata-records>
+      </connection>
+    </datasource>
+    <datasource caption='Power System' inline='true' name='federated.c7cf41254ff8468c8b279bf67a11' version='18.1'>
+      <connection class='federated'>
+        <named-connections>
+          <named-connection caption='power_system' name='hyper.ad8a59a7323345e780f080a55663'>
+            <connection authentication='auth-none' author-locale='en_GB' class='hyper' dbname='PluginTestData/power_system.hyper' default-settings='yes' server='' sslmode='' username='tableau_internal_user' />
+          </named-connection>
+        </named-connections>
+        <relation connection='hyper.ad8a59a7323345e780f080a55663' name='power_system' table='[Extract].[power_system]' type='table' />
+        <metadata-records>
+          <metadata-record class='column'>
+            <remote-name>timestamp</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[timestamp]</local-name>
+            <parent-name>[power_system]</parent-name>
+            <remote-alias>timestamp</remote-alias>
+            <ordinal>0</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>false</contains-null>
+            <collation flag='0' name='binary' />
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>messageType</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[messageType]</local-name>
+            <parent-name>[power_system]</parent-name>
+            <remote-alias>messageType</remote-alias>
+            <ordinal>1</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>false</contains-null>
+            <collation flag='0' name='binary' />
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>power.generator.primary.voltage_v</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[power.generator.primary.voltage_v]</local-name>
+            <parent-name>[power_system]</parent-name>
+            <remote-alias>power.generator.primary.voltage_v</remote-alias>
+            <ordinal>2</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>power.generator.primary.current_a</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[power.generator.primary.current_a]</local-name>
+            <parent-name>[power_system]</parent-name>
+            <remote-alias>power.generator.primary.current_a</remote-alias>
+            <ordinal>3</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>power.generator.primary.frequency_hz</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[power.generator.primary.frequency_hz]</local-name>
+            <parent-name>[power_system]</parent-name>
+            <remote-alias>power.generator.primary.frequency_hz</remote-alias>
+            <ordinal>4</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>power.generator.primary.load_pct</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[power.generator.primary.load_pct]</local-name>
+            <parent-name>[power_system]</parent-name>
+            <remote-alias>power.generator.primary.load_pct</remote-alias>
+            <ordinal>5</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>power.generator.primary.temp_c</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[power.generator.primary.temp_c]</local-name>
+            <parent-name>[power_system]</parent-name>
+            <remote-alias>power.generator.primary.temp_c</remote-alias>
+            <ordinal>6</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>power.battery.main.voltage_v</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[power.battery.main.voltage_v]</local-name>
+            <parent-name>[power_system]</parent-name>
+            <remote-alias>power.battery.main.voltage_v</remote-alias>
+            <ordinal>7</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>power.battery.main.soc_pct</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[power.battery.main.soc_pct]</local-name>
+            <parent-name>[power_system]</parent-name>
+            <remote-alias>power.battery.main.soc_pct</remote-alias>
+            <ordinal>8</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>power.battery.main.temp_c</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[power.battery.main.temp_c]</local-name>
+            <parent-name>[power_system]</parent-name>
+            <remote-alias>power.battery.main.temp_c</remote-alias>
+            <ordinal>9</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>power.battery.main.health</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[power.battery.main.health]</local-name>
+            <parent-name>[power_system]</parent-name>
+            <remote-alias>power.battery.main.health</remote-alias>
+            <ordinal>10</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='binary' />
+          </metadata-record>
+        </metadata-records>
+      </connection>
+    </datasource>
+    <datasource caption='System Log' inline='true' name='federated.4b0e7b6688664a4c970f0c86d5ba' version='18.1'>
+      <connection class='federated'>
+        <named-connections>
+          <named-connection caption='system_log' name='hyper.dd02699f03de4b6293a5d484a2e9'>
+            <connection authentication='auth-none' author-locale='en_GB' class='hyper' dbname='PluginTestData/system_log.hyper' default-settings='yes' server='' sslmode='' username='tableau_internal_user' />
+          </named-connection>
+        </named-connections>
+        <relation connection='hyper.dd02699f03de4b6293a5d484a2e9' name='system_log' table='[Extract].[system_log]' type='table' />
+        <metadata-records>
+          <metadata-record class='column'>
+            <remote-name>timestamp</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[timestamp]</local-name>
+            <parent-name>[system_log]</parent-name>
+            <remote-alias>timestamp</remote-alias>
+            <ordinal>0</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>false</contains-null>
+            <collation flag='0' name='binary' />
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>messageType</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[messageType]</local-name>
+            <parent-name>[system_log]</parent-name>
+            <remote-alias>messageType</remote-alias>
+            <ordinal>1</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>false</contains-null>
+            <collation flag='0' name='binary' />
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>systemlog.event.severity</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[systemlog.event.severity]</local-name>
+            <parent-name>[system_log]</parent-name>
+            <remote-alias>systemlog.event.severity</remote-alias>
+            <ordinal>2</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='binary' />
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>systemlog.event.source</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[systemlog.event.source]</local-name>
+            <parent-name>[system_log]</parent-name>
+            <remote-alias>systemlog.event.source</remote-alias>
+            <ordinal>3</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='binary' />
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>systemlog.event.message</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[systemlog.event.message]</local-name>
+            <parent-name>[system_log]</parent-name>
+            <remote-alias>systemlog.event.message</remote-alias>
+            <ordinal>4</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='binary' />
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>systemlog.event.code</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[systemlog.event.code]</local-name>
+            <parent-name>[system_log]</parent-name>
+            <remote-alias>systemlog.event.code</remote-alias>
+            <ordinal>5</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>systemlog.event.subsystem_id</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[systemlog.event.subsystem_id]</local-name>
+            <parent-name>[system_log]</parent-name>
+            <remote-alias>systemlog.event.subsystem_id</remote-alias>
+            <ordinal>6</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+        </metadata-records>
+      </connection>
+    </datasource>
+  </datasources>
+  <worksheets>
+    <worksheet name='Navigation GPS Position'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='Navigation GPS Position' name='federated.1194e2c903414dc7b5cb33ba8f93' />
+          </datasources>
+          <datasource-dependencies datasource='federated.1194e2c903414dc7b5cb33ba8f93'>
+            <column datatype='string' name='[timestamp]' role='dimension' type='nominal' />
+          </datasource-dependencies>
+          <aggregation value='false' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+          </pane>
+        </panes>
+        <rows>[federated.1194e2c903414dc7b5cb33ba8f93].[timestamp]</rows>
+        <cols />
+      </table>
+      <simple-id uuid='{00000001-0000-0000-0000-000000000001}' />
+    </worksheet>
+    <worksheet name='Navigation INS Attitude'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='Navigation INS Attitude' name='federated.b5bb5f4a7faf44ebaa46ac8a3315' />
+          </datasources>
+          <datasource-dependencies datasource='federated.b5bb5f4a7faf44ebaa46ac8a3315'>
+            <column datatype='string' name='[timestamp]' role='dimension' type='nominal' />
+          </datasource-dependencies>
+          <aggregation value='false' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+          </pane>
+        </panes>
+        <rows>[federated.b5bb5f4a7faf44ebaa46ac8a3315].[timestamp]</rows>
+        <cols />
+      </table>
+      <simple-id uuid='{00000002-0000-0000-0000-000000000001}' />
+    </worksheet>
+    <worksheet name='Navigation Barometric Pressure'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='Navigation Barometric Pressure' name='federated.5459a414b6cd4343b9c534a65625' />
+          </datasources>
+          <datasource-dependencies datasource='federated.5459a414b6cd4343b9c534a65625'>
+            <column datatype='string' name='[timestamp]' role='dimension' type='nominal' />
+          </datasource-dependencies>
+          <aggregation value='false' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+          </pane>
+        </panes>
+        <rows>[federated.5459a414b6cd4343b9c534a65625].[timestamp]</rows>
+        <cols />
+      </table>
+      <simple-id uuid='{00000003-0000-0000-0000-000000000001}' />
+    </worksheet>
+    <worksheet name='Flight Control Surfaces'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='Flight Control Surfaces' name='federated.b08b6b5575ea484abbb235ca2323' />
+          </datasources>
+          <datasource-dependencies datasource='federated.b08b6b5575ea484abbb235ca2323'>
+            <column datatype='string' name='[timestamp]' role='dimension' type='nominal' />
+          </datasource-dependencies>
+          <aggregation value='false' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+          </pane>
+        </panes>
+        <rows>[federated.b08b6b5575ea484abbb235ca2323].[timestamp]</rows>
+        <cols />
+      </table>
+      <simple-id uuid='{00000004-0000-0000-0000-000000000001}' />
+    </worksheet>
+    <worksheet name='Flight Control Mode'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='Flight Control Mode' name='federated.c0fad58d32f347d1a229e5d58286' />
+          </datasources>
+          <datasource-dependencies datasource='federated.c0fad58d32f347d1a229e5d58286'>
+            <column datatype='string' name='[timestamp]' role='dimension' type='nominal' />
+          </datasource-dependencies>
+          <aggregation value='false' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+          </pane>
+        </panes>
+        <rows>[federated.c0fad58d32f347d1a229e5d58286].[timestamp]</rows>
+        <cols />
+      </table>
+      <simple-id uuid='{00000005-0000-0000-0000-000000000001}' />
+    </worksheet>
+    <worksheet name='Sensors Radar Track'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='Sensors Radar Track' name='federated.44b3003341044fe48913011998fe' />
+          </datasources>
+          <datasource-dependencies datasource='federated.44b3003341044fe48913011998fe'>
+            <column datatype='string' name='[timestamp]' role='dimension' type='nominal' />
+          </datasource-dependencies>
+          <aggregation value='false' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+          </pane>
+        </panes>
+        <rows>[federated.44b3003341044fe48913011998fe].[timestamp]</rows>
+        <cols />
+      </table>
+      <simple-id uuid='{00000006-0000-0000-0000-000000000001}' />
+    </worksheet>
+    <worksheet name='Sensors EO'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='Sensors EO' name='federated.2a97ccc4ef214f1ebeeebd1acba0' />
+          </datasources>
+          <datasource-dependencies datasource='federated.2a97ccc4ef214f1ebeeebd1acba0'>
+            <column datatype='string' name='[timestamp]' role='dimension' type='nominal' />
+          </datasource-dependencies>
+          <aggregation value='false' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+          </pane>
+        </panes>
+        <rows>[federated.2a97ccc4ef214f1ebeeebd1acba0].[timestamp]</rows>
+        <cols />
+      </table>
+      <simple-id uuid='{00000007-0000-0000-0000-000000000001}' />
+    </worksheet>
+    <worksheet name='Communications Radio'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='Communications Radio' name='federated.db8d1ef745974cfe90a9e51c62dd' />
+          </datasources>
+          <datasource-dependencies datasource='federated.db8d1ef745974cfe90a9e51c62dd'>
+            <column datatype='string' name='[timestamp]' role='dimension' type='nominal' />
+          </datasource-dependencies>
+          <aggregation value='false' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+          </pane>
+        </panes>
+        <rows>[federated.db8d1ef745974cfe90a9e51c62dd].[timestamp]</rows>
+        <cols />
+      </table>
+      <simple-id uuid='{00000008-0000-0000-0000-000000000001}' />
+    </worksheet>
+    <worksheet name='Power System'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='Power System' name='federated.c7cf41254ff8468c8b279bf67a11' />
+          </datasources>
+          <datasource-dependencies datasource='federated.c7cf41254ff8468c8b279bf67a11'>
+            <column datatype='string' name='[timestamp]' role='dimension' type='nominal' />
+          </datasource-dependencies>
+          <aggregation value='false' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+          </pane>
+        </panes>
+        <rows>[federated.c7cf41254ff8468c8b279bf67a11].[timestamp]</rows>
+        <cols />
+      </table>
+      <simple-id uuid='{00000009-0000-0000-0000-000000000001}' />
+    </worksheet>
+    <worksheet name='System Log'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='System Log' name='federated.4b0e7b6688664a4c970f0c86d5ba' />
+          </datasources>
+          <datasource-dependencies datasource='federated.4b0e7b6688664a4c970f0c86d5ba'>
+            <column datatype='string' name='[timestamp]' role='dimension' type='nominal' />
+          </datasource-dependencies>
+          <aggregation value='false' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+          </pane>
+        </panes>
+        <rows>[federated.4b0e7b6688664a4c970f0c86d5ba].[timestamp]</rows>
+        <cols />
+      </table>
+      <simple-id uuid='{0000000a-0000-0000-0000-000000000001}' />
+    </worksheet>
+  </worksheets>
+  <windows>
+    <window class='worksheet' maximized='true' name='Navigation GPS Position'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{00000001-0000-0000-0000-000000000002}' />
+    </window>
+    <window class='worksheet' name='Navigation INS Attitude'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{00000002-0000-0000-0000-000000000002}' />
+    </window>
+    <window class='worksheet' name='Navigation Barometric Pressure'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{00000003-0000-0000-0000-000000000002}' />
+    </window>
+    <window class='worksheet' name='Flight Control Surfaces'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{00000004-0000-0000-0000-000000000002}' />
+    </window>
+    <window class='worksheet' name='Flight Control Mode'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{00000005-0000-0000-0000-000000000002}' />
+    </window>
+    <window class='worksheet' name='Sensors Radar Track'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{00000006-0000-0000-0000-000000000002}' />
+    </window>
+    <window class='worksheet' name='Sensors EO'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{00000007-0000-0000-0000-000000000002}' />
+    </window>
+    <window class='worksheet' name='Communications Radio'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{00000008-0000-0000-0000-000000000002}' />
+    </window>
+    <window class='worksheet' name='Power System'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{00000009-0000-0000-0000-000000000002}' />
+    </window>
+    <window class='worksheet' name='System Log'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{0000000a-0000-0000-0000-000000000002}' />
+    </window>
+  </windows>
+</workbook>

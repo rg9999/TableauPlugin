@@ -137,6 +137,7 @@ export default function GridArea({ onRowClick }: GridAreaProps) {
             rowHeight={28}
             rowBuffer={20}
             suppressMovableColumns={false}
+            suppressFieldDotNotation={true}
             animateRows={false}
             rowSelection="single"
             onGridReady={(params) => { gridApiRef.current = params.api }}

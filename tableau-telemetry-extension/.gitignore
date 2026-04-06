@@ -15,6 +15,9 @@ releases
 .env
 .env.local
 
+# SSL certs for local dev
+certs/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

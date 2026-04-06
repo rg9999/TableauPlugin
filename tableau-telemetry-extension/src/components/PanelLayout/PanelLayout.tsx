@@ -3,8 +3,12 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
+import ChevronRightIcon from '@mui/icons-material/ChevronRight'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { COLORS, LAYOUT, SPACING, TYPOGRAPHY } from '../../theme/designTokens'
 import ResizeHandle from './ResizeHandle'
+
+import LogConsole from '../LogConsole/LogConsole'
 
 interface PanelLayoutProps {
   treeContent?: ReactNode
@@ -12,6 +16,10 @@ interface PanelLayoutProps {
   detailContent?: ReactNode
   detailOpen?: boolean
   statusBarContent?: ReactNode
+  /** Currently selected worksheet name, shown in the panel header */
+  selectedWorksheet?: string | null
+  /** Called when user clicks back to go to worksheet selection */
+  onBackToWorksheets?: () => void
 }
 
 export default function PanelLayout({
@@ -20,11 +28,16 @@ export default function PanelLayout({
   detailContent,
   detailOpen = false,
   statusBarContent,
+  selectedWorksheet,
+  onBackToWorksheets,
 }: PanelLayoutProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [treeWidth, setTreeWidth] = useState<number>(LAYOUT.treePanelWidth)
   const [collapsed, setCollapsed] = useState(false)
   const [prevWidth, setPrevWidth] = useState<number>(LAYOUT.treePanelWidth)
+  const [detailWidth, setDetailWidth] = useState<number>(LAYOUT.detailPanelWidth)
+  const [detailCollapsed, setDetailCollapsed] = useState(false)
+  const [prevDetailWidth, setPrevDetailWidth] = useState<number>(LAYOUT.detailPanelWidth)
   const [containerWidth, setContainerWidth] = useState(1000)
   // Default to a reasonable size so features work before ResizeObserver fires
   const [containerHeight, setContainerHeight] = useState(500)
@@ -89,8 +102,29 @@ export default function PanelLayout({
     }
   }, [collapsed, prevWidth, treeWidth])
 
-  const detailDisabled = containerHeight < 300
-  const showDetail = detailOpen && !detailDisabled
+  // Detail panel resize — drag moves the left edge (negative deltaX = wider)
+  const handleDetailResize = useCallback(
+    (deltaX: number) => {
+      if (detailCollapsed) return
+      setDetailWidth((w) => {
+        const newWidth = Math.max(150, Math.min(w - deltaX, containerWidth * 0.5))
+        return newWidth
+      })
+    },
+    [detailCollapsed, containerWidth],
+  )
+
+  const handleDetailCollapseToggle = useCallback(() => {
+    if (detailCollapsed) {
+      setDetailCollapsed(false)
+      setDetailWidth(prevDetailWidth)
+    } else {
+      setPrevDetailWidth(detailWidth)
+      setDetailCollapsed(true)
+    }
+  }, [detailCollapsed, prevDetailWidth, detailWidth])
+
+  const showDetail = detailOpen
 
   return (
     <Box
@@ -161,21 +195,36 @@ export default function PanelLayout({
                 minHeight: 28,
               }}
             >
-              <Typography
-                sx={{
-                  fontSize: TYPOGRAPHY.panelHeader.size,
-                  fontWeight: TYPOGRAPHY.panelHeader.weight,
-                  color: COLORS.textPrimary,
-                }}
-              >
-                Fields
-              </Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: '2px', minWidth: 0 }}>
+                {selectedWorksheet && onBackToWorksheets && (
+                  <IconButton
+                    size="small"
+                    onClick={onBackToWorksheets}
+                    aria-label="back to worksheet selection"
+                    sx={{ p: 0.25 }}
+                  >
+                    <ArrowBackIcon sx={{ fontSize: 16 }} />
+                  </IconButton>
+                )}
+                <Typography
+                  sx={{
+                    fontSize: TYPOGRAPHY.panelHeader.size,
+                    fontWeight: TYPOGRAPHY.panelHeader.weight,
+                    color: COLORS.textPrimary,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {selectedWorksheet ?? 'Fields'}
+                </Typography>
+              </Box>
               <IconButton
                 size="small"
                 onClick={handleCollapseToggle}
                 aria-label="collapse tree panel"
                 data-testid="tree-collapse-button"
-                sx={{ p: 0.25 }}
+                sx={{ p: 0.25, flexShrink: 0 }}
               >
                 <ChevronLeftIcon sx={{ fontSize: 18 }} />
               </IconButton>
@@ -197,8 +246,8 @@ export default function PanelLayout({
           <ResizeHandle onResize={handleResize} onDoubleClick={handleCollapseToggle} />
         )}
 
-        {/* Grid + detail area */}
-        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        {/* Grid + detail area (side by side) */}
+        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'row', overflow: 'hidden' }}>
           {/* Grid area */}
           <Box sx={{ flex: 1, overflow: 'hidden' }} data-testid="grid-panel">
             {gridContent ?? (
@@ -224,27 +273,99 @@ export default function PanelLayout({
             )}
           </Box>
 
-          {/* Detail panel — only when open and zone is tall enough */}
-          {showDetail && (
-            <Box
-              sx={{
-                height: LAYOUT.detailPanelHeight,
-                minHeight: LAYOUT.detailPanelHeight,
-                borderTop: `2px solid ${COLORS.border}`,
-                backgroundColor: COLORS.surface,
-                overflow: 'auto',
-              }}
-              data-testid="detail-panel"
-            >
-              {detailContent ?? (
-                <Box sx={{ padding: `${SPACING.md}px`, color: COLORS.textMuted }}>
-                  Row detail
+          {/* Detail panel — right side, with resize handle */}
+          {showDetail && !detailCollapsed && (
+            <>
+              <ResizeHandle onResize={handleDetailResize} onDoubleClick={handleDetailCollapseToggle} />
+              <Box
+                sx={{
+                  width: detailWidth,
+                  minWidth: detailWidth,
+                  backgroundColor: COLORS.surface,
+                  overflow: 'auto',
+                  display: 'flex',
+                  flexDirection: 'column',
+                }}
+                data-testid="detail-panel"
+              >
+                {/* Detail panel header */}
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    px: `${SPACING.sm}px`,
+                    py: `${SPACING.xs}px`,
+                    borderBottom: `1px solid ${COLORS.border}`,
+                    minHeight: 28,
+                    flexShrink: 0,
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: TYPOGRAPHY.panelHeader.size,
+                      fontWeight: TYPOGRAPHY.panelHeader.weight,
+                      color: COLORS.textPrimary,
+                    }}
+                  >
+                    Row Detail
+                  </Typography>
+                  <IconButton
+                    size="small"
+                    onClick={handleDetailCollapseToggle}
+                    aria-label="collapse detail panel"
+                    sx={{ p: 0.25, flexShrink: 0 }}
+                  >
+                    <ChevronRightIcon sx={{ fontSize: 18 }} />
+                  </IconButton>
                 </Box>
-              )}
+                {/* Detail content */}
+                <Box sx={{ flex: 1, overflow: 'auto' }}>
+                  {detailContent ?? (
+                    <Box sx={{ padding: `${SPACING.md}px`, color: COLORS.textMuted }}>
+                      Click a row to see details
+                    </Box>
+                  )}
+                </Box>
+              </Box>
+            </>
+          )}
+
+          {/* Collapsed detail panel indicator */}
+          {showDetail && detailCollapsed && (
+            <Box
+              onClick={handleDetailCollapseToggle}
+              sx={{
+                width: LAYOUT.treePanelCollapsedWidth,
+                minWidth: LAYOUT.treePanelCollapsedWidth,
+                backgroundColor: COLORS.surface,
+                borderLeft: `1px solid ${COLORS.border}`,
+                cursor: 'pointer',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                paddingTop: `${SPACING.sm}px`,
+              }}
+              data-testid="detail-panel-collapsed"
+            >
+              <Typography
+                sx={{
+                  writingMode: 'vertical-lr',
+                  fontSize: TYPOGRAPHY.panelHeader.size,
+                  fontWeight: TYPOGRAPHY.panelHeader.weight,
+                  color: COLORS.accent,
+                  letterSpacing: '1px',
+                }}
+              >
+                ◀ Detail
+              </Typography>
             </Box>
           )}
         </Box>
       </Box>
+
+      {/* In-app log console (collapsible) */}
+      <LogConsole />
 
       {/* Status bar */}
       <Box
